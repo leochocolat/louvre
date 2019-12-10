@@ -55,9 +55,10 @@ class ThreeComponent {
 
         this._renderer = new THREE.WebGLRenderer({
             canvas: this.el,
-            antialias: true,
-            shadowMapEnabled: true
+            antialias: true
         });
+
+        this._renderer.shadowMap.enabled = true;
     }
 
     _setupControls() {
@@ -69,7 +70,7 @@ class ThreeComponent {
         var geometry = new THREE.PlaneGeometry( 120, 120, 1);
         var material = new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide } );
         let plane = new THREE.Mesh(geometry, material);
-        plane.position.z = -20;
+        plane.position.z = 0;
         plane.castShadow = false;
         plane.receiveShadow = true;
 
@@ -78,34 +79,36 @@ class ThreeComponent {
         var sphereGeometry = new THREE.SphereBufferGeometry( 2, 32, 32 );
         var sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
         var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        sphere.position.z = 40;
         sphere.castShadow = true;
         sphere.receiveShadow = false;
-        this._scene.add( sphere );
+        // this._scene.add( sphere );
 
-        // this._microphone = this._models.microphone.scene;
-        // this._microphone.castShadow = true;
-        // this._microphone.receiveShadow = false;
+        this._microphone = this._models.microphone.scene;
+        this._microphone.position.z = 40;
+        this._microphone.castShadow = true;
+        this._microphone.receiveShadow = false;
 
-        // this._microphone.traverse((child) => {
-        //     if (child.isMesh) {
-        //         child.castShadow = true;
-        //         child.receiveShadow = false;
-        //     }
-        // });
+        this._microphone.traverse((child) => {
+            if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = false;
+            }
+        });
 
-        // this._scene.add(this._microphone);
+        this._scene.add(this._microphone);
     }
 
     _setupLights() {
         let spotLight = new THREE.SpotLight( 0xFFFFFF, 2);
-        spotLight.position.set(0, 0, 50);
+        spotLight.position.set(0, 0, 60);
         spotLight.target.position.set(0, 0, 0);
 
         spotLight.castShadow = true;
-        spotLight.shadow.mapSize.width = 1024;
-        spotLight.shadow.mapSize.height = 1024;
-        spotLight.shadow.camera.near = 10;
-        spotLight.shadow.camera.far = 200;
+        spotLight.shadow.mapSize.width = 5000;
+        spotLight.shadow.mapSize.height = 5000;
+        spotLight.shadow.camera.near = 1;
+        spotLight.shadow.camera.far = 2000;
 
         this.lightHelper = new THREE.SpotLightHelper(spotLight);
         this._scene.add(this.lightHelper);
@@ -121,6 +124,7 @@ class ThreeComponent {
         this._controls.update();
         this.lightHelper.update();
         this.shadowCameraHelper.update();
+        this._microphone.rotation.y += 0.1;
         
         this._renderer.render(this._scene, this._camera);
     }
