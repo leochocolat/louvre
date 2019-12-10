@@ -1,5 +1,6 @@
 import bindAll from '../utils/bindAll';
-import THREE from 'three';
+import * as THREE from 'three';
+import ModelesLoader from '../modules/ModelesLoader';
 
 class ThreeComponent {
     constructor(options) {
@@ -27,7 +28,7 @@ class ThreeComponent {
     }
 
     _setupThreeScene() {
-        
+        new ModelesLoader();
     }
 
     _tick() {
