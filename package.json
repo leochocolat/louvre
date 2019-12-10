@@ -19,6 +19,7 @@
     "IE 10"
   ],
   "dependencies": {
+    "gsap": "^3.0.2",
     "three": "^0.111.0"
   },
   "devDependencies": {
