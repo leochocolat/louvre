@@ -13,27 +13,36 @@ class ModelesLoader {
     }
 
     _setup() {
-        let promises = [];
+        this._promises = [];
         this.modeles = {};
-        
+    }
+
+    loadAssets() {
         for (let i = 0; i < data.length; i++) {
             let promise = new Promise(resolve => {
                 this._loader = new GLTFLoader().load(data[i].url, resolve);
                 this.modeles[`${data[i].name}`] = {};
-            }).then(result => {
+            })
+            .then(result => {
                 this.modeles[`${data[i].name}`] = result;
                 console.log(`Asset loaded : ${(1+i)/data.length * 100}%`);
             });
-            promises.push(promise);
+            this._promises.push(promise);
         };
 
-        Promise.all(promises).then(this._loadHandler);
+        return Promise.all(this._promises);
+    }
+
+    getModels() {
+        return this.modeles;
     }
 
     _loadHandler() {
         console.log('LOADED');
         console.log(this.modeles);
     }
+
+
 }
 
 export default ModelesLoader;

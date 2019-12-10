@@ -18,7 +18,10 @@ class ThreeComponent {
     }
 
     _setup() {
+        this._loadModels();
         this._setupThreeScene();
+        this._setupControls();
+        this._setupLights();
         this._resize();
         this._setupEventListeners();
     }
@@ -27,38 +30,102 @@ class ThreeComponent {
         this._width = window.innerWidth;
         this._height = window.innerHeight;
 
-        // resize camera and renderer
         this._camera.aspect = (this._width / this._height)
         this._camera.updateProjectionMatrix();
         this._renderer.setSize(this._width , this._height);
     }
 
+    _loadModels() {
+        this._loader = new ModelesLoader();
+        this._loader.loadAssets().then(() => { 
+            this._models = this._loader.getModels();
+            this._start();
+        });
+    }
+
+    _start() {
+        this._addMeshToScene();
+        this._tickHandler();
+    }
+
     _setupThreeScene() {
         this._scene = new THREE.Scene();
-        this._camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        this._camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this._camera.position.z = 5;
 
         this._renderer = new THREE.WebGLRenderer({
-            canvas: this.el
+            canvas: this.el,
+            antialias: true,
+            shadowMapEnabled: true
         });
+    }
 
-        this._controls = new OrbitControls( this._camera, this._renderer.domElement );
+    _setupControls() {
+        this._controls = new OrbitControls(this._camera, this._renderer.domElement);
+        this._controls.update();
+    }
 
-        var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-        this.cube = new THREE.Mesh( geometry, material );
-        this._scene.add( this.cube );
+    _addMeshToScene() {
+        var geometry = new THREE.PlaneGeometry( 120, 120, 1);
+        var material = new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide } );
+        let plane = new THREE.Mesh(geometry, material);
+        plane.position.z = -20;
+        plane.castShadow = false;
+        plane.receiveShadow = true;
 
-        this._camera.position.z = 5;
-        this._controls.update()
+        this._scene.add(plane);
+
+        var sphereGeometry = new THREE.SphereBufferGeometry( 2, 32, 32 );
+        var sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
+        var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        sphere.castShadow = true;
+        sphere.receiveShadow = false;
+        this._scene.add( sphere );
+
+        // this._microphone = this._models.microphone.scene;
+        // this._microphone.castShadow = true;
+        // this._microphone.receiveShadow = false;
+
+        // this._microphone.traverse((child) => {
+        //     if (child.isMesh) {
+        //         child.castShadow = true;
+        //         child.receiveShadow = false;
+        //     }
+        // });
+
+        // this._scene.add(this._microphone);
+    }
+
+    _setupLights() {
+        let spotLight = new THREE.SpotLight( 0xFFFFFF, 2);
+        spotLight.position.set(0, 0, 50);
+        spotLight.target.position.set(0, 0, 0);
+
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.shadow.camera.near = 10;
+        spotLight.shadow.camera.far = 200;
+
+        this.lightHelper = new THREE.SpotLightHelper(spotLight);
+        this._scene.add(this.lightHelper);
+
+        this.shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
+        this._scene.add(this.shadowCameraHelper);
+        this._scene.add(new THREE.AxesHelper(10));
+
+        this._scene.add(spotLight);
     }
 
     _tick() {
-        this._controls.update()
+        this._controls.update();
+        this.lightHelper.update();
+        this.shadowCameraHelper.update();
+        
         this._renderer.render(this._scene, this._camera);
     }
 
     _setupEventListeners() {
-        this._tickHandler();
         window.addEventListener('resize', this._resizeHandler);
     }
 
