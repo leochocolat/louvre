@@ -61,6 +61,6 @@ dist
     └── index.html
 ```
 
-### Project Structure
-
-Handle multiple pages
+### TODO
+Add browsersync
+Handle Handlebars compilation errors
