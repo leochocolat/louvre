@@ -34,9 +34,6 @@ class ThreeComponent {
     }
 
     _setupThreeScene() {
-<<<<<<< HEAD
-        new ModelesLoader();
-=======
         this._scene = new THREE.Scene();
         this._camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -53,7 +50,6 @@ class ThreeComponent {
 
         this._camera.position.z = 5;
         this._controls.update()
->>>>>>> 55c62ff71cf8324eb38500bdb2493a627ccecced
     }
 
     _tick() {
