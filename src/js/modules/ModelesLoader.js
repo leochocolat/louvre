@@ -27,14 +27,12 @@ class ModelesLoader {
             promises.push(promise);
         };
 
-        Promise.all(promises).then(() => {
-            console.log('LOADED');
-            console.log(this.modeles);
-        });
+        Promise.all(promises).then(this._loadHandler);
     }
 
     _loadHandler() {
-
+        console.log('LOADED');
+        console.log(this.modeles);
     }
 }
 
