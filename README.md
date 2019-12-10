@@ -1,4 +1,4 @@
-# Webpack Handlebars Static Site Builder
+# Louvre Project - Gobelins 2019 - 2020
 
 Built with:
 

@@ -1,5 +1,5 @@
 const COMPONENTS = {
-    'example-component': () => import('./components/ExampleComponent'),
+    'example-component': () => import('./components/ExampleComponent')
 }
 
 class ComponentFactory {
