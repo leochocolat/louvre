@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
+import Ground from './Ground';
 
 /*
     HANDLE SCENE, CAMERA AND RENDERER
@@ -22,7 +23,8 @@ class ThreeScene {
 
         this.sceneEntities = {
             lights: new ThreeLights(),
-            modeleTest: new ThreeModele('modele-test')
+            modeleTest: new ThreeModele('modele-test'),
+            ground: new Ground()
         };
 
         this._setup();
