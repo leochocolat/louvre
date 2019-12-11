@@ -14,6 +14,8 @@ class ThreeComponent {
         this.el = options.el;
         this.canvas = this.el;
 
+        this._delta = 0;
+
         this._setup();
     }
 
@@ -55,7 +57,10 @@ class ThreeComponent {
 
         this._renderer = new THREE.WebGLRenderer({
             canvas: this.el,
-            antialias: true
+            antialias: true,
+            physicallyCorrectLights: true,
+            gammaInput: true,
+            gammaOutput: true
         });
 
         this._renderer.shadowMap.enabled = true;
@@ -67,7 +72,8 @@ class ThreeComponent {
     }
 
     _addMeshToScene() {
-        var geometry = new THREE.PlaneGeometry( 120, 120, 1);
+        //GROUND
+        var geometry = new THREE.PlaneGeometry( 20, 20, 1);
         var material = new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide } );
         let plane = new THREE.Mesh(geometry, material);
         plane.position.z = 0;
@@ -76,16 +82,40 @@ class ThreeComponent {
 
         this._scene.add(plane);
 
-        var sphereGeometry = new THREE.SphereBufferGeometry( 2, 32, 32 );
-        var sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
-        var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        sphere.position.z = 40;
-        sphere.castShadow = true;
-        sphere.receiveShadow = false;
-        // this._scene.add( sphere );
+        //PHYSICAL LIGHTS
+        var sphereGeometry = new THREE.SphereBufferGeometry(0.1, 20, 20);
 
+        var sphereMaterialRed = new THREE.MeshStandardMaterial({
+            color: 0xff0000,
+            emissive: 0xff0000,
+            emissiveIntensity: 0.5,
+            castShadow: true
+        });
+        var sphereRed = new THREE.Mesh(sphereGeometry, sphereMaterialRed);
+
+        var sphereMaterialBlue = new THREE.MeshStandardMaterial({
+            color: 0x0000ff,
+            emissive: 0x0000ff,
+            emissiveIntensity: 0.5,
+            castShadow: true
+        });
+        var sphereBlue = new THREE.Mesh(sphereGeometry, sphereMaterialBlue);
+
+        this._sphereLightRed = new THREE.PointLight(0xff0000, 0.2, 100, 2);
+        this._sphereLightRed.add(sphereRed);
+        this._sphereLightRed.castShadow = true;
+
+        this._sphereLightBlue = new THREE.PointLight(0x0000ff, 1, 100, 2);
+        this._sphereLightBlue.add(sphereBlue);
+        this._sphereLightBlue.position.z = 7;
+        this._sphereLightBlue.castShadow = true;
+
+        this._scene.add(this._sphereLightRed);
+        this._scene.add(this._sphereLightBlue);
+
+        //3D MODEL
         this._microphone = this._models.microphone.scene;
-        this._microphone.position.z = 40;
+        this._microphone.position.z = 2;
         this._microphone.castShadow = true;
         this._microphone.receiveShadow = false;
 
@@ -100,31 +130,35 @@ class ThreeComponent {
     }
 
     _setupLights() {
-        let spotLight = new THREE.SpotLight( 0xFFFFFF, 2);
-        spotLight.position.set(0, 0, 60);
-        spotLight.target.position.set(0, 0, 0);
+        let AmbientLight = new THREE.AmbientLight(0xffffff, 0.5); // soft white light
 
-        spotLight.castShadow = true;
-        spotLight.shadow.mapSize.width = 5000;
-        spotLight.shadow.mapSize.height = 5000;
-        spotLight.shadow.camera.near = 1;
-        spotLight.shadow.camera.far = 2000;
+        let hemisphereLight = new THREE.HemisphereLight();
+        hemisphereLight.color.set(0xffffff);
+        hemisphereLight.groundColor.set(0xff0000);
+        hemisphereLight.position.set(0, 0, 100);
 
-        this.lightHelper = new THREE.SpotLightHelper(spotLight);
-        this._scene.add(this.lightHelper);
+        let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
+        directionalLight.position.set(0, 0, 10);
+        directionalLight.castShadow = true;
 
-        this.shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
-        this._scene.add(this.shadowCameraHelper);
-        this._scene.add(new THREE.AxesHelper(10));
-
-        this._scene.add(spotLight);
+        this._scene.add(AmbientLight);
+        this._scene.add(hemisphereLight);
+        this._scene.add(directionalLight);
+        
+        let dirLightHeper = new THREE.DirectionalLightHelper(directionalLight, 1, 0xff0000);
+        this._scene.add(dirLightHeper);
     }
 
     _tick() {
         this._controls.update();
-        this.lightHelper.update();
-        this.shadowCameraHelper.update();
-        this._microphone.rotation.y += 0.1;
+
+        this._delta += 0.01;
+
+        this._sphereLightRed.position.y = Math.sin(this._delta) * 2;
+        this._sphereLightRed.position.z = Math.cos(this._delta) * 2 + 5;
+
+        this._sphereLightBlue.position.x = Math.cos(this._delta) * 2;
+        this._sphereLightBlue.position.y = Math.sin(this._delta) * 2;
         
         this._renderer.render(this._scene, this._camera);
     }
