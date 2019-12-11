@@ -23,11 +23,14 @@ class ThreeScene {
 
         this.sceneEntities = {
             lights: new ThreeLights(),
-            modeleTest: new ThreeModele('modele-test'),
+            modeleTest: new ThreeModele('ruby'),
             ground: new Ground()
         };
 
+        this._delta = 0;
+
         this._setup();
+        this._createEntities();
     }
 
     _setup() {
@@ -49,6 +52,13 @@ class ThreeScene {
         this._controls.update();
     }
 
+    _createEntities() {
+        for (let i in this.sceneEntities) {
+            if (this.sceneEntities[i].is3dModel) continue;
+            this.sceneEntities[i].addToScene(this._scene);
+        }
+    }
+
     start(models) {
         this._models = models;
         this._isReady = true;
@@ -59,6 +69,7 @@ class ThreeScene {
         for (let i in this.sceneEntities) {
             if (!this.sceneEntities[i].is3dModel) continue;
             this.sceneEntities[i].build(this._models);
+            this.sceneEntities[i].addToScene(this._scene);
         }
     }
 
@@ -72,10 +83,15 @@ class ThreeScene {
     }
 
     _render() {
+        this._delta += 0.01;
+
+        // this._camera.position.x = Math.cos(this._delta) * 1;
+        // this._camera.position.z = Math.sin(this._delta) * 1;
+
         this._controls.update();
 
         for (let i in this.sceneEntities) {
-            this.sceneEntities[i].update();
+            this.sceneEntities[i].update(this._delta);
         }
 
         this._renderer.render(this._scene, this._camera);

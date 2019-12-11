@@ -10,7 +10,6 @@ class ModelesLoader {
             '_loadHandler'
         );
 
-
         this.components = {
             loader: new LoaderComponent({ el: document.querySelector('.js-loader-component') })
         }
@@ -47,7 +46,6 @@ class ModelesLoader {
 
     _loadHandler() {
         this.components.loader.transitionOut();
-        console.log(this.modeles);
     }
 
 
