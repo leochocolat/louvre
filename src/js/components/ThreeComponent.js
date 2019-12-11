@@ -14,8 +14,6 @@ class ThreeComponent {
         this.el = options.el;
         this.canvas = this.el;
 
-        this._delta = 0;
-
         this._setup();
     }
 
@@ -74,10 +72,13 @@ class ThreeComponent {
     _addMeshToScene() {
         //GROUND
         var geometry = new THREE.PlaneGeometry( 20, 20, 1);
-        var material = new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide } );
+        var material = new THREE.MeshStandardMaterial({
+            side: THREE.DoubleSide,
+            color: 0x222222,
+            metalness: 0.5,
+        });
         let plane = new THREE.Mesh(geometry, material);
-        plane.position.z = 0;
-        plane.castShadow = false;
+        plane.position.z = -10;
         plane.receiveShadow = true;
 
         this._scene.add(plane);
@@ -88,24 +89,23 @@ class ThreeComponent {
         var sphereMaterialRed = new THREE.MeshStandardMaterial({
             color: 0xff0000,
             emissive: 0xff0000,
-            emissiveIntensity: 0.5,
-            castShadow: true
+            emissiveIntensity: 0.5
         });
         var sphereRed = new THREE.Mesh(sphereGeometry, sphereMaterialRed);
 
         var sphereMaterialBlue = new THREE.MeshStandardMaterial({
             color: 0x0000ff,
             emissive: 0x0000ff,
-            emissiveIntensity: 0.5,
-            castShadow: true
+            emissiveIntensity: 0.5
         });
         var sphereBlue = new THREE.Mesh(sphereGeometry, sphereMaterialBlue);
 
-        this._sphereLightRed = new THREE.PointLight(0xff0000, 0.2, 100, 2);
+        this._sphereLightRed = new THREE.PointLight(0xffffff, 0.2, 100, 2);
         this._sphereLightRed.add(sphereRed);
+        this._sphereLightRed.position.z = 5;
         this._sphereLightRed.castShadow = true;
 
-        this._sphereLightBlue = new THREE.PointLight(0x0000ff, 1, 100, 2);
+        this._sphereLightBlue = new THREE.PointLight(0xffffff, 1, 100, 2);
         this._sphereLightBlue.add(sphereBlue);
         this._sphereLightBlue.position.z = 7;
         this._sphereLightBlue.castShadow = true;
@@ -114,51 +114,48 @@ class ThreeComponent {
         this._scene.add(this._sphereLightBlue);
 
         //3D MODEL
-        this._microphone = this._models.microphone.scene;
-        this._microphone.position.z = 2;
-        this._microphone.castShadow = true;
-        this._microphone.receiveShadow = false;
+        this._modeleTest = this._models.ruby.scene;
+        this._modeleTest.position.y = -1;
+        this._modeleTest.scale.set(.01, .01, .01);
+        this._modeleTest.castShadow = true;
+        this._modeleTest.receiveShadow = false;
 
-        this._microphone.traverse((child) => {
+        this._modeleTest.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = false;
             }
         });
 
-        this._scene.add(this._microphone);
+        this._scene.add(this._modeleTest);
+
+        this._animation = new THREE.AnimationMixer(this._modeleTest);
+        this._animation.clipAction(this._models.ruby.animations[0]).play();
     }
 
     _setupLights() {
-        let AmbientLight = new THREE.AmbientLight(0xffffff, 0.5); // soft white light
+        let AmbientLight = new THREE.AmbientLight(0xffffff, 1); // soft white light
 
         let hemisphereLight = new THREE.HemisphereLight();
         hemisphereLight.color.set(0xffffff);
         hemisphereLight.groundColor.set(0xff0000);
         hemisphereLight.position.set(0, 0, 100);
 
-        let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
-        directionalLight.position.set(0, 0, 10);
+        let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(0, 0, 200);
         directionalLight.castShadow = true;
 
         this._scene.add(AmbientLight);
         this._scene.add(hemisphereLight);
         this._scene.add(directionalLight);
         
+        //helpers
         let dirLightHeper = new THREE.DirectionalLightHelper(directionalLight, 1, 0xff0000);
-        this._scene.add(dirLightHeper);
+        // this._scene.add(dirLightHeper);
     }
 
     _tick() {
         this._controls.update();
-
-        this._delta += 0.01;
-
-        this._sphereLightRed.position.y = Math.sin(this._delta) * 2;
-        this._sphereLightRed.position.z = Math.cos(this._delta) * 2 + 5;
-
-        this._sphereLightBlue.position.x = Math.cos(this._delta) * 2;
-        this._sphereLightBlue.position.y = Math.sin(this._delta) * 2;
         
         this._renderer.render(this._scene, this._camera);
     }

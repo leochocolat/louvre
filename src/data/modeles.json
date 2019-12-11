@@ -2,5 +2,13 @@
     {
         "name": "microphone",
         "url": "modeles/microphone/scene.gltf"
+    },
+    {
+        "name": "modele",
+        "url": "modeles/modele/Untitled.gltf"
+    },
+    {
+        "name": "ruby",
+        "url": "modeles/ruby_rose/scene.gltf"
     }
 ]
