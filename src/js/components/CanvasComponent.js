@@ -17,8 +17,8 @@ class CanvasComponent {
     }
 
     _setup() {
-        this._loadModels();
         this._setupThree();
+        this._loadModels();
         this._resize();
         this._setupEventListeners();
     }
@@ -38,7 +38,7 @@ class CanvasComponent {
     }
 
     _start() {
-        this._threeScene.start();
+        this._threeScene.start(this._models);
     }
 
     _tick() {

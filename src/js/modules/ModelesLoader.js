@@ -1,6 +1,7 @@
 import bindAll from '../utils/bindAll';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import data from '../../data/modeles';
+import LoaderComponent from '../components/LoaderComponent';
 
 class ModelesLoader {
     constructor() {
@@ -8,6 +9,11 @@ class ModelesLoader {
             this,
             '_loadHandler'
         );
+
+
+        this.components = {
+            loader: new LoaderComponent({ el: document.querySelector('.js-loader-component') })
+        }
 
         this._setup();
     }
@@ -25,10 +31,12 @@ class ModelesLoader {
             })
             .then(result => {
                 this.modeles[`${data[i].name}`] = result;
-                console.log(`Asset loaded : ${(1+i)/data.length * 100}%`);
+                this.components.loader.updateProgress((1+i)/data.length * 100);
             });
             this._promises.push(promise);
         };
+
+        Promise.all(this._promises).then(this._loadHandler);
 
         return Promise.all(this._promises);
     }
@@ -38,7 +46,7 @@ class ModelesLoader {
     }
 
     _loadHandler() {
-        console.log('LOADED');
+        this.components.loader.transitionOut();
         console.log(this.modeles);
     }
 

@@ -4,6 +4,10 @@ class ThreeLights {
     }
 
     _setup() {
+        
+    }
+
+    update() {
 
     }
 }

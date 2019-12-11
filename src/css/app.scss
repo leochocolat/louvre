@@ -13,5 +13,11 @@
  @import "core/reset";
 
  /**
+ * Partials
+ */
+ @import "sections/section-loader";
+
+ /**
  * Sections
  */
+ @import "partials/canvas";

@@ -4,7 +4,8 @@ import bindAll from '../utils/bindAll';
 //vendors
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
+import ThreeLights from './ThreeLights';
+import ThreeModele from './ThreeModele';
 
 /*
     HANDLE SCENE, CAMERA AND RENDERER
@@ -16,8 +17,13 @@ class ThreeScene {
             this,
             '_render'
         );
-
+        
         this._canvas = canvas;
+
+        this.sceneEntities = {
+            lights: new ThreeLights(),
+            modeleTest: new ThreeModele('modele-test')
+        };
 
         this._setup();
     }
@@ -41,8 +47,17 @@ class ThreeScene {
         this._controls.update();
     }
 
-    start() {
+    start(models) {
+        this._models = models;
         this._isReady = true;
+        this._createModels(this._models);
+    }
+
+    _createModels() {
+        for (let i in this.sceneEntities) {
+            if (!this.sceneEntities[i].is3dModel) continue;
+            this.sceneEntities[i].build(this._models);
+        }
     }
 
     resize(width, height) {
@@ -56,6 +71,11 @@ class ThreeScene {
 
     _render() {
         this._controls.update();
+
+        for (let i in this.sceneEntities) {
+            this.sceneEntities[i].update();
+        }
+
         this._renderer.render(this._scene, this._camera);
     }
 
