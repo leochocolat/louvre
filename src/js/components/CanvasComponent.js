@@ -8,7 +8,8 @@ class CanvasComponent {
             this,
             '_tickHandler',
             '_onLoadHandler',
-            '_resizeHandler'
+            '_resizeHandler',
+            '_mouseClickHandler'
         );
 
         this.el = options.el;
@@ -53,13 +54,17 @@ class CanvasComponent {
     _setupEventListeners() {
         this._tickHandler();
         window.addEventListener('resize', this._resizeHandler);
+        window.addEventListener('click', this._mouseClickHandler);
+
     }
 
     _tickHandler() {
         this._tick();
         window.requestAnimationFrame(this._tickHandler);
     }
-
+    _mouseClickHandler() {
+        this._threeScene.rayCast(event);
+    }
     _resizeHandler() {
         this._resize();
     }
@@ -151,7 +156,7 @@ export default CanvasComponent;
     //     this._scene.add(AmbientLight);
     //     this._scene.add(hemisphereLight);
     //     this._scene.add(directionalLight);
-        
+
     //     //helpers
     //     let dirLightHeper = new THREE.DirectionalLightHelper(directionalLight, 1, 0xff0000);
     //     this._scene.add(dirLightHeper);

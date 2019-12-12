@@ -23,7 +23,7 @@ class ThreeModele {
     }
 
     update() {
-        
+
     }
 
 }
