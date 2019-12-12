@@ -1,0 +1,18 @@
+{{#extend "html/template"}}
+  {{#content "body"}}
+
+  
+  <main role="main">
+    
+    {{> partials/header }}
+    <div data-component="gallery-component">
+        <div class="gcse-search" data-enableAutoComplete="true" data-defaultToImageSearch="true" data-disableWebSearch="true" data-webSearchSafesearch="active" data-imageSearchLayout="popup"></div>
+    </div>
+
+    {{> partials/footer }}
+    
+  </main>
+
+
+  {{/content}}
+{{/extend}}
