@@ -4,7 +4,7 @@ import lerp from '../utils/lerp'
 //vendors
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
+import { TweenMax, Power3 } from 'gsap';
 //modules
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
@@ -87,15 +87,14 @@ class ThreeScene {
 
         let intersects = this._rayCaster.intersectObjects(this._scene.children, true);
 
-        if (intersects[0].object) {
+        if (intersects[0]) {
             this._triggerAnimations(intersects[0].object)
-            // this._camera.position.x = lerp(this._camera.position.x, 20, 0.01)
         }
-        // console.log(this._camera.position.x)
     }
     _triggerAnimations(object) {
-        console.log(object)
-
+        if (object.name === 'Cube')
+            console.log(object)
+        TweenMax.to(this._camera.position, 1, { x: object.position.x, y: object.position.y, z: object.position.z + 15, ease: Power3.easeInOut })
     }
     resize(width, height) {
         this._width = width;
