@@ -4,6 +4,7 @@ import lerp from '../utils/lerp'
 //vendors
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as dat from 'dat.gui';
 
 //modules
 import ModelesLoader from '../modules/ModelesLoader';
@@ -11,6 +12,11 @@ import SoundManager from '../modules/SoundManager';
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
 import Ground from './Ground';
+
+const SETTINGS = {
+    enableRaycast: true,
+    enableOrbitControl: true
+}
 
 /*
     HANDLE SCENE, CAMERA AND RENDERER
@@ -24,6 +30,16 @@ class ThreeScene {
             '_audiosLoadedHandler',
             '_render'
         );
+
+        const gui = new dat.GUI({
+            name: 'Scene',
+        });
+
+        let scene = gui.addFolder('scene');
+        scene.add(SETTINGS, 'enableRaycast');
+        
+        let camera = gui.addFolder('camera');
+        camera.add(SETTINGS, 'enableOrbitControl');
 
         this._canvas = canvas;
 
@@ -97,6 +113,8 @@ class ThreeScene {
     }
 
     rayCast() {
+        if (!SETTINGS.enableRaycast) return;
+
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this._mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
@@ -110,10 +128,11 @@ class ThreeScene {
         }
         // console.log(this._camera.position.x)
     }
+
     _triggerAnimations(object) {
         console.log(object)
-
     }
+
     resize(width, height) {
         this._width = width;
         this._height = height;
@@ -131,6 +150,7 @@ class ThreeScene {
         }
 
         this._controls.update();
+        this._controls.enabled = SETTINGS.enableOrbitControl;
         this._renderer.render(this._scene, this._camera);
     }
 

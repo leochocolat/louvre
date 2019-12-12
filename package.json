@@ -19,6 +19,7 @@
     "IE 10"
   ],
   "dependencies": {
+    "dat.gui": "^0.7.6",
     "gsap": "^3.0.2",
     "three": "^0.111.0"
   },
@@ -27,7 +28,7 @@
     "@babel/preset-env": "^7.5.5",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
-    "copy-webpack-plugin": "^5.0.4",
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.2.0",
     "cssnano": "^4.1.10",
     "eslint": "^6.2.1",

@@ -4,19 +4,11 @@
   
   <main role="main">
 
-    <section class="section-loader js-loader-component">
-      <div class="section-loader__progress js-progress">
-        0%
-      </div>
-    </section>
+    {{> sections/section-loader }}
 
     <canvas class="canvas" data-component="three-component"></canvas>
-
-    <section class="section-subtitles js-subtitles-component">
-      <div class="section-subtitles__content js-content">
-        Lorem ipsum
-      </div>
-    </section>
+    
+    {{> sections/section-subtitles }}
 
   </main>
 
