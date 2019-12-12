@@ -1,5 +1,4 @@
 import bindAll from '../utils/bindAll';
-import ModelesLoader from '../modules/ModelesLoader';
 import ThreeScene from '../modules/ThreeScene';
 
 class CanvasComponent {
@@ -7,7 +6,6 @@ class CanvasComponent {
         bindAll(
             this,
             '_tickHandler',
-            '_onLoadHandler',
             '_resizeHandler',
             '_mouseClickHandler'
         );
@@ -19,7 +17,6 @@ class CanvasComponent {
 
     _setup() {
         this._setupThree();
-        this._loadModels();
         this._resize();
         this._setupEventListeners();
     }
@@ -38,17 +35,8 @@ class CanvasComponent {
         this._threeScene.resize(this._width, this._height);
     }
 
-    _start() {
-        this._threeScene.start(this._models);
-    }
-
     _tick() {
         this._threeScene.tick();
-    }
-
-    _loadModels() {
-        this._loader = new ModelesLoader();
-        this._loader.loadAssets().then(this._onLoadHandler);
     }
 
     _setupEventListeners() {
@@ -67,11 +55,6 @@ class CanvasComponent {
     }
     _resizeHandler() {
         this._resize();
-    }
-
-    _onLoadHandler() {
-        this._models = this._loader.getModels();
-        this._start();
     }
 }
 

@@ -6,6 +6,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TweenMax, Power3 } from 'gsap';
 //modules
+import ModelesLoader from '../modules/ModelesLoader';
+import SoundManager from '../modules/SoundManager';
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
 import Ground from './Ground';
@@ -18,6 +20,8 @@ class ThreeScene {
     constructor(canvas) {
         bindAll(
             this,
+            '_modelsLoadedHandler',
+            '_audiosLoadedHandler',
             '_render'
         );
 
@@ -32,7 +36,19 @@ class ThreeScene {
         this._delta = 0;
 
         this._setup();
+        this._setupAudioManager();
+        this._loadAssets();
         this._createEntities();
+    }
+
+    _setupAudioManager() {
+        this._soundManager = new SoundManager();
+    }
+
+    _loadAssets() {
+        this._loader = new ModelesLoader();
+        this._loader.loadAssets().then(this._modelsLoadedHandler);
+        this._soundManager.loadAssets().then(this._audiosLoadedHandler);
     }
 
     _setup() {
@@ -65,9 +81,10 @@ class ThreeScene {
         }
     }
 
-    start(models) {
-        this._models = models;
+    _start() {
+        if (!this._isAudioReady || !this._isModelsReady) return;
         this._isReady = true;
+        this._soundManager.start();
         this._createModels(this._models);
     }
 
@@ -107,10 +124,7 @@ class ThreeScene {
 
     _render() {
         this._delta += 0.01;
-
-        // this._camera.position.x = Math.cos(this._delta) * 1;
-        // this._camera.position.z = Math.sin(this._delta) * 1;
-
+        
         for (let i in this.sceneEntities) {
             this.sceneEntities[i].update(this._delta);
         }
@@ -123,6 +137,17 @@ class ThreeScene {
         if (!this._isReady) return;
 
         this._render();
+    }
+
+    _modelsLoadedHandler() {
+        this._isModelsReady = true;
+        this._models = this._loader.getModels();
+        this._start();
+    }
+
+    _audiosLoadedHandler() {
+        this._isAudioReady = true;
+        this._start();
     }
 }
 
