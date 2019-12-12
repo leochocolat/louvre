@@ -18,7 +18,7 @@ class Ground {
             metalness: 0.5,
         });
         this.plane = new THREE.Mesh(geometry, material);
-        this.plane.position.z = -15;
+        this.plane.position.z = 0;
 
         this.plane.receiveShadow = true;
     }
@@ -28,7 +28,7 @@ class Ground {
     }
 
     update(delta) {
-        this.plane.rotation.y = -delta;
+        // this.plane.rotation.y = -delta;
     }
 }
 

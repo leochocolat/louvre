@@ -4,6 +4,8 @@ import bindAll from '../utils/bindAll';
 //vendors
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+//modules
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
 import Ground from './Ground';
@@ -23,7 +25,7 @@ class ThreeScene {
 
         this.sceneEntities = {
             lights: new ThreeLights(),
-            modeleTest: new ThreeModele('ruby'),
+            modeleTest: new ThreeModele('modele-test'),
             ground: new Ground()
         };
 
@@ -49,6 +51,7 @@ class ThreeScene {
         this._renderer.shadowMap.enabled = true;
 
         this._controls = new OrbitControls(this._camera, this._renderer.domElement);
+        this._camera.position.set(0, 0, 10);
         this._controls.update();
     }
 
@@ -88,12 +91,12 @@ class ThreeScene {
         // this._camera.position.x = Math.cos(this._delta) * 1;
         // this._camera.position.z = Math.sin(this._delta) * 1;
 
-        this._controls.update();
-
+        
         for (let i in this.sceneEntities) {
             this.sceneEntities[i].update(this._delta);
         }
-
+        
+        this._controls.update();
         this._renderer.render(this._scene, this._camera);
     }
 

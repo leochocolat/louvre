@@ -7,7 +7,7 @@ class ThreeModele {
 
     build(models) {
         this.object = models[this.name].scene;
-        this.object.position.z = -5;
+        this.object.position.z = 5;
         this.object.scale.set(.01, .01, .01);
         this.object.castShadow = true;
 
@@ -19,7 +19,7 @@ class ThreeModele {
     }
 
     addToScene(scene) {
-        // scene.add(this.object);
+        scene.add(this.object);
     }
 
     update() {
