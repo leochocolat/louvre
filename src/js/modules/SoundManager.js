@@ -9,6 +9,7 @@ class SoundManager {
             '_loadHandler',
             '_audioEndedHandler'
         )
+
         this._setup();
 
         this.audios = {};
@@ -21,25 +22,9 @@ class SoundManager {
         this._audioContext = new AudioContext();
     }
 
-    loadAssets() {
-        this._promises = [];
-
-        for (let i = 0; i < data.length; i++) {
-            let promise = new Promise(resolve => {
-                return fetch(data[i].url).then( response => {
-                    resolve(response.arrayBuffer());
-                });
-            }).then((result) =>{ 
-                this.audios[`${data[i].name}`] = result;
-            });
-            this._promises.push(promise);
-        }
-
-        return Promise.all(this._promises);
-    }
-
-    start() {
-        Promise.all(this._promises).then(this._loadHandler);
+    start(audios) {
+        this.audios = audios;
+        this.play('introduction');
     }
 
     play(name) {

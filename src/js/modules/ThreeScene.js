@@ -1,13 +1,16 @@
 //utils
 import bindAll from '../utils/bindAll';
-import lerp from '../utils/lerp'
+import lerp from '../utils/lerp';
+
 //vendors
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { TweenLite, Power3 } from 'gsap';
 import * as dat from 'dat.gui';
 
+
 //modules
-import ModelesLoader from '../modules/ModelesLoader';
+import AssetsLoader from '../modules/AssetsLoader';
 import SoundManager from '../modules/SoundManager';
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
@@ -15,20 +18,26 @@ import Ground from './Ground';
 
 const SETTINGS = {
     enableRaycast: true,
-    enableOrbitControl: true
+    enableOrbitControl: true,
+    position: {
+        x: -5.5,
+        y: 22.2,
+        z: 66
+    }
 }
 
-/*
-    HANDLE SCENE, CAMERA AND RENDERER
-    CREATE SCENE OBJECTS (lights, Mesh...)
-*/
+
+// x: -306.8418884277344
+// y: -545.6057739257812
+// z: 937.37939453125
+
 class ThreeScene {
     constructor(canvas) {
         bindAll(
             this,
-            '_modelsLoadedHandler',
-            '_audiosLoadedHandler',
-            '_render'
+            '_assetsLoadedHandler',
+            '_render',
+            '_cameraSettingsChangedHandler'
         );
 
         const gui = new dat.GUI({
@@ -40,13 +49,16 @@ class ThreeScene {
         
         let camera = gui.addFolder('camera');
         camera.add(SETTINGS, 'enableOrbitControl');
+        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
 
         this._canvas = canvas;
 
         this.sceneEntities = {
             lights: new ThreeLights(),
-            modeleTest: new ThreeModele('modele-test'),
-            ground: new Ground()
+            modeleTest: new ThreeModele('room'),
+            // ground: new Ground()
         };
 
         this._delta = 0;
@@ -62,9 +74,8 @@ class ThreeScene {
     }
 
     _loadAssets() {
-        this._loader = new ModelesLoader();
-        this._loader.loadAssets().then(this._modelsLoadedHandler);
-        this._soundManager.loadAssets().then(this._audiosLoadedHandler);
+        this._loader = new AssetsLoader();
+        this._loader.loadAssets().then(this._assetsLoadedHandler);
     }
 
     _setup() {
@@ -86,7 +97,11 @@ class ThreeScene {
         this._renderer.shadowMap.enabled = true;
 
         this._controls = new OrbitControls(this._camera, this._renderer.domElement);
-        this._camera.position.set(0, 0, 10);
+        this._camera.position.set(
+            SETTINGS.position.x,
+            SETTINGS.position.y,
+            SETTINGS.position.z,
+        );
         this._controls.update();
     }
 
@@ -98,10 +113,9 @@ class ThreeScene {
     }
 
     _start() {
-        if (!this._isAudioReady || !this._isModelsReady) return;
-        this._isReady = true;
-        this._soundManager.start();
+        this._soundManager.start(this._audios);
         this._createModels(this._models);
+        this._isReady = true;
     }
 
     _createModels() {
@@ -122,15 +136,16 @@ class ThreeScene {
 
         let intersects = this._rayCaster.intersectObjects(this._scene.children, true);
 
-        if (intersects[0].object) {
-            this._triggerAnimations(intersects[0].object)
-            // this._camera.position.x = lerp(this._camera.position.x, 20, 0.01)
+        if (intersects[0]) {
+            this._triggerAnimations(intersects[0].object);
         }
-        // console.log(this._camera.position.x)
     }
 
     _triggerAnimations(object) {
-        console.log(object)
+        console.log(object);
+        // if (object.name === 'Cube')
+        // console.log(object)
+        // TweenMax.to(this._camera.position, 1, { x: object.position.x, y: object.position.y, z: object.position.z + 15, ease: Power3.easeInOut })
     }
 
     resize(width, height) {
@@ -157,17 +172,24 @@ class ThreeScene {
     tick() {
         if (!this._isReady) return;
 
+        this._controls.update();
         this._render();
     }
 
-    _modelsLoadedHandler() {
-        this._isModelsReady = true;
-        this._models = this._loader.getModels();
-        this._start();
+    _cameraSettingsChangedHandler() {
+        this._camera.position.set(
+            SETTINGS.position.x,
+            SETTINGS.position.y,
+            SETTINGS.position.z,
+        );
+        this._controls.update();
+        this._controls.saveState();
+        this._controls.reset();
     }
 
-    _audiosLoadedHandler() {
-        this._isAudioReady = true;
+    _assetsLoadedHandler() {
+        this._models = this._loader.getModels();
+        this._audios = this._loader.getAudios();
         this._start();
     }
 }

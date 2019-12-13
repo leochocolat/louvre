@@ -13,7 +13,6 @@ class SubtitlesManager {
     }
 
     play(name) {
-        console.log(data[name]);
         for (let i = 0; i < data[name].length; i++) {
             setTimeout(() => {
                 this.component.update(data[name][i].content);

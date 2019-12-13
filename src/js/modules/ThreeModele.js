@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class ThreeModele {
     constructor(name) {
         this.name = name;
@@ -14,6 +16,9 @@ class ThreeModele {
         this.object.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
+                child.receiveShadow = true;
+                child.material.emissive = new THREE.Color(0xffffff);
+                child.material.emissiveIntensity = 0;
             }
         });
     }
@@ -22,8 +27,12 @@ class ThreeModele {
         scene.add(this.object);
     }
 
-    update() {
-
+    update(delta) {
+        this.object.traverse((child) => {
+            if (child.isMesh) {
+                // child.material.emissiveIntensity = Math.cos(delta);
+            }
+        });
     }
 
 }

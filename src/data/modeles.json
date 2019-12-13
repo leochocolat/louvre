@@ -10,5 +10,9 @@
     {
         "name": "ruby",
         "url": "modeles/ruby_rose/scene.gltf"
+    },
+    {
+        "name": "room",
+        "url": "modeles/room/scene.gltf"
     }
 ]
