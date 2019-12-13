@@ -8,12 +8,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TweenLite, Power3 } from 'gsap';
 import * as dat from 'dat.gui';
 
-
 //modules
 import AssetsLoader from '../modules/AssetsLoader';
 import SoundManager from '../modules/SoundManager';
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
+import CameraLight from './CameraLight';
 import Ground from './Ground';
 
 const SETTINGS = {
@@ -23,13 +23,10 @@ const SETTINGS = {
         x: -5.5,
         y: 22.2,
         z: 66
-    }
+    },
+    toggleGround: true,
+    toggleCameraLight: true,
 }
-
-
-// x: -306.8418884277344
-// y: -545.6057739257812
-// z: 937.37939453125
 
 class ThreeScene {
     constructor(canvas) {
@@ -37,7 +34,8 @@ class ThreeScene {
             this,
             '_assetsLoadedHandler',
             '_render',
-            '_cameraSettingsChangedHandler'
+            '_cameraSettingsChangedHandler',
+            '_toggleEntityHandler'
         );
 
         const gui = new dat.GUI({
@@ -46,6 +44,8 @@ class ThreeScene {
 
         let scene = gui.addFolder('scene');
         scene.add(SETTINGS, 'enableRaycast');
+        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
         
         let camera = gui.addFolder('camera');
         camera.add(SETTINGS, 'enableOrbitControl');
@@ -58,7 +58,8 @@ class ThreeScene {
         this.sceneEntities = {
             lights: new ThreeLights(),
             modeleTest: new ThreeModele('room'),
-            // ground: new Ground()
+            cameraLight: new CameraLight(),
+            ground: new Ground()
         };
 
         this._delta = 0;
@@ -142,7 +143,10 @@ class ThreeScene {
     }
 
     _triggerAnimations(object) {
-        console.log(object);
+        this.sceneEntities.cameraLight.updateLightPosition(this._camera.position);
+        this.sceneEntities.cameraLight.updateLightTarget(object);
+        this.sceneEntities.cameraLight.turnOn();
+        console.log(object.name);
         // if (object.name === 'Cube')
         // console.log(object)
         // TweenMax.to(this._camera.position, 1, { x: object.position.x, y: object.position.y, z: object.position.z + 15, ease: Power3.easeInOut })
@@ -185,6 +189,11 @@ class ThreeScene {
         this._controls.update();
         this._controls.saveState();
         this._controls.reset();
+    }
+
+    _toggleEntityHandler() {
+        this.sceneEntities.ground.setVisibility(SETTINGS.toggleGround);
+        this.sceneEntities.cameraLight.setVisibility(SETTINGS.toggleCameraLight);
     }
 
     _assetsLoadedHandler() {

@@ -11,20 +11,24 @@ class Ground {
     }
 
     _createPlane() {
-        let geometry = new THREE.PlaneGeometry(20, 20, 1);
-        let material = new THREE.MeshStandardMaterial({
+        let geometry = new THREE.PlaneGeometry(500, 500, 1);
+        let material = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
-            color: 0x222222,
-            metalness: 0.5,
+            color: 0xffffff,
         });
         this.plane = new THREE.Mesh(geometry, material);
-        this.plane.position.z = 0;
+        this.plane.position.y = 0.1;
+        this.plane.rotation.x = Math.PI/2;
 
         this.plane.receiveShadow = true;
     }
 
     addToScene(scene) {
         scene.add(this.plane);
+    }
+
+    setVisibility(bool) {
+        this.plane.visible = bool;
     }
 
     update(delta) {
