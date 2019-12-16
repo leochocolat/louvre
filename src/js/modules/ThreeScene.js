@@ -24,7 +24,7 @@ const SETTINGS = {
         y: 22.2,
         z: 66
     },
-    toggleGround: true,
+    toggleGround: false,
     toggleCameraLight: true,
 }
 
@@ -116,6 +116,7 @@ class ThreeScene {
     _start() {
         this._soundManager.start(this._audios);
         this._createModels(this._models);
+        this._toggleEntityHandler();
         this._isReady = true;
     }
 
@@ -146,7 +147,6 @@ class ThreeScene {
         this.sceneEntities.cameraLight.updateLightPosition(this._camera.position);
         this.sceneEntities.cameraLight.updateLightTarget(object);
         this.sceneEntities.cameraLight.turnOn();
-        console.log(object.name);
         // if (object.name === 'Cube')
         // console.log(object)
         // TweenMax.to(this._camera.position, 1, { x: object.position.x, y: object.position.y, z: object.position.z + 15, ease: Power3.easeInOut })
@@ -200,6 +200,10 @@ class ThreeScene {
         this._models = this._loader.getModels();
         this._audios = this._loader.getAudios();
         this._start();
+    }
+
+    mousemoveHandler(position) {
+        this.sceneEntities.modeleTest.mousemoveHandler(position);
     }
 }
 

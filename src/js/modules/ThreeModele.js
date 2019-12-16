@@ -1,10 +1,22 @@
 import * as THREE from 'three';
+import { TweenLite } from 'gsap';
+import lerp from '../utils/lerp';
 
 class ThreeModele {
     constructor(name) {
         this.name = name;
         this.is3dModel = true;
         this.object;
+
+        this._rotation = {
+            x: 0,
+            y: 0
+        }
+
+        this._mousePosition = {
+            x: 0,
+            y: 0,
+        }
     }
 
     build(models) {
@@ -27,12 +39,20 @@ class ThreeModele {
         scene.add(this.object);
     }
 
+    updateRotation() {
+        this._rotation.x = lerp(this._rotation.x, this._mousePosition.x, 0.1);
+        this._rotation.y = lerp(this._rotation.y, this._mousePosition.y, 0.1);
+
+        this.object.rotation.x = - this._rotation.y * 0.00005;
+        this.object.rotation.y = - this._rotation.x * 0.00005;
+    }
+
+    mousemoveHandler(position) {
+        this._mousePosition = position;
+    }
+
     update(delta) {
-        this.object.traverse((child) => {
-            if (child.isMesh) {
-                // child.material.emissiveIntensity = Math.cos(delta);
-            }
-        });
+        this.updateRotation();
     }
 
 }

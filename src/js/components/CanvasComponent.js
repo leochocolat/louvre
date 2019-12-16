@@ -7,7 +7,8 @@ class CanvasComponent {
             this,
             '_tickHandler',
             '_resizeHandler',
-            '_mouseClickHandler'
+            '_mouseClickHandler',
+            '_mousemoveHandler'
         );
 
         this.el = options.el;
@@ -43,18 +44,28 @@ class CanvasComponent {
         this._tickHandler();
         window.addEventListener('resize', this._resizeHandler);
         window.addEventListener('click', this._mouseClickHandler);
-
+        window.addEventListener('mousemove', this._mousemoveHandler);
     }
 
     _tickHandler() {
         this._tick();
         window.requestAnimationFrame(this._tickHandler);
     }
+
     _mouseClickHandler() {
         this._threeScene.rayCast(event);
     }
+
     _resizeHandler() {
         this._resize();
+    }
+
+    _mousemoveHandler(e) {
+        this._mousePosition = {
+            x: e.clientX - this._width/2,
+            y: e.clientY - this._height/2,
+        }
+        this._threeScene.mousemoveHandler(e);
     }
 }
 
