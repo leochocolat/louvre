@@ -15,11 +15,12 @@
  /**
  * Partials
  */
- @import "sections/section-loader";
- @import "sections/section-subtitles";
-
+ @import "partials/canvas";
+ @import "partials/controls";
+ @import "partials/cursor";
+ 
  /**
  * Sections
  */
- @import "partials/canvas";
- @import "partials/controls";
+ @import "sections/section-loader";
+ @import "sections/section-subtitles";

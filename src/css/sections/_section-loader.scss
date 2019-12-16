@@ -1,4 +1,8 @@
 .section-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     position: absolute;
     top: 0;
     left: 0;
@@ -13,5 +17,7 @@
 
 .section-loader__progress {
     color: white;
-    font-size: rem(100px);
+
+    font-family: sans-serif;
+    font-size: rem(50px);
 }

@@ -7,13 +7,15 @@ class SoundManager {
     constructor() {
         bindAll(
             this,
-            '_loadHandler',
             '_audioEndedHandler',
-            '_muteButtonClickHandler'
+            '_muteButtonClickHandler',
+            '_tickHandler'
         )
         
         this.ui = {
-            muteButton: document.querySelector('.js-mute-button')
+            muteButton: document.querySelector('.js-mute-button'),
+            soundBar: document.querySelectorAll('.js-mute-button span'),
+            soundState: document.querySelector('.js-sound-state'),
         }
 
         this._setup();
@@ -31,14 +33,31 @@ class SoundManager {
         this._audioGain = this._audioContext.createGain();
         this._audioGain.gain.value = 1;
         this._audioGain.connect(this._audioContext.destination);
+
+        this._analyzer = this._audioContext.createAnalyser();
+        this._audioGain.connect(this._analyzer);
     }
 
     start(audios) {
         this.audios = audios;
-        this.play('introduction');
+        this.playAudio('introduction');
+        this.playAmbiance('tumtum');
     }
 
-    play(name) {
+    playAudio(name) {
+        let audio = this.audios[name];
+        this._audioContext.decodeAudioData(audio, buffer => {
+            let bufferSource = this._audioContext.createBufferSource();
+            bufferSource.buffer = buffer;
+            bufferSource.loop = false;
+            bufferSource.connect(this._audioGain);
+            bufferSource.start();
+            this._subtitlesManager.play(name);
+            bufferSource.onended = this._audioEndedHandler;
+        });
+    }
+
+    playAmbiance(name) {
         let audio = this.audios[name];
         this._audioContext.decodeAudioData(audio, buffer => {
             let bufferSource = this._audioContext.createBufferSource();
@@ -46,26 +65,46 @@ class SoundManager {
             bufferSource.loop = true;
             bufferSource.connect(this._audioGain);
             bufferSource.start();
-            this._subtitlesManager.play(name);
+        });
+    }
+
+    playSound(name) {
+        let audio = this.audios[name];
+        this._audioContext.decodeAudioData(audio, buffer => {
+            let bufferSource = this._audioContext.createBufferSource();
+            bufferSource.buffer = buffer;
             bufferSource.loop = false;
-            bufferSource.onended = this._audioEndedHandler;
+            bufferSource.connect(this._audioGain);
+            bufferSource.start();
         });
     }
 
     toggleMute() {
         if (this._audioGain.gain.value === 0) {
             TweenLite.to(this._audioGain.gain, .5, { value: 1 });
+            this.ui.soundState.classList.remove('isMuted');
         } else {
             TweenLite.to(this._audioGain.gain, .5, { value: 0 });
+            this.ui.soundState.classList.add('isMuted');
         }
     }
 
-    _setupEventListeners() {
-        this.ui.muteButton.addEventListener('click', this._muteButtonClickHandler);
+    _updateSoundBar(frequencyArray) {
+        // console.log(frequencyArray);
+        for (let i = 0; i < this.ui.soundBar.length; i++) {
+            TweenLite.to(this.ui.soundBar[i], .2, { scaleY: 0.2 + frequencyArray[i]/300 })
+        }
     }
 
-    _loadHandler() {
-        this.play('introduction');
+    _tick() {
+        let frequencyArray = new Uint8Array(this._analyzer.frequencyBinCount);
+        this._analyzer.getByteFrequencyData(frequencyArray);
+        this._updateSoundBar(frequencyArray);
+    } 
+
+    _setupEventListeners() {
+        this.ui.muteButton.addEventListener('click', this._muteButtonClickHandler);
+        TweenLite.ticker.addEventListener('tick', this._tickHandler);
     }
 
     _audioEndedHandler() {
@@ -74,6 +113,10 @@ class SoundManager {
 
     _muteButtonClickHandler() {
         this.toggleMute();
+    }
+
+    _tickHandler() {
+        this._tick();
     }
 }
 

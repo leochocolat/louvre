@@ -21,7 +21,7 @@ class LoaderComponent {
 
     transitionOut() {
         let timeline = new TimelineLite();
-        timeline.to(this.el, .5, { autoAlpha: 0 });
+        timeline.to(this.el, 1, { autoAlpha: 0 });
         timeline.set(this.el, { display: 'none' });
     }
 }

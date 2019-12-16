@@ -7,21 +7,21 @@ const SETTINGS = {
     windowLight: {
         castShadow: true,
         color: '#ff0000',
-        intensity: 1,
+        intensity: 0.4,
         position: {
-            x: 22, 
+            x: 24, 
             y: 24,
-            z: -6
+            z: -2
         },
     },
     globalLight: {
         castShadow: false,
         color: '#0000ff',
-        intensity: 0.8,
+        intensity: 0.9,
         position: {
-            x: 0, 
-            y: 200,
-            z: 50
+            x: 49, 
+            y: 123,
+            z: 71
         },
     }
 }

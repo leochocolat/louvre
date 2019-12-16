@@ -1,7 +1,7 @@
 .controls__mute-button {
     position: absolute;
-    right: 0;
-    bottom: 60px;
+    right: 50px;
+    bottom: 30px;
 
     width: 100px;
     height: 30px;
@@ -13,4 +13,41 @@
     outline: none;
     
     cursor: pointer;
+
+    span {
+        display: inline-block;
+
+        width: 1px;
+        height: 15px;
+
+        margin-right: 1px;
+
+        transform-origin: left bottom;
+
+        background: white;
+
+        mix-blend-mode: difference;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
 }
+
+.mute-button__sound-state {
+    display: inline-block;
+    margin-right: 10px;
+
+    text-transform: uppercase;
+
+    opacity: 0;
+    transform: translateY(10%);
+
+    transition: opacity .5s ease-in-out, transform .5s ease-in-out;
+
+    &.isMuted {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
