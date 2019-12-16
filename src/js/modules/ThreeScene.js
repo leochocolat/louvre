@@ -22,7 +22,7 @@ const SETTINGS = {
     position: {
         x: -5.5,
         y: 22.2,
-        z: 66
+        z: 65
     },
     toggleGround: false,
     toggleCameraLight: true,
@@ -82,7 +82,7 @@ class ThreeScene {
     _setup() {
         this._scene = new THREE.Scene();
 
-        this._camera = new THREE.PerspectiveCamera(75, this._canvas.width / this._canvas.height, 1, 10000);
+        this._camera = new THREE.PerspectiveCamera(50, this._canvas.width / this._canvas.height, 1, 10000);
 
         this._renderer = new THREE.WebGLRenderer({
             canvas: this._canvas,
@@ -148,8 +148,14 @@ class ThreeScene {
         this.sceneEntities.cameraLight.updateLightTarget(object);
         this.sceneEntities.cameraLight.turnOn();
         // if (object.name === 'Cube')
-        // console.log(object)
-        // TweenMax.to(this._camera.position, 1, { x: object.position.x, y: object.position.y, z: object.position.z + 15, ease: Power3.easeInOut })
+        console.log(object.name)
+
+        if (object.name == 'Rideau') {
+            TweenMax.to(object.scale, 1, { x: 0.5 });
+        }
+        if (object.name == 'Ouverture_livre') {
+            TweenMax.to(object.rotation, 1, { z: -0.1 });
+        }
     }
 
     resize(width, height) {

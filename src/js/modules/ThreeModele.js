@@ -31,12 +31,21 @@ class ThreeModele {
                 child.receiveShadow = true;
                 child.material.emissive = new THREE.Color(0xffffff);
                 child.material.emissiveIntensity = 0;
+                
+                if (child.name == 'IMAGE') {
+                    child.castShadow = false;
+                    child.receiveShadow = false;
+                    child.visible = false;
+                }
             }
         });
+
+        this.getClickableAreas();
     }
 
     addToScene(scene) {
         scene.add(this.object);
+        scene.add(this._sphereRed);
     }
 
     updateRotation() {
@@ -45,6 +54,31 @@ class ThreeModele {
 
         this.object.rotation.x = - this._rotation.y * 0.00005;
         this.object.rotation.y = - this._rotation.x * 0.00005;
+    }
+
+    getClickableAreas() {
+        this.object.traverse((child) => {
+            if (child.isMesh) {
+                if (child.name === 'Sculpture') {
+                    this.object.updateMatrixWorld();
+
+                    let vec = new THREE.Vector3();
+                    let position = child.getWorldPosition(vec); 
+
+                    let sphereGeometry = new THREE.BoxGeometry(1, 1, 1);
+                    let sphereMaterialRed = new THREE.MeshStandardMaterial({
+                        color: 0x00ff00,
+                        emissive: 0x00ff00,
+                        emissiveIntensity: 0.5
+                    });
+                    this._sphereRed = new THREE.Mesh(sphereGeometry, sphereMaterialRed);
+                    this._sphereRed.name = `ancragePoint_${child.name}`;
+                    this._sphereRed.position.x = position.x;
+                    this._sphereRed.position.y = position.y;
+                    this._sphereRed.position.z = position.z;
+                }
+            }
+        });
     }
 
     mousemoveHandler(position) {

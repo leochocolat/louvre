@@ -41,7 +41,7 @@ class SoundManager {
     start(audios) {
         this.audios = audios;
         this.playAudio('introduction');
-        this.playAmbiance('tumtum');
+        this.playAmbiance('ambiance');
     }
 
     playAudio(name) {
