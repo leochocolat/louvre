@@ -1,5 +1,7 @@
 const COMPONENTS = {
-    'example-component': () => import('./components/ExampleComponent')
+    'example-component': () => import('./components/ExampleComponent'),
+    'three-component': () => import('./components/CanvasComponent'),
+    'cursor-component': () => import('./components/CursorComponent'),
 }
 
 class ComponentFactory {
@@ -15,7 +17,7 @@ class ComponentFactory {
             const componentName = element.getAttribute(this._selector);
             if (COMPONENTS[componentName]) {
                 COMPONENTS[componentName]().then(function(value) {
-                    new value.default({el: element});
+                    new value.default({ el: element });
                 });
             }
             else {

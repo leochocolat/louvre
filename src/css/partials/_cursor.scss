@@ -1,0 +1,23 @@
+$cursor-size: 30px;
+
+.cursor {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: $cursor-size;
+    height: $cursor-size;
+
+    margin-top: calc(-#{$cursor-size} / 2);
+    margin-left: calc(-#{$cursor-size} / 2);
+
+    border-radius: 50%;
+
+    border: solid 1px white;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    mix-blend-mode: difference;
+}

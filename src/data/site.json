@@ -1,4 +1,16 @@
 {
     "title" : "Louvre",
-    "metadescription" : "Immersive website for la petite gallery du Louvre, Gobelins students"
+    "metadescription" : "Immersive website for la petite gallery du Louvre, Gobelins students",
+    "content" : {
+        "1" : {
+            "title" : "L'artiste, cet artisan de génie",
+            "quote" : {
+                "content" : "",
+                "sources" : ""
+            },
+            "description" : "",
+            "explication" : "",
+            "modeleName" : ""
+        }
+    }
 }

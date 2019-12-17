@@ -10,7 +10,17 @@
  @import "core/layout";
  @import "core/base";
  @import "core/typography";
+ @import "core/reset";
 
+ /**
+ * Partials
+ */
+ @import "partials/canvas";
+ @import "partials/controls";
+ @import "partials/cursor";
+ 
  /**
  * Sections
  */
+ @import "sections/section-loader";
+ @import "sections/section-subtitles";

@@ -1,0 +1,46 @@
+{
+    "introduction" : [
+        {
+            "content" : "I have a dream",
+            "timestamp" : 0
+        },
+        {
+            "content" : "That one day",
+            "timestamp" : 2
+        },
+        {
+            "content" : "This nation will rise up",
+            "timestamp" : 5
+        },
+        {
+            "content" : "Leave out the true meaning of its crise",
+            "timestamp" : 8
+        },
+        {
+            "content" : "We all choose to niquer serge car il est con",
+            "timestamp" : 12
+        },
+        {
+            "content" : "Et qu'il ne nous inspire que du dégout",
+            "timestamp" : 16
+        }
+    ],
+    "1": [
+        {
+            "content" : "",
+            "timestamp" : ""
+        },
+        {
+            "content" : "",
+            "timestamp" : ""
+        },
+        {
+            "content" : "",
+            "timestamp" : ""
+        },
+        {
+            "content" : "",
+            "timestamp" : ""
+        }
+    ]
+}

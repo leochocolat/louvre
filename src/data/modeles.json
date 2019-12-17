@@ -1,0 +1,22 @@
+[
+    {
+        "name": "microphone",
+        "url": "modeles/microphone/scene.gltf"
+    },
+    {
+        "name": "modele-test",
+        "url": "modeles/modele/Untitled.gltf"
+    },
+    {
+        "name": "ruby",
+        "url": "modeles/ruby_rose/scene.gltf"
+    },
+    {
+        "name": "room",
+        "url": "modeles/room/Scene.gltf"
+    },
+    {
+        "name": "testAnim",
+        "url": "modeles/export/Untitled.gltf"
+    }
+]

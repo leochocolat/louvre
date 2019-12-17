@@ -1,17 +1,19 @@
 {{#extend "html/template"}}
   {{#content "body"}}
 
-  
   <main role="main">
-    
-    {{> partials/header }}
 
-    {{> sections/section-home }}
+    {{> sections/section-loader }}
 
-    {{> partials/footer }}
+    <canvas class="canvas" data-component="three-component"></canvas>
     
+    {{> sections/section-subtitles }}
+
+    {{> partials/controls }}
+
+    <div class="cursor js-cursor" data-component="cursor-component"></div>
+
   </main>
-
 
   {{/content}}
 {{/extend}}

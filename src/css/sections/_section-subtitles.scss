@@ -1,0 +1,21 @@
+.section-subtitles {
+    display: flex;
+    justify-content: center;
+
+    position: absolute;
+    bottom: 150px;
+    left: 0;
+
+    width: 100%;
+
+    color: white;
+    text-align: center;
+
+    pointer-events: none;
+}
+
+.section-subtitles__content {
+    font-size: rem(20px);
+    font-family: sans-serif;
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+}

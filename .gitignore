@@ -6,3 +6,6 @@ node_modules
 dist
 generated
 build
+.zip
+.mp4
+.mov

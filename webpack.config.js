@@ -105,6 +105,15 @@ module.exports = {
         from: path.join(sourceDir, 'img'),
         to: 'img',
       },
+      //remove to run production build and add manually the modeles folder in the build folder
+      {
+        from: path.join(sourceDir, 'modeles'),
+        to: 'modeles',
+      },
+      {
+        from: path.join(sourceDir, 'audios'),
+        to: 'audios',
+      },
     ]),
     new MiniCssExtractPlugin({
       filename: isProd ? '[name].[chunkhash].css' : '[name].css',
@@ -115,7 +124,7 @@ module.exports = {
   ].concat(isProd ? prodPlugins : []),
   devServer: {
     contentBase: buildDir,
-    compress: true,
+    compress: false,
     port: PORT,
     watchOptions: {
       poll: true,

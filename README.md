@@ -61,6 +61,9 @@ dist
     └── index.html
 ```
 
+### THREE JS
+To add a new 3D Model (gltf only) just add your 3D Object folder into src/modeles and then add a new item in src/data/modeles.json. 
+
 ### TODO
 Add browsersync
 Handle Handlebars compilation errors
