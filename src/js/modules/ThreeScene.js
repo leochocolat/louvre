@@ -15,6 +15,7 @@ import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
 import CameraLight from './CameraLight';
 import Ground from './Ground';
+import { Mesh } from 'three';
 
 const SETTINGS = {
     enableRaycast: true,
@@ -147,15 +148,28 @@ class ThreeScene {
         this.sceneEntities.cameraLight.updateLightPosition(this._camera.position);
         this.sceneEntities.cameraLight.updateLightTarget(object);
         this.sceneEntities.cameraLight.turnOn();
-        // if (object.name === 'Cube')
-        console.log(object.name)
 
-        if (object.name == 'Rideau') {
+        console.log(object.name);
+
+        if (object.name == 'clic_inte_8') {
+            let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
             TweenMax.to(object.scale, 1, { x: 0.5 });
         }
-        if (object.name == 'Ouverture_livre') {
-            TweenMax.to(object.rotation, 1, { z: -0.1 });
+        if (object.name == 'clic_inte_4') {
+            let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
+            TweenMax.to(child.rotation, 1, { z: 1 });
         }
+        
+    }
+
+    _getSceneObjectWithName(object, name) {
+        let mesh;
+        object.traverse((child) => {
+            if (child.isMesh && child.name === name) {
+                mesh = child;
+            }
+        });
+        return mesh;
     }
 
     resize(width, height) {
