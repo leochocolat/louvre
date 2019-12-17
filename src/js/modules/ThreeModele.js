@@ -27,11 +27,23 @@ class ThreeModele {
 
         this.object.traverse((child) => {
             if (child.isMesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                child.material.emissive = new THREE.Color(0xffffff);
-                child.material.emissiveIntensity = 0;
-                
+                let regex = /inte_/;
+                if (regex.test(child.name)) {
+                    child.castShadow = false;
+                    child.receiveShadow = false;
+                    child.visible = true;
+                    
+                    if (child.material) {
+                        child.material.transparent = true;
+                        child.material.opacity = 0;
+                    }
+                } else {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.material.emissive = new THREE.Color(0xffffff);
+                    child.material.emissiveIntensity = 0;
+                }
+
                 if (child.name == 'IMAGE') {
                     child.castShadow = false;
                     child.receiveShadow = false;
@@ -59,7 +71,7 @@ class ThreeModele {
     getClickableAreas() {
         this.object.traverse((child) => {
             if (child.isMesh) {
-                console.log(child)
+                // console.log(child)
                 if (child.name === 'Sculpture') {
                     this.object.updateMatrixWorld();
 

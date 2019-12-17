@@ -211,6 +211,8 @@ class ThreeScene {
             this.sceneEntities[i].update(this._delta);
         }
 
+        this._soundManager.update(this._delta);
+
         // this._controls.update();
         // this._controls.enabled = SETTINGS.enableOrbitControl;
         this._renderer.render(this._scene, this._camera);

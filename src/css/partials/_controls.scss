@@ -34,6 +34,15 @@
     }
 }
 
+.mute-button__canvas {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    width: 50px;
+    height: 50px;
+} 
+
 .mute-button__sound-state {
     display: inline-block;
     margin-right: 10px;

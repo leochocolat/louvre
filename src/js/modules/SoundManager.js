@@ -2,6 +2,7 @@ import data from '../../data/audios';
 import bindAll from '../utils/bindAll';
 import SubtitlesManager from './SubtitlesManager';
 import { TweenLite } from 'gsap';
+import SoundVisualizerComponent from '../components/SoundVisualizerComponent';
 
 class SoundManager {
     constructor() {
@@ -9,13 +10,16 @@ class SoundManager {
             this,
             '_audioEndedHandler',
             '_muteButtonClickHandler',
-            '_tickHandler'
         )
         
         this.ui = {
             muteButton: document.querySelector('.js-mute-button'),
             soundBar: document.querySelectorAll('.js-mute-button span'),
             soundState: document.querySelector('.js-sound-state'),
+        }
+
+        this.components = {
+            soundVisualizer: new SoundVisualizerComponent()
         }
 
         this._setup();
@@ -90,21 +94,19 @@ class SoundManager {
     }
 
     _updateSoundBar(frequencyArray) {
-        // console.log(frequencyArray);
         for (let i = 0; i < this.ui.soundBar.length; i++) {
             TweenLite.to(this.ui.soundBar[i], .2, { scaleY: 0.2 + frequencyArray[i]/300 })
         }
     }
 
-    _tick() {
+    update(delta) {
         let frequencyArray = new Uint8Array(this._analyzer.frequencyBinCount);
         this._analyzer.getByteFrequencyData(frequencyArray);
-        this._updateSoundBar(frequencyArray);
+        this.components.soundVisualizer.update(delta, this._audioGain.gain.value);
     } 
 
     _setupEventListeners() {
         this.ui.muteButton.addEventListener('click', this._muteButtonClickHandler);
-        TweenLite.ticker.addEventListener('tick', this._tickHandler);
     }
 
     _audioEndedHandler() {
@@ -113,10 +115,6 @@ class SoundManager {
 
     _muteButtonClickHandler() {
         this.toggleMute();
-    }
-
-    _tickHandler() {
-        this._tick();
     }
 }
 
