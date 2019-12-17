@@ -13,7 +13,7 @@
     },
     {
         "name": "room",
-        "url": "modeles/room/scene.gltf"
+        "url": "modeles/room/Scene.gltf"
     },
     {
         "name": "testAnim",

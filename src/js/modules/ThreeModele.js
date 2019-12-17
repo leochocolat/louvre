@@ -45,7 +45,7 @@ class ThreeModele {
 
     addToScene(scene) {
         scene.add(this.object);
-        scene.add(this._sphereRed);
+        // scene.add(this._sphereRed);
     }
 
     updateRotation() {
@@ -59,18 +59,20 @@ class ThreeModele {
     getClickableAreas() {
         this.object.traverse((child) => {
             if (child.isMesh) {
+                console.log(child)
                 if (child.name === 'Sculpture') {
                     this.object.updateMatrixWorld();
 
                     let vec = new THREE.Vector3();
                     let position = child.getWorldPosition(vec); 
 
-                    let sphereGeometry = new THREE.BoxGeometry(1, 1, 1);
+                    let sphereGeometry = new THREE.SphereGeometry(2, 50, 50);
                     let sphereMaterialRed = new THREE.MeshStandardMaterial({
                         color: 0x00ff00,
                         emissive: 0x00ff00,
                         emissiveIntensity: 0.5
                     });
+
                     this._sphereRed = new THREE.Mesh(sphereGeometry, sphereMaterialRed);
                     this._sphereRed.name = `ancragePoint_${child.name}`;
                     this._sphereRed.position.x = position.x;
