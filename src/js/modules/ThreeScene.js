@@ -20,12 +20,17 @@ const SETTINGS = {
     enableRaycast: true,
     enableOrbitControl: true,
     position: {
-        x: -5.5,
+        x: 0.2,
         y: 22.2,
-        z: 65
+        z: 31.3
     },
     toggleGround: false,
     toggleCameraLight: true,
+    cameraLookAt: {
+        x: -594,
+        y: 1.6,
+        z: -64.6,
+    }
 }
 
 class ThreeScene {
@@ -35,7 +40,8 @@ class ThreeScene {
             '_assetsLoadedHandler',
             '_render',
             '_cameraSettingsChangedHandler',
-            '_toggleEntityHandler'
+            '_toggleEntityHandler',
+            // '_setCameraLookAt'
         );
 
         const gui = new dat.GUI({
@@ -46,12 +52,18 @@ class ThreeScene {
         scene.add(SETTINGS, 'enableRaycast');
         scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
         scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        
+
         let camera = gui.addFolder('camera');
         camera.add(SETTINGS, 'enableOrbitControl');
         camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
         camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
         camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
+
+        let cameraView = gui.addFolder('cameraView');
+        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
+        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
+        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
+
 
         this._canvas = canvas;
 
@@ -97,13 +109,24 @@ class ThreeScene {
 
         this._renderer.shadowMap.enabled = true;
 
-        this._controls = new OrbitControls(this._camera, this._renderer.domElement);
+        // this._controls = new OrbitControls(this._camera, this._renderer.domElement);
+
         this._camera.position.set(
             SETTINGS.position.x,
             SETTINGS.position.y,
             SETTINGS.position.z,
         );
-        this._controls.update();
+
+        this._camera.lookAt(
+            SETTINGS.cameraLookAt.x,
+            SETTINGS.cameraLookAt.y,
+            SETTINGS.cameraLookAt.z
+        );
+        // this._controls.update();
+        setTimeout(() => {
+
+            this._setCameraLookAt()
+        }, 1000);
     }
 
     _createEntities() {
@@ -148,7 +171,6 @@ class ThreeScene {
         this.sceneEntities.cameraLight.updateLightTarget(object);
         this.sceneEntities.cameraLight.turnOn();
         // if (object.name === 'Cube')
-        console.log(object.name)
 
         if (object.name == 'Rideau') {
             TweenMax.to(object.scale, 1, { x: 0.5 });
@@ -169,20 +191,20 @@ class ThreeScene {
 
     _render() {
         this._delta += 0.01;
-        
+
         for (let i in this.sceneEntities) {
             this.sceneEntities[i].update(this._delta);
         }
 
-        this._controls.update();
-        this._controls.enabled = SETTINGS.enableOrbitControl;
+        // this._controls.update();
+        // this._controls.enabled = SETTINGS.enableOrbitControl;
         this._renderer.render(this._scene, this._camera);
     }
 
     tick() {
         if (!this._isReady) return;
 
-        this._controls.update();
+        // this._controls.update();
         this._render();
     }
 
@@ -192,9 +214,27 @@ class ThreeScene {
             SETTINGS.position.y,
             SETTINGS.position.z,
         );
-        this._controls.update();
-        this._controls.saveState();
-        this._controls.reset();
+        // this._controls.update();
+        // this._controls.saveState();
+        // this._controls.reset();
+    }
+
+    _setCameraLookAt() {
+        TweenMax.to(SETTINGS.cameraLookAt, 3, {
+            x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: () => {
+                this._camera.lookAt(SETTINGS.cameraLookAt.x, SETTINGS.cameraLookAt.y, SETTINGS.cameraLookAt.z);
+            }
+        });
+
+        TweenMax.to(SETTINGS.position, 2, {
+            x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: () => {
+                this._camera.position.set(SETTINGS.position.x, SETTINGS.position.y, SETTINGS.position.z)
+            }
+        });
+
+        // this._controls.update();
+        // this._controls.saveState();
+        // this._controls.reset();
     }
 
     _toggleEntityHandler() {
