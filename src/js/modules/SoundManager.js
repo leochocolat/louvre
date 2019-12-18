@@ -44,7 +44,7 @@ class SoundManager {
 
     start(audios) {
         this.audios = audios;
-        this.playAudio('introduction');
+        this.playAudio('8');
         this.playAmbiance('ambiance');
     }
 
