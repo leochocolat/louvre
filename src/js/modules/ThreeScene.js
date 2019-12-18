@@ -41,9 +41,10 @@ class ThreeScene {
             this,
             '_assetsLoadedHandler',
             '_render',
-            '_cameraSettingsChangedHandler',
             '_toggleEntityHandler',
             '_toggleHitBoxes',
+            '_cameraAnimationCompletedHandler',
+            '_audioEndedHandler'
         );
 
         const gui = new dat.GUI({
@@ -159,12 +160,12 @@ class ThreeScene {
 
     _setupCameraAnimations() {
         this._timelines = {};
-        this._timelines.clic_inte_1 = new TimelineLite({ paused: true });
-        this._timelines.clic_inte_1.to(SETTINGS.position, 2, { x: 24.44, y: 24.42, z: 2.39, ease: Power3.easeInOut }, 0);
-        this._timelines.clic_inte_1.to(SETTINGS.cameraLookAt, 2, { x: -43.33, y: -14.27, z: -53.91, ease: Power3.easeInOut }, 0);
+        this._timelines['1'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['1'].to(SETTINGS.position, 2, { x: 24.44, y: 24.42, z: 2.39, ease: Power2.easeInOut }, 0);
+        this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -43.33, y: -14.27, z: -53.91, ease: Power2.easeInOut }, 0);
 
-        this._timelines.clic_inte_1.to(SETTINGS.position, 2, { x: 11.78, y: 16.81, z: -17.58, ease: Power3.easeInOut }, 1.9);
-        this._timelines.clic_inte_1.to(SETTINGS.cameraLookAt, 2, { x: -91.69, y: -67.18, z: -60.49, ease: Power3.easeInOut }, 1.9);
+        this._timelines['1'].to(SETTINGS.position, 2, { x: 11.78, y: 16.81, z: -17.58, ease: Power3.easeInOut }, 1.9);
+        this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -91.69, y: -67.18, z: -60.49, ease: Power3.easeInOut }, 1.9);
     }
 
     rayCast() {
@@ -183,10 +184,9 @@ class ThreeScene {
         }
     }
 
-    _triggerAnimations(object) {
-        // this.sceneEntities.cameraLight.updateLightPosition(this._camera.position);
-        // this.sceneEntities.cameraLight.updateLightTarget(object);
-        // this.sceneEntities.cameraLight.turnOn();
+    _triggerAnimations(object, index) {
+        console.log(index);
+
         if (object.name == 'clic_inte_8') {
             let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
             TweenMax.to(child.scale, 1, { x: 0.5 });
@@ -196,9 +196,8 @@ class ThreeScene {
             TweenMax.to(child.rotation, 1, { z: 1 });
         }
 
-        if (this._timelines[object.name]) {
-            this._timelines[object.name].play();
-            // console.log(object.name)
+        if (this._timelines[index]) {
+            this._timelines[index].play();
         };
     }
 
@@ -253,12 +252,17 @@ class ThreeScene {
         console.log(object.name)
         let regex = /inte_/;
         if (regex.test(object.name)) {
-            this._triggerAnimations(object);
+            let splits = object.name.split('_');
+            this._activeIndex = parseInt(splits[splits.length - 1]);
+            this._triggerAnimations(object, this._activeIndex);
         }
     }
 
-    _cameraSettingsChangedHandler() {
-            
+    _cameraAnimationCompletedHandler() {
+        this.components.content.update(this._activeIndex);
+        this._soundManager.playAudio(this._activeIndex).then((response) => {
+            setTimeout(this._audioEndedHandler, response.duration * 1000);
+        });
     }
 
     _setCameraLookAt() {
@@ -266,7 +270,6 @@ class ThreeScene {
 
         // timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
         // timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
-
 
         timeline.set(SETTINGS.cameraLookAt, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
         timeline.set(SETTINGS.position, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
@@ -285,6 +288,10 @@ class ThreeScene {
         this._models = this._loader.getModels();
         this._audios = this._loader.getAudios();
         this._start();
+    }
+
+    _audioEndedHandler() {
+        this._timelines[this._activeIndex].reverse();
     }
 
     mousemoveHandler(position) {

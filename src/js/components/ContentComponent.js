@@ -13,16 +13,21 @@ class ContentComponent {
 
     }
 
-    update() {
-
+    update(index) {
+        this._activeIndex = index;
+        
+        this.transitionOut();
+        this.ui.blockContent[index].classList.add('isActive');
     }
 
     transitionIn() {
-
+        
     }
 
     transitionOut() {
-
+        for (let i = 0; i < this.ui.blockContent.length; i++) {
+            this.ui.blockContent[i].classList.remove('isActive');
+        }
     }
 }
 
