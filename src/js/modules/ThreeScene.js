@@ -147,7 +147,7 @@ class ThreeScene {
 
         setTimeout(() => {
             this._setCameraLookAt()
-        }, 100);
+        }, 1000);
     }
 
     _createModels() {
@@ -163,13 +163,44 @@ class ThreeScene {
         this._timelines['1'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
         this._timelines['1'].to(SETTINGS.position, 2, { x: 24.44, y: 24.42, z: 2.39, ease: Power2.easeInOut }, 0);
         this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -43.33, y: -14.27, z: -53.91, ease: Power2.easeInOut }, 0);
-
         this._timelines['1'].to(SETTINGS.position, 2, { x: 11.78, y: 16.81, z: -17.58, ease: Power3.easeInOut }, 1.9);
         this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -91.69, y: -67.18, z: -60.49, ease: Power3.easeInOut }, 1.9);
+
+        this._timelines['2'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['2'].to(SETTINGS.position, 2, { x: 2.13, y: 19.17, z: 1.01, ease: Power2.easeInOut }, 0);
+        this._timelines['2'].to(SETTINGS.cameraLookAt, 2, { x: -19.91, y: 7.31, z: -60.76, ease: Power2.easeInOut }, 0);
+
+        this._timelines['3'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['3'].to(SETTINGS.position, 2, { x: -3.78, y: 21.36, z: -6.06, ease: Power2.easeInOut }, 0);
+        this._timelines['3'].to(SETTINGS.cameraLookAt, 2, { x: -19.35, y: 25.21, z: -12.48, ease: Power2.easeInOut }, 0);
+
+        this._timelines['4'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['4'].to(SETTINGS.position, 2, { x: -13.1, y: 8.08, z: 15.06, ease: Power2.easeInOut }, 0);
+        this._timelines['4'].to(SETTINGS.cameraLookAt, 2, { x: -34.09, y: -20.85, z: -47.33, ease: Power2.easeInOut }, 0);
+
+        this._timelines['5'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['5'].to(SETTINGS.position, 2, { x: 4.73, y: 16.15, z: -0.26, ease: Power2.easeInOut }, 0);
+        this._timelines['5'].to(SETTINGS.cameraLookAt, 2, { x: 26.07, y: 15.37, z: -50.88, ease: Power2.easeInOut }, 0);
+
+        this._timelines['6'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['6'].to(SETTINGS.position, 2, { x: -15.22, y: 18.06, z: 20.99, ease: Power2.easeInOut }, 0);
+        this._timelines['6'].to(SETTINGS.cameraLookAt, 2, { x: -60.68, y: 30.35, z: -43.05, ease: Power2.easeInOut }, 0);
+
+        this._timelines['7'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['7'].to(SETTINGS.position, 2, { x: 26.62, y: 15, z: 25, ease: Power2.easeInOut }, 0);
+        this._timelines['7'].to(SETTINGS.cameraLookAt, 2, { x: -69, y: 16, z: 24.42, ease: Power2.easeInOut }, 0);
+        this._timelines['7'].to(SETTINGS.position, 2, { x: 22.21, y: 13.39, z: 4.57, ease: Power2.easeInOut }, 0);
+        this._timelines['7'].to(SETTINGS.cameraLookAt, 2, { x: -166.45, y: 16, z: -40.72, ease: Power2.easeInOut }, 0);
+
+        this._timelines['8'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
+        this._timelines['8'].to(SETTINGS.position, 2, { x: -8.76, y: 13.39, z: 2.36, ease: Power2.easeInOut }, 0);
+        this._timelines['8'].to(SETTINGS.cameraLookAt, 2, { x: 0, y: 12.22, z: -60.56, ease: Power2.easeInOut }, 0);
+        this._timelines['8'].to(SETTINGS.position, 2, { x: 0.16, y: 11.18, z: -8.66, ease: Power2.easeInOut }, 0);
+        this._timelines['8'].to(SETTINGS.cameraLookAt, 2, { x: -27.5, y: 18.85, z: -27.5, ease: Power2.easeInOut }, 0);
     }
 
     rayCast() {
-        if (this._isAnimating) return;
+        if (this._isSpeaking) return;
         if (!SETTINGS.enableRaycast) return;
 
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -185,17 +216,14 @@ class ThreeScene {
     }
 
     _triggerAnimations(object, index) {
-        console.log(index);
-
-        if (object.name == 'clic_inte_8') {
-            let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
-            TweenMax.to(child.scale, 1, { x: 0.5 });
-        }
-        if (object.name == 'clic_inte_4') {
-            let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
-            TweenMax.to(child.rotation, 1, { z: 1 });
-        }
-
+        // if (object.name == 'clic_inte_8') {
+        //     let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
+        //     TweenMax.to(child.scale, 1, { x: 0.5 });
+        // }
+        // if (object.name == 'clic_inte_4') {
+        //     let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
+        //     TweenMax.to(child.rotation, 1, { z: 1 });
+        // }
         if (this._timelines[index]) {
             this._timelines[index].play();
         };
@@ -254,6 +282,7 @@ class ThreeScene {
         if (regex.test(object.name)) {
             let splits = object.name.split('_');
             this._activeIndex = parseInt(splits[splits.length - 1]);
+            this._isSpeaking = true;
             this._triggerAnimations(object, this._activeIndex);
         }
     }
@@ -291,7 +320,9 @@ class ThreeScene {
     }
 
     _audioEndedHandler() {
-        this._timelines[this._activeIndex].reverse();
+        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
+        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        this._isSpeaking = false;
     }
 
     mousemoveHandler(position) {
