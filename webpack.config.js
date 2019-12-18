@@ -114,6 +114,10 @@ module.exports = {
         from: path.join(sourceDir, 'audios'),
         to: 'audios',
       },
+      {
+        from: path.join(sourceDir, 'fonts'),
+        to: 'fonts',
+      },
     ]),
     new MiniCssExtractPlugin({
       filename: isProd ? '[name].[chunkhash].css' : '[name].css',
