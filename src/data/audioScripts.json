@@ -27,20 +27,330 @@
     ],
     "1": [
         {
-            "content" : "",
-            "timestamp" : ""
+            "content" : "Les grecs et les Romains confondaient dans un même temps \"l'artiste\" et \"l'artisan\",",
+            "timestamp" : 0
+        },
+        {
+            "content" : "Tekhnitès en grec et Artifex en latin.",
+            "timestamp" : 4
+        },
+        {
+            "content" : "Relevant des arts mécaniques ou manuels,",
+            "timestamp" : 9
+        },
+        {
+            "content" : "\"l'artiste-artisan\" exerçait son métier dans un atelier,",
+            "timestamp" : 12
+        },
+        {
+            "content" : "ayant acquis par l'apprentissage un savoir-faire technique traditionnel",
+            "timestamp" : 16
+        },
+        {
+            "content" : "qui laissait peu de place à la création individuelle.",
+            "timestamp" : 21
+        }
+    ],
+    "2": [
+        {
+            "content" : "Bien que jusqu'à la Renaissance, l'artisan n'était pas considéré comme un créateur autonome,",
+            "timestamp" : 0
+        },
+        {
+            "content" : "certains sortirent pourtant de l'anonymat,",
+            "timestamp" : 5
+        },
+        {
+            "content" : "comme l'indiquent des objets portant leurs noms, voire quelques éléments biographiques.",
+            "timestamp" : 7
+        },
+        {
+            "content" : "Ces mentions ou ces signatures, le plus souvent complexes à interpréter,",
+            "timestamp" : 15
+        },
+        {
+            "content" : "pouvaient proclamer la notoriété d'un atelier ou l'excellence d'une production.",
+            "timestamp" : 20 
+        },
+        {
+            "content" : "Progressivement, avec la naissance d'une histoire de l'art et d'un marché de l'art,",
+            "timestamp" : 27
+        },
+        {
+            "content" : "certains de ces artisans usèrent de la signature pour valoriser leurs créations.",
+            "timestamp" : 32
+        }
+    ],
+    "3": [
+        {
+            "content" : "A la Renaissance, architectes, sculpteurs et peintres cherchent à s'émanciper de leur statut d'artisan.",
+            "timestamp" : 0
+        },
+        {
+            "content" : "Participant pleinement à la culture humaniste,",
+            "timestamp" : 7
+        },
+        {
+            "content" : "les peintres, particulièrement, affirment cette prétention en cultivant le genre de l'autoportrait.",
+            "timestamp" : 11
         },
         {
             "content" : "",
-            "timestamp" : ""
+            "timestamp" : 18
+        },
+        {
+            "content" : "Digne de se représenter à l'égal des princes,",
+            "timestamp" : 21
+        },
+        {
+            "content" : "le peintre se met en scène et livre ainsi ses réflexions sur l'acte créateur.",
+            "timestamp" : 24
+        }
+    ],
+    "4": [
+        {
+            "content" : "La littérature comme les Beaux-Arts partagent la même question de la représentation du monde.",
+            "timestamp" : 0
+        },
+        {
+            "content" : "Ut pictura poesis - ce célèbre vers du poète Horace",
+            "timestamp" : 6
+        },
+        {
+            "content" : "reprend l'idée selon laquelle l'oeuvre littéraire doit être harmonieusement proportionnée,",
+            "timestamp" : 11
+        },
+        {
+            "content" : "comme les détails d'un tableau.",
+            "timestamp" : 17
         },
         {
             "content" : "",
-            "timestamp" : ""
+            "timestamp" : 20
+        },
+        {
+            "content" : "Cette analogie entre les deux arts,",
+            "timestamp" : 23
+        },
+        {
+            "content" : " a encouragé dès la Renaissance, les peintres à voir dans le figure du poète,",
+            "timestamp" : 27
+        },
+        {
+            "content" : "inspiré par les Muses et honoré par le pouvoir en place,",
+            "timestamp" : 32
+        },
+        {
+            "content" : "le modèle à atteindre et le statut à conquérir.",
+            "timestamp" : 37
+        }
+    ],
+    "5": [
+        {
+            "content" : "Dans la Grèce des Ve et IVe siècles avant J.-C.,",
+            "timestamp" : 0
+        },
+        {
+            "content" : "les peintres tels Zeuxis ou Apelle,",
+            "timestamp" : 3
+        },
+        {
+            "content" : "et les sculpteurs, parmi lesquels Phidias et Praxitele,",
+            "timestamp" : 6
+        },
+        {
+            "content" : "ont acquis reconnaissance et prestige au sein de la cité.",
+            "timestamp" : 10
+        },
+        {
+            "content" : "L'histoire de l'art naissante témoigne du goût pour l'attribution d'oeuvres à des artistes connus.",
+            "timestamp" : 14
+        },
+        {
+            "content" : "Au Ier siècle après J.-C.,",
+            "timestamp" : 21
+        },
+        {
+            "content" : "l'auteur romain Pline l'Ancien reprend cette tradition dans son Histoire naturelle.",
+            "timestamp" : 24
+        },
+        {
+            "content" : "Ces vies d'artistes antiques deviennent des sources d'inspiration.",
+            "timestamp" : 31
+        },
+        {
+            "content" : "Le peintre et historien de l'art italien, Vasari reprend cette veine biographique",
+            "timestamp" : 35
+        },
+        {
+            "content" : "lorsqu'il publie en 1550 à Florence les Vies des plus excellents architectes,",
+            "timestamp" : 40
+        },
+        {
+            "content" : "peintres et sculpteurs, de Cimabue à Michel-Ange.",
+            "timestamp" : 45
+        },
+        {
+            "content" : "Comme leurs illustres prédécesseurs antiques,",
+            "timestamp" : 51
+        },
+        {
+            "content" : "les Vies des artistes de la Renaissance deviennent à leur tour des modèles à méditer et à imiter.",
+            "timestamp" : 55
+        }
+    ],
+    "6": [
+        {
+            "content" : "En France, l'Académie royale de peinture et de sculpture, fondée en 1648,",
+            "timestamp" : 0
+        },
+        {
+            "content" : "est placée sous la protection du roi Louis XIV.",
+            "timestamp" : 5
+        },
+        {
+            "content" : "Au XVIIIe siècle, elle a son siège au Louvre, où sont conservées ses collections,",
+            "timestamp" : 11
+        },
+        {
+            "content" : "notamment de protraits et d'autoportaits d'académiciens.",
+            "timestamp" : 16
+        },
+        {
+            "content" : "La nouvelle institution artistique,",
+            "timestamp" : 22
+        },
+        {
+            "content" : "répond au désir d'un certain nombre d'artistes,",
+            "timestamp" : 24
+        },
+        {
+            "content" : "de s'affranchir de la tutelle des corporations de métier,",
+            "timestamp" : 27
+        },
+        {
+            "content" : "qui enferment les peintres et les sculpteurs dans un système hiérarchisé.",
+            "timestamp" : 30
         },
         {
             "content" : "",
-            "timestamp" : ""
+            "timestamp" : 37
+        },
+        {
+            "content" : "Dispensant un enseignement fondé sur le dessin d'après le modèle vivant et l'Antique,",
+            "timestamp" : 38
+        },
+        {
+            "content" : "l'Académie élève la peinture et la sculpture au rang d'arts nobles dits \"arts libéraux\".",
+            "timestamp" : 44
+        },
+        {
+            "content" : "En 1793, la Révolution Française supprime l'Académie royale et crée l'Académie des beaux-arts.",
+            "timestamp" : 52
+        },
+        {
+            "content" : "Son influence est progressivement contestée au cours du XIXe siècle.",
+            "timestamp" : 62
+        }
+    ],
+    "7": [
+        {
+            "content" : "Alors que le siècle des Lumières voit l'affirmation",
+            "timestamp" : 0
+        },
+        {
+            "content" : "et parfois même la consécration des talents artistiques de plusieurs femmes à l'échelle européenne,",
+            "timestamp" : 3
+        },
+        {
+            "content" : "l'attitude à leur égard de la part des institutions, des critiques et des intellectuels demeure ambigüe,",
+            "timestamp" : 7
+        },
+        {
+            "content" : "souvent même réticente.",
+            "timestamp" : 13.5
+        },
+        {
+            "content" : "Le public accorde pourtant son attention et même ses faveurs à ces femmes d'exception",
+            "timestamp" : 17
+        },
+        {
+            "content" : "qui savent construire une carrière durable et obtiennent parfois des commandes de premier plan.",
+            "timestamp" : 21
+        },
+        {
+            "content" : " Aux XVIIe et XVIIIe siècles,",
+            "timestamp" : 29
+        },
+        {
+            "content" : "une quinzaine de femmes en tout sont admises dans les rangs de l'Académie",
+            "timestamp" : 31
+        },
+        {
+            "content" : "pour plus de cinq cents hommes. ",
+            "timestamp" : 35
+        }
+    ],
+    "8": [
+        {
+            "content" : "C'est un phare allumé sur mille citadelles, un appel de chasseurs perdus dans les grands bois !",
+            "timestamp" : 0
+        },
+        {
+            "content" : "C'est ainsi que Baudelaire, dans \"Les Phares\", évoque la longue chaîne des peintres ",
+            "timestamp" : 7
+        },
+        {
+            "content" : "qui d'un siècle à l'autre, de Rubens à Delacroix,",
+            "timestamp" : 13
+        },
+        {
+            "content" : "puisant dans la tradition pour toujours inventer à nouveau,",
+            "timestamp" : 17
+        },
+        {
+            "content" : "témoignent \"d'âge en âge\" de la \"dignité\" de l'artiste.",
+            "timestamp" : 20
+        },
+        {
+            "content" : "",
+            "timestamp" : 26
+        },
+        {
+            "content" : "Dès lors, les grands artistes peuvent devenir des “phares” qui éclairent l'humanité,",
+            "timestamp" : 28
+        },
+        {
+            "content" : "car leur style n'est pas seulement une question de technique et de virtuosité,",
+            "timestamp" : 34
+        },
+        {
+            "content" : "mais une manière de sentir, une façon singulière de percevoir le monde,",
+            "timestamp" : 38
+        },
+        {
+            "content" : "dont la découverte enrichit la sensibilité du spectateur.",
+            "timestamp" : 42
+        },
+        {
+            "content" : "",
+            "timestamp" : 48
+        },
+        {
+            "content" : "Ainsi depuis la Renaissance jusqu'à nos jours,",
+            "timestamp" : 50
+        },
+        {
+            "content" : "la figure de l'artiste n'est plus seulement un artisan, mais un créateur :",
+            "timestamp" : 52.5
+        },
+        {
+            "content" : "en signant ses oeuvres, il se proclame auteur singulier d'une vision subjective du monde,",
+            "timestamp" : 58
+        },
+        {
+            "content" : "pourtant partageable par tous.",
+            "timestamp" : 65
         }
     ]
 }
