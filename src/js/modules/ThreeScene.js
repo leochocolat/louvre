@@ -5,7 +5,7 @@ import lerp from '../utils/lerp';
 //vendors
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { TweenLite, Power3 } from 'gsap';
+import { TweenLite, Power3, TimelineLite } from 'gsap';
 import * as dat from 'dat.gui';
 
 //modules
@@ -27,6 +27,7 @@ const SETTINGS = {
     },
     toggleGround: false,
     toggleCameraLight: true,
+    toggleHitboxes: true,
     cameraLookAt: {
         x: -594,
         y: 1.6,
@@ -42,7 +43,7 @@ class ThreeScene {
             '_render',
             '_cameraSettingsChangedHandler',
             '_toggleEntityHandler',
-            // '_setCameraLookAt'
+            '_toggleHitBoxes',
         );
 
         const gui = new dat.GUI({
@@ -53,17 +54,18 @@ class ThreeScene {
         scene.add(SETTINGS, 'enableRaycast');
         scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
         scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
 
         let camera = gui.addFolder('camera');
         camera.add(SETTINGS, 'enableOrbitControl');
-        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
 
         let cameraView = gui.addFolder('cameraView');
-        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
-        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
-        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
+        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
 
 
         this._canvas = canvas;
@@ -80,6 +82,7 @@ class ThreeScene {
         this._setup();
         this._setupAudioManager();
         this._loadAssets();
+        this._setupCameraAnimations();
         this._createEntities();
     }
 
@@ -123,9 +126,10 @@ class ThreeScene {
             SETTINGS.cameraLookAt.y,
             SETTINGS.cameraLookAt.z
         );
-        // this._controls.update();
-        setTimeout(() => {
 
+        // this._controls.update();
+
+        setTimeout(() => {
             this._setCameraLookAt()
         }, 1000);
     }
@@ -152,7 +156,14 @@ class ThreeScene {
         }
     }
 
+    _setupCameraAnimations() {
+        this._timelines = {};
+        this._timelines.clic_inte_1 = new TimelineLite({ paused: true });
+        this._timelines.clic_inte_1.to(this._camera.position, 1, { x: 0.2, y: 35.45, z: 33.24, ease: Power3.easeInOut });
+    }
+
     rayCast() {
+        if (this._isAnimating) return;
         if (!SETTINGS.enableRaycast) return;
 
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -163,26 +174,27 @@ class ThreeScene {
         let intersects = this._rayCaster.intersectObjects(this._scene.children, true);
 
         if (intersects[0]) {
-            this._triggerAnimations(intersects[0].object);
+            this.rayCastHandler(intersects[0].object);
         }
     }
 
     _triggerAnimations(object) {
-        this.sceneEntities.cameraLight.updateLightPosition(this._camera.position);
-        this.sceneEntities.cameraLight.updateLightTarget(object);
-        this.sceneEntities.cameraLight.turnOn();
-
-        console.log(object.name);
+        // this.sceneEntities.cameraLight.updateLightPosition(this._camera.position);
+        // this.sceneEntities.cameraLight.updateLightTarget(object);
+        // this.sceneEntities.cameraLight.turnOn();
 
         if (object.name == 'clic_inte_8') {
             let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
-            TweenMax.to(object.scale, 1, { x: 0.5 });
+            TweenMax.to(child.scale, 1, { x: 0.5 });
         }
         if (object.name == 'clic_inte_4') {
             let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
             TweenMax.to(child.rotation, 1, { z: 1 });
         }
 
+        if (this._timelines[object.name]) {
+            this._timelines[object.name].play();
+        };
     }
 
     _getSceneObjectWithName(object, name) {
@@ -225,11 +237,25 @@ class ThreeScene {
         this._render();
     }
 
+    rayCastHandler(object) {
+        console.log(object.name)
+        let regex = /inte_/;
+        if (regex.test(object.name)) {
+            this._triggerAnimations(object);
+        }
+    }
+
     _cameraSettingsChangedHandler() {
         this._camera.position.set(
             SETTINGS.position.x,
             SETTINGS.position.y,
             SETTINGS.position.z,
+        );
+
+        this._camera.lookAt(
+            SETTINGS.cameraLookAt.x,
+            SETTINGS.cameraLookAt.y,
+            SETTINGS.cameraLookAt.z
         );
         // this._controls.update();
         // this._controls.saveState();
@@ -257,6 +283,10 @@ class ThreeScene {
     _toggleEntityHandler() {
         this.sceneEntities.ground.setVisibility(SETTINGS.toggleGround);
         this.sceneEntities.cameraLight.setVisibility(SETTINGS.toggleCameraLight);
+    }
+
+    _toggleHitBoxes() {
+        this.sceneEntities.modeleTest.disableHitBox(SETTINGS.disableHitBox);
     }
 
     _assetsLoadedHandler() {

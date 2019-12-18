@@ -71,7 +71,6 @@ class ThreeModele {
     getClickableAreas() {
         this.object.traverse((child) => {
             if (child.isMesh) {
-                // console.log(child)
                 if (child.name === 'Sculpture') {
                     this.object.updateMatrixWorld();
 
@@ -101,6 +100,18 @@ class ThreeModele {
 
     update(delta) {
         this.updateRotation();
+    }
+    
+    disableHitBox(bool) {
+        console.log(bool)
+        this.object.traverse((child) => {
+            if (child.isMesh) {
+                let regex = /inte_/;
+                if (regex.test(child.name)) {
+                    child.visible = bool;
+                }
+            }
+        });
     }
 
 }

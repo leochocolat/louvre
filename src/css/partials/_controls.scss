@@ -4,7 +4,7 @@
     bottom: 30px;
 
     width: 100px;
-    height: 30px;
+    height: 50px;
 
     color: black;
 
@@ -44,11 +44,16 @@
 } 
 
 .mute-button__sound-state {
-    display: inline-block;
-    margin-right: 10px;
+    position: absolute;
+    top: 0;
+    right: 70px;
 
+    display: inline-block;
+
+    line-height: 50px;
     text-transform: uppercase;
 
+    color: white;
     opacity: 0;
     transform: translateY(10%);
 
