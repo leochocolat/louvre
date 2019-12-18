@@ -37,7 +37,7 @@ class SoundVisualizerComponent {
 
     _updatePoints(delta, gain) {
         for (let i = 0; i < this._points.length; i++) {
-            this._points[i].y = this._height/2 + Math.sin((delta + i) * 0.4) * 10 * gain;
+            this._points[i].y = this._height/2 + Math.sin((delta + i * 0.3)) * 10 * gain;
         }
     }
 

@@ -2,15 +2,117 @@
     "title" : "Louvre",
     "metadescription" : "Immersive website for la petite gallery du Louvre, Gobelins students",
     "content" : {
-        "1" : {
+        "one" : {
             "title" : "L'artiste, cet artisan de génie",
-            "quote" : {
+            "introduction" : "L'artiste avant tout un artisan doué d'un savoir manuel",
+            "description" : {
                 "content" : "",
-                "sources" : ""
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
             },
-            "description" : "",
-            "explication" : "",
-            "modeleName" : ""
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
+        },
+        "two" : {
+            "title" : "La signature",
+            "introduction" : "Indiquer la provenance mais aussi revendiquer sa création",
+            "description" : {
+                "content" : "",
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
+            },
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
+        },
+        "three" : {
+            "title" : "L'autoportrait",
+            "introduction" : "L'autoportrait, entre oeuvre de jeunesse et besoin de postérité",
+            "description" : {
+                "content" : "",
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
+            },
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
+        },
+        "four" : {
+            "title" : "Ut pictura poesis",
+            "introduction" : "Le poème harmonieusement proportionné comme un tableau",
+            "description" : {
+                "content" : "",
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
+            },
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
+        },
+        "five" : {
+            "title" : "Vies d'artiste",
+            "introduction" : "Le poème harmonieusement proportionné comme un tableau",
+            "description" : {
+                "content" : "",
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
+            },
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
+        },
+        "six" : {
+            "title" : "L'artiste et l'académie",
+            "introduction" : "L'émancipation de l'artiste et l'élévation de l'art pictural et sculptural",
+            "description" : {
+                "content" : "",
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
+            },
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
+        },
+        "seven" : {
+            "title" : "La femme artiste",
+            "introduction" : "De la présence atténuée à la figure affirmée au sein une société misogyne sclérosée",
+            "description" : {
+                "content" : "",
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
+            },
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
+        },
+        "eight" : {
+            "title" : "L'artiste 'un phare allumé sur mille citadelles'",
+            "introduction" : "La figure romantique de l'artiste qui éclaire l'humanité",
+            "description" : {
+                "content" : "",
+                "author" : "Eschmounillec, sculpteur actif à Chypre au VIIe siècle av.J-C. Monument offet au dieu Bès Larnaca (Chypre), 750-600 avant J.C., calcaire, 68 x 29 cm, Paris, musée du Louvre, département des Antiquités orientales AM 1196"
+            },
+            "modeleName" : "",
+            "quote" : {
+                "content" : "Et il fit d'abord un bouclier grand et solide, aux ornements variés, avec un contour triple et resplendissant et une attache d'argent. [...] Il y représenta la terre et le ciel, et la mer et l'infatiguable Soleil, l'orbe entier de la lune et tous les astres dont le ciel est couronné.",
+                "author" : "HOMERE, Iliade, XVIII, 482 et sq., VIe siècle av. J.-C., traduit par P. Mazon, Belles-Lettres, Paris, 1974"
+            },
+            "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
         }
     }
 }

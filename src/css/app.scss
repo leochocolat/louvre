@@ -18,9 +18,11 @@
  @import "partials/canvas";
  @import "partials/controls";
  @import "partials/cursor";
+ @import "partials/block-content";
  
  /**
  * Sections
  */
  @import "sections/section-loader";
  @import "sections/section-subtitles";
+ @import "sections/section-content";

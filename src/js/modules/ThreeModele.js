@@ -60,6 +60,34 @@ class ThreeModele {
         // scene.add(this._sphereRed);
     }
 
+    getPicturePosition() {
+        let vec = new THREE.Vector3();
+
+        this.object.traverse((child) => {
+            if (child.isMesh) {
+                if (child.name === 'toile_menu') {
+                    this.object.updateMatrixWorld();
+                    let position = child.getWorldPosition(vec);
+
+                    let sphereGeometry = new THREE.SphereGeometry(2, 50, 50);
+                    let sphereMaterialRed = new THREE.MeshStandardMaterial({
+                        color: 0x00ff00,
+                        emissive: 0x00ff00,
+                        emissiveIntensity: 0.5
+                    });
+
+                    this._sphereRed = new THREE.Mesh(sphereGeometry, sphereMaterialRed);
+                    this._sphereRed.name = `ancragePoint_${child.name}`;
+                    this._sphereRed.position.x = position.x;
+                    this._sphereRed.position.y = position.y;
+                    this._sphereRed.position.z = position.z;
+                }
+            }
+        });
+
+        return vec;
+    }
+
     updateRotation() {
         this._rotation.x = lerp(this._rotation.x, this._mousePosition.x, 0.1);
         this._rotation.y = lerp(this._rotation.y, this._mousePosition.y, 0.1);
