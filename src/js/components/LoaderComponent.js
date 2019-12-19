@@ -74,16 +74,18 @@ class LoaderComponent {
         if (!this._isCompleted) return;
 
         let timeline = new TimelineLite();
-        timeline.staggerTo(this.el.querySelectorAll('.js-span-end'), 1.5, { x: window.innerWidth, ease: Power3.easeInOut }, -0.1, 0);
-        timeline.staggerTo(this.ui.heading.querySelectorAll('.js-heading-span'), 1.5, { x: '150%', ease: Power3.easeInOut }, 0.01, 0);
-        timeline.to(this.el, 1, { x: '100%', ease: Power3.easeOut }, 1);
+        timeline.to(this.ui.heading.querySelectorAll('.js-heading-span'), 1.3, { x: '150%', ease: Power3.easeInOut }, 0);
+        timeline.staggerTo(this.el.querySelectorAll('.js-span-end'), 1.5, { x: window.innerWidth, ease: Power3.easeInOut }, -0.1, 0.1);
+        timeline.to(this.el, 1, { x: '100%', ease: Power3.easeOut }, 1.2);
         timeline.set(this.el, { display: 'none' });
     }
 
     _loaderAnimationCompleted() {
         this._isCompleted = true;
         if (this._isLoaded) {
-            this.transitionOut();
+            setTimeout(() => {
+                this.transitionOut();
+            }, 1000);
         }
     }
 }

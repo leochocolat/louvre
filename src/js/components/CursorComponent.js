@@ -17,11 +17,11 @@ class CursorComponent {
     }
 
     _setupEventListeners() {
-        window.addEventListener('mousemove', this._mousemoveHandler);
+        // window.addEventListener('mousemove', this._mousemoveHandler);
     }
 
     _mousemoveHandler(e) {
-        TweenLite.to(this.el, .5, { autoAlpha: 1, x: e.clientX, y: e.clientY });
+        // TweenLite.to(this.el, .5, { autoAlpha: 1, x: e.clientX, y: e.clientY });
     }
 }
 

@@ -132,7 +132,6 @@ class ThreeModele {
     }
 
     disableHitBox(bool) {
-        console.log(bool)
         this.object.traverse((child) => {
             if (child.isMesh) {
                 let regex = /inte_/;

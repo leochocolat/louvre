@@ -115,8 +115,8 @@ class SoundManager {
     }
 
     update(delta) {
-        let frequencyArray = new Uint8Array(this._analyzer.frequencyBinCount);
-        this._analyzer.getByteFrequencyData(frequencyArray);
+        // let frequencyArray = new Uint8Array(this._analyzer.frequencyBinCount);
+        // this._analyzer.getByteFrequencyData(frequencyArray);
         this.components.soundVisualizer.update(delta, this._audioGain.gain.value);
     } 
 

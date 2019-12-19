@@ -49,7 +49,7 @@ class CanvasComponent {
     }
 
     _setupEventListeners() {
-        this._tickHandler();
+        TweenLite.ticker.addEventListener('tick', this._tickHandler);
         window.addEventListener('resize', this._resizeHandler);
         window.addEventListener('click', this._mouseClickHandler);
         window.addEventListener('mousemove', this._mousemoveHandler);
@@ -58,7 +58,6 @@ class CanvasComponent {
 
     _tickHandler() {
         this._tick();
-        window.requestAnimationFrame(this._tickHandler);
     }
 
     _mouseClickHandler() {
@@ -76,10 +75,10 @@ class CanvasComponent {
         }
         this._threeScene.mousemoveHandler(event);
         this._threeScene.rayCastMouseMove(event);
-
     }
 
     _startBtnClickHandler() {
+        TweenMax.to(this.ui.button, 0.2, { borderColor: 'white', ease: Power1.easeOut });
         TweenMax.to(this.ui.button, 0.5, { autoAlpha: 0, ease: Power1.easeOut });
         TweenMax.staggerTo(this.ui.homeUI, 1, { autoAlpha: 0, ease: Power2.easeInOut }, -0.2, 0);
         TweenMax.to(this.ui.homeSection, 1, { autoAlpha: 0, ease: Power2.easeInOut, delay: 1 });

@@ -1,13 +1,15 @@
 .progress-bar {
-    width: 50px;
+    // width: 10px;
     height: 60vh;
     margin-top: 20vh;
     position: absolute;
-    right: 30px;
+    right: 80px;
     display: flex;
     align-items: center;
     flex-flow: column;
     justify-content: space-between;
+
+    z-index: 1;
 }
 .progress-bar .bullet {
     width: 25px;
@@ -25,7 +27,7 @@
     background-color: white;
     border-radius: 50px;
     transform: scale(1);
-    transition: 1s ease;
+    transition: transform .3s ease-in-out;
 }
 .progress-bar .bullet.active::before {
     width: 8px;
@@ -34,5 +36,4 @@
     display: inline-block;
     background-color: white;
     border-radius: 50px;
-    transition: 1s ease;
 }

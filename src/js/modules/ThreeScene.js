@@ -4,7 +4,6 @@ import lerp from '../utils/lerp';
 
 //vendors
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TweenLite, Power3, TimelineLite } from 'gsap';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
@@ -16,8 +15,10 @@ import { Sky } from 'three/examples/jsm/objects/Sky.js'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 
 import * as dat from 'dat.gui';
+
 //components
 import ProgressBarComponent from '../components/ProgressBarComponent';
+import ContentComponent from '../components/ContentComponent';
 
 //modules
 import AssetsLoader from './AssetsLoader';
@@ -30,7 +31,6 @@ import Ground from './Ground';
 
 import vert from '../shaders/vert.glsl'
 import frag from '../shaders/frag.glsl'
-import ContentComponent from '../components/ContentComponent';
 
 const SETTINGS = {
     enableRaycast: true,
@@ -67,7 +67,8 @@ class ThreeScene {
             '_toggleEntityHandler',
             '_toggleHitBoxes',
             '_cameraAnimationCompletedHandler',
-            '_audioEndedHandler'
+            '_audioEndedHandler',
+            '_cameraUpdateHandler'
         );
 
         const gui = new dat.GUI({
@@ -83,20 +84,20 @@ class ThreeScene {
 
         let camera = gui.addFolder('camera');
         camera.add(SETTINGS, 'enableOrbitControl');
-        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraUpdateHandler);
+        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraUpdateHandler);
+        camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraUpdateHandler);
 
         let cameraView = gui.addFolder('cameraView');
-        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
 
         // let camera = gui.addFolder('camera');
         // camera.add(SETTINGS, 'enableOrbitControl');
-        // camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
-        // camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
-        // camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
+        // camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
+        // camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
+        // camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraUpdateHandler);
 
         this._canvas = canvas;
 
@@ -116,6 +117,10 @@ class ThreeScene {
         this._delta = 0;
 
         this._setup();
+    }
+
+    _setup() {
+        this._setupSceneAndCamera();
         this.resize(window.innerWidth, window.innerHeight);
         this._setupAudioManager();
         this._loadAssets();
@@ -125,16 +130,7 @@ class ThreeScene {
         this._createSceneNoise();
     }
 
-    _setupAudioManager() {
-        this._soundManager = new SoundManager();
-    }
-
-    _loadAssets() {
-        this._loader = new AssetsLoader();
-        this._loader.loadAssets().then(this._assetsLoadedHandler);
-    }
-
-    _setup() {
+    _setupSceneAndCamera() {
         this._scene = new THREE.Scene();
 
         this._camera = new THREE.PerspectiveCamera(50, this._canvas.width / this._canvas.height, 1, 10000);
@@ -154,8 +150,6 @@ class ThreeScene {
         this._renderer.shadowMap.width = 256;
         this._renderer.shadowMap.height = 256;
 
-        // this._controls = new OrbitControls(this._camera, this._renderer.domElement);
-
         this._camera.position.set(
             SETTINGS.position.x,
             SETTINGS.position.y,
@@ -169,9 +163,54 @@ class ThreeScene {
         );
     }
 
-    startExperience() {
-        this._setCameraLookAt();
-        this._soundManager.start(this._audios);
+    _setupAudioManager() {
+        this._soundManager = new SoundManager();
+    }
+
+    _loadAssets() {
+        this._loader = new AssetsLoader();
+        this._loader.loadAssets().then(this._assetsLoadedHandler);
+    }
+
+    _setupCameraAnimations() {
+        this._timelines = {};
+        this._timelines['1'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['1'].to(SETTINGS.position, 2, { x: 24.44, y: 24.42, z: 2.39, ease: Power2.easeInOut }, 0);
+        this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -43.33, y: -14.27, z: -53.91, ease: Power2.easeInOut }, 0);
+        this._timelines['1'].to(SETTINGS.position, 2, { x: 11.78, y: 16.81, z: -17.58, ease: Power3.easeInOut }, 1.9);
+        this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -91.69, y: -67.18, z: -60.49, ease: Power3.easeInOut }, 1.9);
+
+        this._timelines['2'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['2'].to(SETTINGS.position, 2, { x: 2.13, y: 19.17, z: 1.01, ease: Power2.easeInOut }, 0);
+        this._timelines['2'].to(SETTINGS.cameraLookAt, 2, { x: -19.91, y: 7.31, z: -60.76, ease: Power2.easeInOut }, 0);
+
+        this._timelines['3'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['3'].to(SETTINGS.position, 2, { x: -3.78, y: 21.36, z: -6.06, ease: Power2.easeInOut }, 0);
+        this._timelines['3'].to(SETTINGS.cameraLookAt, 2, { x: -19.35, y: 25.21, z: -12.48, ease: Power2.easeInOut }, 0);
+
+        this._timelines['4'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['4'].to(SETTINGS.position, 2, { x: -13.1, y: 8.08, z: 15.06, ease: Power2.easeInOut }, 0);
+        this._timelines['4'].to(SETTINGS.cameraLookAt, 2, { x: -34.09, y: -20.85, z: -47.33, ease: Power2.easeInOut }, 0);
+
+        this._timelines['5'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['5'].to(SETTINGS.position, 2, { x: 4.73, y: 16.15, z: -0.26, ease: Power2.easeInOut }, 0);
+        this._timelines['5'].to(SETTINGS.cameraLookAt, 2, { x: 26.07, y: 15.37, z: -50.88, ease: Power2.easeInOut }, 0);
+
+        this._timelines['6'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['6'].to(SETTINGS.position, 2, { x: -15.22, y: 18.06, z: 20.99, ease: Power2.easeInOut }, 0);
+        this._timelines['6'].to(SETTINGS.cameraLookAt, 2, { x: -60.68, y: 30.35, z: -43.05, ease: Power2.easeInOut }, 0);
+
+        this._timelines['7'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['7'].to(SETTINGS.position, 2, { x: 26.62, y: 15, z: 25, ease: Power2.easeInOut }, 0);
+        this._timelines['7'].to(SETTINGS.cameraLookAt, 2, { x: -69, y: 16, z: 24.42, ease: Power2.easeInOut }, 0);
+        this._timelines['7'].to(SETTINGS.position, 2, { x: 22.21, y: 13.39, z: 4.57, ease: Power2.easeInOut }, 0);
+        this._timelines['7'].to(SETTINGS.cameraLookAt, 2, { x: -166.45, y: 16, z: -40.72, ease: Power2.easeInOut }, 0);
+
+        this._timelines['8'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler, onUpdate: this._cameraUpdateHandler });
+        this._timelines['8'].to(SETTINGS.position, 2, { x: -8.76, y: 13.39, z: 2.36, ease: Power2.easeInOut }, 0);
+        this._timelines['8'].to(SETTINGS.cameraLookAt, 2, { x: 0, y: 12.22, z: -60.56, ease: Power2.easeInOut }, 0);
+        this._timelines['8'].to(SETTINGS.position, 2, { x: 0.16, y: 11.18, z: -8.66, ease: Power2.easeInOut }, 0);
+        this._timelines['8'].to(SETTINGS.cameraLookAt, 2, { x: -27.5, y: 18.85, z: -27.5, ease: Power2.easeInOut }, 0);
     }
 
     _createSceneNoise() {
@@ -213,17 +252,6 @@ class ThreeScene {
         this._effectFXAA.renderToScreen = true;
 
         this._composer.addPass(this._effectFXAA);
-
-    }
-
-    _createSkyBox() {
-        this._sky = new Sky();
-        this._sunSphere = new THREE.Mesh(
-            new THREE.SphereBufferGeometry(20000, 16, 8),
-            new THREE.MeshBasicMaterial({ color: 0xffffff })
-        );
-        this._skyUniforms = this._sky.material.uniforms;
-        this._setupSkyBox();
     }
 
     _setupSkyBox() {
@@ -239,7 +267,16 @@ class ThreeScene {
 
 
         this._scene.add(this._sunSphere, this._sky);
+    }
 
+    _createSkyBox() {
+        this._sky = new Sky();
+        this._sunSphere = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(20000, 16, 8),
+            new THREE.MeshBasicMaterial({ color: 0xffffff })
+        );
+        this._skyUniforms = this._sky.material.uniforms;
+        this._setupSkyBox();
     }
 
     _createEntities() {
@@ -249,59 +286,35 @@ class ThreeScene {
         }
     }
 
+    _createModels() {
+        for (let name in this.sceneEntities) {
+            if (!this.sceneEntities[name].is3dModel) continue;
+            this.sceneEntities[name].build(this._models);
+            this.sceneEntities[name].addToScene(this._scene);
+        }
+    }
+
     _start() {
         this._createModels(this._models);
         this._toggleEntityHandler();
         this._isReady = true;
     }
 
-    _createModels() {
-        for (let i in this.sceneEntities) {
-            if (!this.sceneEntities[i].is3dModel) continue;
-            this.sceneEntities[i].build(this._models);
-            this.sceneEntities[i].addToScene(this._scene);
-        }
+    startExperience() {
+        this._setCameraLookAt();
+        this._soundManager.start(this._audios);
     }
 
-    _setupCameraAnimations() {
-        this._timelines = {};
-        this._timelines['1'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['1'].to(SETTINGS.position, 2, { x: 24.44, y: 24.42, z: 2.39, ease: Power2.easeInOut }, 0);
-        this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -43.33, y: -14.27, z: -53.91, ease: Power2.easeInOut }, 0);
-        this._timelines['1'].to(SETTINGS.position, 2, { x: 11.78, y: 16.81, z: -17.58, ease: Power3.easeInOut }, 1.9);
-        this._timelines['1'].to(SETTINGS.cameraLookAt, 2, { x: -91.69, y: -67.18, z: -60.49, ease: Power3.easeInOut }, 1.9);
+    _setCameraLookAt() {
+        let timeline = new TimelineLite({
+            onComplete: () => {
+                SETTINGS.enableMousemove = true;
+            },
+            onUpdate: this._cameraUpdateHandler
+        });
 
-        this._timelines['2'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['2'].to(SETTINGS.position, 2, { x: 2.13, y: 19.17, z: 1.01, ease: Power2.easeInOut }, 0);
-        this._timelines['2'].to(SETTINGS.cameraLookAt, 2, { x: -19.91, y: 7.31, z: -60.76, ease: Power2.easeInOut }, 0);
-
-        this._timelines['3'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['3'].to(SETTINGS.position, 2, { x: -3.78, y: 21.36, z: -6.06, ease: Power2.easeInOut }, 0);
-        this._timelines['3'].to(SETTINGS.cameraLookAt, 2, { x: -19.35, y: 25.21, z: -12.48, ease: Power2.easeInOut }, 0);
-
-        this._timelines['4'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['4'].to(SETTINGS.position, 2, { x: -13.1, y: 8.08, z: 15.06, ease: Power2.easeInOut }, 0);
-        this._timelines['4'].to(SETTINGS.cameraLookAt, 2, { x: -34.09, y: -20.85, z: -47.33, ease: Power2.easeInOut }, 0);
-
-        this._timelines['5'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['5'].to(SETTINGS.position, 2, { x: 4.73, y: 16.15, z: -0.26, ease: Power2.easeInOut }, 0);
-        this._timelines['5'].to(SETTINGS.cameraLookAt, 2, { x: 26.07, y: 15.37, z: -50.88, ease: Power2.easeInOut }, 0);
-
-        this._timelines['6'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['6'].to(SETTINGS.position, 2, { x: -15.22, y: 18.06, z: 20.99, ease: Power2.easeInOut }, 0);
-        this._timelines['6'].to(SETTINGS.cameraLookAt, 2, { x: -60.68, y: 30.35, z: -43.05, ease: Power2.easeInOut }, 0);
-
-        this._timelines['7'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['7'].to(SETTINGS.position, 2, { x: 26.62, y: 15, z: 25, ease: Power2.easeInOut }, 0);
-        this._timelines['7'].to(SETTINGS.cameraLookAt, 2, { x: -69, y: 16, z: 24.42, ease: Power2.easeInOut }, 0);
-        this._timelines['7'].to(SETTINGS.position, 2, { x: 22.21, y: 13.39, z: 4.57, ease: Power2.easeInOut }, 0);
-        this._timelines['7'].to(SETTINGS.cameraLookAt, 2, { x: -166.45, y: 16, z: -40.72, ease: Power2.easeInOut }, 0);
-
-        this._timelines['8'] = new TimelineLite({ paused: true, onComplete: this._cameraAnimationCompletedHandler });
-        this._timelines['8'].to(SETTINGS.position, 2, { x: -8.76, y: 13.39, z: 2.36, ease: Power2.easeInOut }, 0);
-        this._timelines['8'].to(SETTINGS.cameraLookAt, 2, { x: 0, y: 12.22, z: -60.56, ease: Power2.easeInOut }, 0);
-        this._timelines['8'].to(SETTINGS.position, 2, { x: 0.16, y: 11.18, z: -8.66, ease: Power2.easeInOut }, 0);
-        this._timelines['8'].to(SETTINGS.cameraLookAt, 2, { x: -27.5, y: 18.85, z: -27.5, ease: Power2.easeInOut }, 0);
+        timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 12, z: -24.5, ease: Power3.easeInOut }, 0);
     }
 
     rayCast() {
@@ -334,30 +347,28 @@ class ThreeScene {
     }
 
     _getSelectedBox(object, index) {
-        // console.log(object)
-        // let regex = /interaction_/;
-        this._selectedGlowObjects = [];
-        // if (regex.test(object.name)) {
-        //     this._selectedGlowObjects.push(object);
-        // }
         let regex = /inte_/;
         if (regex.test(object.name)) {
             let splits = object.name.split('_');
             this._activeIndex = parseInt(splits[splits.length - 1]);
-            this._getSelectedObject(this._activeIndex)
+            let glowingObj = this._getSelectedObject(this._activeIndex);
         }
     }
-    _getSelectedObject(index) {
-        console.log(index)
 
-        let regex = /interaction_/;
-        if (this.sceneEntities.modeleTest.object)
-            this.sceneEntities.modeleTest.object.children[0].traverse((child) => {
-                if (regex.test(child.name)) {
-                    console.log(child.name)
-                }
-                // this._selectedGlowObjects.push(object);
-            })
+    _getSelectedObject(index) {
+        let object;
+
+        if (!this.sceneEntities.modeleTest.object) return;
+
+        this.sceneEntities.modeleTest.object.children[0].traverse((child) => {
+            if (child.name === `interaction_${index}`) {
+                object = child;console.log('name', child.name)
+            }
+        });
+
+        console.log(object.name);
+
+        return object;
     }
 
     _triggerAnimations(object, index) {
@@ -401,9 +412,17 @@ class ThreeScene {
         this.noiseCounter += 0.1;
         this._customPass.uniforms["amount"].value = this.noiseCounter;
 
-
         this._soundManager.update(this._delta);
+        this._composer.render(this._scene, this._camera);
+    }
 
+    tick() {
+        if (!this._isReady) return;
+
+        this._render();
+    }
+
+    _cameraUpdateHandler() {
         this._camera.position.x = SETTINGS.position.x;
         this._camera.position.y = SETTINGS.position.y;
         this._camera.position.z = SETTINGS.position.z;
@@ -413,14 +432,6 @@ class ThreeScene {
             SETTINGS.cameraLookAt.y,
             SETTINGS.cameraLookAt.z
         );
-
-        this._composer.render(this._scene, this._camera);
-    }
-
-    tick() {
-        if (!this._isReady) return;
-
-        this._render();
     }
 
     rayCastHandler(object) {
@@ -440,17 +451,6 @@ class ThreeScene {
         });
     }
 
-    _setCameraLookAt() {
-        let timeline = new TimelineLite({
-            onComplete: () => {
-                SETTINGS.enableMousemove = true;
-            }
-        });
-
-        timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
-        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
-    }
-
     _toggleEntityHandler() {
         this.sceneEntities.ground.setVisibility(SETTINGS.toggleGround);
         this.sceneEntities.cameraLight.setVisibility(SETTINGS.toggleCameraLight);
@@ -463,19 +463,21 @@ class ThreeScene {
     _assetsLoadedHandler() {
         this._models = this._loader.getModels();
         this._audios = this._loader.getAudios();
-        this._start();
+        setTimeout(() => {
+            this._start();
+        }, 100);
     }
 
     _audioEndedHandler() {
-        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
-        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
         this.components.content.transitionOut();
         this._isSpeaking = false;
     }
 
     _leaveInteraction() {
-        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
-        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
         this.components.content.transitionOut();
         this._isSpeaking = false;
     }
