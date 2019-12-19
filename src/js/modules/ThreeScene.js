@@ -47,27 +47,27 @@ class ThreeScene {
             '_audioEndedHandler'
         );
 
-        // const gui = new dat.GUI({
-        //     name: 'Scene',
-        // });
+        const gui = new dat.GUI({
+            name: 'Scene',
+        });
 
-        // let scene = gui.addFolder('scene');
-        // scene.add(SETTINGS, 'enableRaycast');
-        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        // scene.add(SETTINGS, 'enableMousemove');
-        // scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
+        let scene = gui.addFolder('scene');
+        scene.add(SETTINGS, 'enableRaycast');
+        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'enableMousemove');
+        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
 
-        // let camera = gui.addFolder('camera');
-        // camera.add(SETTINGS, 'enableOrbitControl');
-        // camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
-        // camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
-        // camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        let camera = gui.addFolder('camera');
+        camera.add(SETTINGS, 'enableOrbitControl');
+        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
 
-        // let cameraView = gui.addFolder('cameraView');
-        // cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
-        // cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
-        // cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        let cameraView = gui.addFolder('cameraView');
+        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
 
 
         this._canvas = canvas;
@@ -134,6 +134,7 @@ class ThreeScene {
 
     startExperience() {
         this._setCameraLookAt();
+        this._soundManager.start(this._audios);
     }
 
     _createEntities() {
@@ -144,7 +145,6 @@ class ThreeScene {
     }
 
     _start() {
-        this._soundManager.start(this._audios);
         this._createModels(this._models);
         this._toggleEntityHandler();
         this._isReady = true;
@@ -220,15 +220,8 @@ class ThreeScene {
     }
 
     _triggerAnimations(object, index) {
-        // if (object.name == 'clic_inte_8') {
-        //     let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
-        //     TweenMax.to(child.scale, 1, { x: 0.5 });
-        // }
-        // if (object.name == 'clic_inte_4') {
-        //     let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
-        //     TweenMax.to(child.rotation, 1, { z: 1 });
-        // }
         if (this._timelines[index]) {
+            this._timelines[index].progress(0);
             this._timelines[index].play();
         };
     }
@@ -325,6 +318,13 @@ class ThreeScene {
     }
 
     _audioEndedHandler() {
+        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
+        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        this.components.content.transitionOut();
+        this._isSpeaking = false;
+    }
+    
+    _leaveInteraction() {
         TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
         TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
         this.components.content.transitionOut();

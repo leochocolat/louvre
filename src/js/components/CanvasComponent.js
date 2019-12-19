@@ -18,6 +18,7 @@ class CanvasComponent {
         this.ui = {
             button: document.querySelector('.js-start-button'),
             homeUI: document.querySelectorAll('.js-ui-home'),
+            homeSection: document.querySelectorAll('.js-home-section'),
         }
 
         this._setup();
@@ -77,7 +78,9 @@ class CanvasComponent {
     }
 
     _startBtnClickHandler() {
-        TweenMax.staggerTo(this.ui.homeUI, 1, { autoAlpha: 0, ease: Power3.easeInOut }, -0.2);
+        TweenMax.to(this.ui.button, 0.5, { autoAlpha: 0, ease: Power1.easeOut });
+        TweenMax.staggerTo(this.ui.homeUI, 1, { autoAlpha: 0, ease: Power2.easeInOut }, -0.2, 0);
+        TweenMax.to(this.ui.homeSection, 1, { autoAlpha: 0, ease: Power2.easeInOut, delay: 1 });
         setTimeout(() => {
             this._threeScene.startExperience();
         }, 1000)
