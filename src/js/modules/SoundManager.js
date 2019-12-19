@@ -51,16 +51,16 @@ class SoundManager {
         let audio = this.audios[name];
         
         let promise = new Promise(resolve => {
-            this._audioContext.decodeAudioData(audio, buffer => {
-                let bufferSource = this._audioContext.createBufferSource();
-                bufferSource.buffer = buffer;
+            this._audioContext.decodeAudioData(audio.slice(0), buffer => {
+                this._bufferSource = this._audioContext.createBufferSource();
+                this._bufferSource.buffer = buffer;
                 resolve(buffer);
-                bufferSource.loop = false;
-                bufferSource.connect(this._audioGain);
-                bufferSource.start();
-                this._currentAudioDuration = bufferSource.buffer.duration;
+                this._bufferSource.loop = false;
+                this._bufferSource.connect(this._audioGain);
+                this._bufferSource.start(0);
+                this._currentAudioDuration = this._bufferSource.buffer.duration;
                 this._subtitlesManager.play(name);
-                bufferSource.onended = this._audioEndedHandler;
+                this._bufferSource.onended = this._audioEndedHandler;
             });
         });
 
@@ -125,6 +125,7 @@ class SoundManager {
     }
 
     _audioEndedHandler() {
+        console.log(this._bufferSource)
         this._subtitlesManager.end();
     }
 
