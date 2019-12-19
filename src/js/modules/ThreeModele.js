@@ -28,11 +28,12 @@ class ThreeModele {
         this.object.traverse((child) => {
             if (child.isMesh) {
                 let regex = /inte_/;
+
                 if (regex.test(child.name)) {
-                    child.castShadow = false;
-                    child.receiveShadow = false;
-                    child.visible = true;
-                    
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.visible = false;
+
                     if (child.material) {
                         child.material.transparent = true;
                         child.material.opacity = 0;
@@ -47,7 +48,7 @@ class ThreeModele {
                 if (child.name == 'IMAGE') {
                     child.castShadow = false;
                     child.receiveShadow = false;
-                    child.visible = false;
+                    child.visible = true;
                 }
             }
         });
@@ -76,7 +77,7 @@ class ThreeModele {
                     this.object.updateMatrixWorld();
 
                     let vec = new THREE.Vector3();
-                    let position = child.getWorldPosition(vec); 
+                    let position = child.getWorldPosition(vec);
 
                     let sphereGeometry = new THREE.SphereGeometry(2, 50, 50);
                     let sphereMaterialRed = new THREE.MeshStandardMaterial({

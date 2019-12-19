@@ -16,7 +16,7 @@ class ComponentFactory {
             const element = this._elements[i];
             const componentName = element.getAttribute(this._selector);
             if (COMPONENTS[componentName]) {
-                COMPONENTS[componentName]().then(function(value) {
+                COMPONENTS[componentName]().then(function (value) {
                     new value.default({ el: element });
                 });
             }

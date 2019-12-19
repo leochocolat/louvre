@@ -6,16 +6,30 @@ import lerp from '../utils/lerp';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TweenLite, Power3 } from 'gsap';
+
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { Sky } from 'three/examples/jsm/objects/Sky.js'
+
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+
 import * as dat from 'dat.gui';
+//components
+import ProgressBarComponent from '../components/ProgressBarComponent';
 
 //modules
-import AssetsLoader from '../modules/AssetsLoader';
-import SoundManager from '../modules/SoundManager';
+import AssetsLoader from './AssetsLoader';
+import SoundManager from './SoundManager';
 import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
 import CameraLight from './CameraLight';
 import Ground from './Ground';
-import { Mesh } from 'three';
+
+
+import vert from '../shaders/vert.glsl'
+import frag from '../shaders/frag.glsl'
 
 const SETTINGS = {
     enableRaycast: true,
@@ -31,6 +45,13 @@ const SETTINGS = {
         x: -594,
         y: 1.6,
         z: -64.6,
+    },
+    sunController: {
+        turbidity: 3.5,
+        rayleigh: 1.3,
+        luminance: 1.1,
+        inclination: 0.05,
+        azimuth: 1.0172,
     }
 }
 
@@ -49,38 +70,40 @@ class ThreeScene {
             name: 'Scene',
         });
 
-        let scene = gui.addFolder('scene');
-        scene.add(SETTINGS, 'enableRaycast');
-        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        // let scene = gui.addFolder('scene');
+        // scene.add(SETTINGS, 'enableRaycast');
+        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
 
-        let camera = gui.addFolder('camera');
-        camera.add(SETTINGS, 'enableOrbitControl');
-        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
-
-        let cameraView = gui.addFolder('cameraView');
-        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
-        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
-        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-1000).max(100).step(0.1).onChange(this._setCameraLookAt)
-
+        // let camera = gui.addFolder('camera');
+        // camera.add(SETTINGS, 'enableOrbitControl');
+        // camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
+        // camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
+        // camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraSettingsChangedHandler);
 
         this._canvas = canvas;
 
+
         this.sceneEntities = {
             lights: new ThreeLights(),
-            modeleTest: new ThreeModele('room'),
+            modeleTest: new ThreeModele('final'),
             cameraLight: new CameraLight(),
             ground: new Ground()
+        };
+
+        this.components = {
+            progressBar: new ProgressBarComponent()
         };
 
         this._delta = 0;
 
         this._setup();
+        this.resize(window.innerWidth, window.innerHeight);
         this._setupAudioManager();
         this._loadAssets();
+        this._createSkyBox();
         this._createEntities();
+        this._createSceneNoise();
     }
 
     _setupAudioManager() {
@@ -109,6 +132,8 @@ class ThreeScene {
         this._rayCaster = new THREE.Raycaster();
 
         this._renderer.shadowMap.enabled = true;
+        this._renderer.shadowMap.width = 256;
+        this._renderer.shadowMap.height = 256;
 
         // this._controls = new OrbitControls(this._camera, this._renderer.domElement);
 
@@ -125,9 +150,76 @@ class ThreeScene {
         );
         // this._controls.update();
         setTimeout(() => {
-
             this._setCameraLookAt()
         }, 1000);
+    }
+
+    _createSceneNoise() {
+        this._composer = new EffectComposer(this._renderer);
+
+        let pixelRatio = window.devicePixelRatio || 0,
+            renderPass = new RenderPass(this._scene, this._camera),
+            noiseEffect = {
+                uniforms: {
+                    "tDiffuse": { value: null },
+                    "amount": { value: this.noiseCounter }
+                },
+                vertexShader: vert,
+                fragmentShader: frag
+            }
+
+        this._composer.addPass(renderPass);
+        renderPass.renderToScreen = true
+
+        this._composer.setSize(this._width * pixelRatio, this._height * pixelRatio);
+        this._composer.setPixelRatio(pixelRatio);
+
+        this.noiseCounter = 0.0
+
+        this._customPass = new ShaderPass(noiseEffect);
+        this._composer.addPass(this._customPass);
+
+        this._outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this._scene, this._camera)
+
+        this._outlinePass.edgeStrength = 10;
+        this._outlinePass.edgeThickness = 4;
+        this._outlinePass.visibleEdgeColor.set(0xffffff);
+
+        this._composer.addPass(this._outlinePass);
+
+        this._effectFXAA = new ShaderPass(FXAAShader);
+
+        this._effectFXAA.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+        this._effectFXAA.renderToScreen = true;
+
+        this._composer.addPass(this._effectFXAA);
+
+    }
+
+    _createSkyBox() {
+        this._sky = new Sky();
+        this._sunSphere = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(20000, 16, 8),
+            new THREE.MeshBasicMaterial({ color: 0xffffff })
+        );
+        this._skyUniforms = this._sky.material.uniforms;
+        this._setupSkyBox();
+    }
+
+    _setupSkyBox() {
+        this._sky.scale.setScalar(450000);
+        this._sunSphere.position.x = 40000 * Math.cos(-SETTINGS.sunController.azimuth);
+        this._sunSphere.position.y = 40000 * Math.sin(-SETTINGS.sunController.azimuth) * Math.sin(-SETTINGS.sunController.inclination);
+        this._sunSphere.position.z = 40000 * Math.sin(-SETTINGS.sunController.azimuth) * Math.cos(-SETTINGS.sunController.inclination);
+        this._sunSphere.visible = SETTINGS.sunController.sun;
+        this._skyUniforms["sunPosition"].value.copy(this._sunSphere.position);
+        this._skyUniforms["luminance"].value = SETTINGS.sunController.luminance;
+        this._skyUniforms["turbidity"].value = SETTINGS.sunController.turbidity;
+        this._skyUniforms["rayleigh"].value = SETTINGS.sunController.rayleigh;;
+
+
+        this._scene.add(this._sunSphere, this._sky);
+
     }
 
     _createEntities() {
@@ -164,7 +256,19 @@ class ThreeScene {
 
         if (intersects[0]) {
             this._triggerAnimations(intersects[0].object);
+            this._addGlowTexture(intersects[0].object);
         }
+    }
+    _addSelectedObject(object) {
+        let regex = /interaction_/;
+        this._selectedGlowObjects = [];
+        if (regex.test(object.name)) {
+            this._selectedGlowObjects.push(object);
+        }
+    }
+    _addGlowTexture(object) {
+        this._addSelectedObject(object);
+        this._outlinePass.selectedObjects = this._selectedGlowObjects;
     }
 
     _triggerAnimations(object) {
@@ -172,7 +276,6 @@ class ThreeScene {
         this.sceneEntities.cameraLight.updateLightTarget(object);
         this.sceneEntities.cameraLight.turnOn();
 
-        console.log(object.name);
 
         if (object.name == 'clic_inte_8') {
             let child = this._getSceneObjectWithName(object.parent, 'ouverture_livre');
@@ -202,6 +305,11 @@ class ThreeScene {
         this._camera.aspect = width / height;
         this._camera.updateProjectionMatrix();
         this._renderer.setSize(width, height);
+
+        if (this._composer && this._effectFXAA) {
+            this._composer.setSize(this._width, this._height);
+            this._effectFXAA.uniforms['resolution'].value.set(1 / this._width, 1 / this._height);
+        }
     }
 
     _render() {
@@ -211,11 +319,16 @@ class ThreeScene {
             this.sceneEntities[i].update(this._delta);
         }
 
+        this.noiseCounter += 0.1;
+        this._customPass.uniforms["amount"].value = this.noiseCounter;
+
+
         this._soundManager.update(this._delta);
 
         // this._controls.update();
         // this._controls.enabled = SETTINGS.enableOrbitControl;
-        this._renderer.render(this._scene, this._camera);
+        // this._renderer.render(this._scene, this._camera);
+        this._composer.render();
     }
 
     tick() {

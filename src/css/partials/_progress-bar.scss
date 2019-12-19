@@ -1,0 +1,38 @@
+.progress-bar {
+    width: 50px;
+    height: 60vh;
+    margin-top: 20vh;
+    position: absolute;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    justify-content: space-between;
+}
+.progress-bar .bullet {
+    width: 25px;
+    height: 25px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+}
+.progress-bar .bullet::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    background-color: white;
+    border-radius: 50px;
+    transform: scale(1);
+    transition: 1s ease;
+}
+.progress-bar .bullet.active::before {
+    width: 8px;
+    height: 8px;
+    transform: scale(2);
+    display: inline-block;
+    background-color: white;
+    border-radius: 50px;
+    transition: 1s ease;
+}
