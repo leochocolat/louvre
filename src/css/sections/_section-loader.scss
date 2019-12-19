@@ -34,6 +34,12 @@
     text-align: center;
     text-transform: uppercase;
     font-size: rem(50px); 
+    letter-spacing: 3px;
+    @include text-rendering();
+
+    span {
+        display: inline-block;
+    }
 }
 
 .section-loader__progress {
@@ -46,5 +52,14 @@
 
     span {
         display: inline-block;
+    }
+    
+    .js-span {
+        &:first-child {
+            transform: translateY(-300px);
+        }
+        &:last-child {
+            transform: translateY(300px);
+        }
     }
 }

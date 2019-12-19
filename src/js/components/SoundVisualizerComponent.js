@@ -16,11 +16,14 @@ class SoundVisualizerComponent {
     }
 
     _resize() {
-        this._width = 50;
-        this._height = 50;
+        this._width = 30;
+        this._height = 20;
 
         this._canvas.width = this._width;
         this._canvas.height = this._height;
+
+        this._canvas.style.width = this._width;
+        this._canvas.style.height = this._height;
     }
 
     _initPoints() {
@@ -37,7 +40,7 @@ class SoundVisualizerComponent {
 
     _updatePoints(delta, gain) {
         for (let i = 0; i < this._points.length; i++) {
-            this._points[i].y = this._height/2 + Math.sin((delta + i * 0.3)) * 10 * gain;
+            this._points[i].y = this._height/2 + Math.sin((delta + i * 0.5)) * 6 * gain;
         }
     }
 

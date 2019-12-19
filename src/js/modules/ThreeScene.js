@@ -47,34 +47,34 @@ class ThreeScene {
             '_audioEndedHandler'
         );
 
-        const gui = new dat.GUI({
-            name: 'Scene',
-        });
+        // const gui = new dat.GUI({
+        //     name: 'Scene',
+        // });
 
-        let scene = gui.addFolder('scene');
-        scene.add(SETTINGS, 'enableRaycast');
-        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'enableMousemove');
-        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
+        // let scene = gui.addFolder('scene');
+        // scene.add(SETTINGS, 'enableRaycast');
+        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'enableMousemove');
+        // scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
 
-        let camera = gui.addFolder('camera');
-        camera.add(SETTINGS, 'enableOrbitControl');
-        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
-        camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        // let camera = gui.addFolder('camera');
+        // camera.add(SETTINGS, 'enableOrbitControl');
+        // camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        // camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
+        // camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler);
 
-        let cameraView = gui.addFolder('cameraView');
-        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        // let cameraView = gui.addFolder('cameraView');
+        // cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraSettingsChangedHandler)
 
 
         this._canvas = canvas;
 
         this.sceneEntities = {
             lights: new ThreeLights(),
-            modeleTest: new ThreeModele('final'),
+            modeleTest: new ThreeModele('500'),
             cameraLight: new CameraLight(),
             ground: new Ground()
         };
@@ -132,6 +132,10 @@ class ThreeScene {
         );
     }
 
+    startExperience() {
+        this._setCameraLookAt();
+    }
+
     _createEntities() {
         for (let i in this.sceneEntities) {
             if (this.sceneEntities[i].is3dModel) continue;
@@ -145,9 +149,9 @@ class ThreeScene {
         this._toggleEntityHandler();
         this._isReady = true;
 
-        setTimeout(() => {
-            this._setCameraLookAt()
-        }, 1000);
+        // setTimeout(() => {
+        //     this._setCameraLookAt()
+        // }, 1000);
     }
 
     _createModels() {
@@ -301,11 +305,8 @@ class ThreeScene {
             }
         });
 
-        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
         timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
-
-        // timeline.set(SETTINGS.cameraLookAt, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
-        // timeline.set(SETTINGS.position, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
     }
 
     _toggleEntityHandler() {

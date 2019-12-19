@@ -1,10 +1,6 @@
 [
     {
-        "name": "room",
-        "url": "modeles/room/scene.gltf"
-    },
-    {
-        "name": "final",
-        "url": "modeles/final/scene.gltf"
+        "name": "500",
+        "url": "modeles/500/SCENE.gltf"
     }
 ]

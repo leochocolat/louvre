@@ -10,14 +10,14 @@ class ContentComponent {
     } 
 
     _setup() {
-
+        
     }
 
     update(index) {
-        this._activeIndex = index;
+        this._activeIndex = index - 1;
         
         this.transitionOut();
-        this.ui.blockContent[index].classList.add('isActive');
+        this.ui.blockContent[this._activeIndex].classList.add('isActive');
     }
 
     transitionIn() {

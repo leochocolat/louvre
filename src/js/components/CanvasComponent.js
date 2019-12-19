@@ -1,5 +1,6 @@
 import bindAll from '../utils/bindAll';
 import ThreeScene from '../modules/ThreeScene';
+import { TweenLite, TweenMax, Power3 } from 'gsap';
 
 class CanvasComponent {
     constructor(options) {
@@ -8,10 +9,16 @@ class CanvasComponent {
             '_tickHandler',
             '_resizeHandler',
             '_mouseClickHandler',
-            '_mousemoveHandler'
+            '_mousemoveHandler',
+            '_startBtnClickHandler'
         );
 
         this.el = options.el;
+
+        this.ui = {
+            button: document.querySelector('.js-start-button'),
+            homeUI: document.querySelectorAll('.js-ui-home'),
+        }
 
         this._setup();
     }
@@ -45,6 +52,7 @@ class CanvasComponent {
         window.addEventListener('resize', this._resizeHandler);
         window.addEventListener('click', this._mouseClickHandler);
         window.addEventListener('mousemove', this._mousemoveHandler);
+        this.ui.button.addEventListener('click', this._startBtnClickHandler);
     }
 
     _tickHandler() {
@@ -66,6 +74,13 @@ class CanvasComponent {
             y: e.clientY - this._height/2,
         }
         this._threeScene.mousemoveHandler(e);
+    }
+
+    _startBtnClickHandler() {
+        TweenMax.staggerTo(this.ui.homeUI, 1, { autoAlpha: 0, ease: Power3.easeInOut }, -0.2);
+        setTimeout(() => {
+            this._threeScene.startExperience();
+        }, 1000)
     }
 }
 
