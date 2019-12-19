@@ -3,11 +3,11 @@ import * as dat from 'dat.gui';
 import bindAll from '../utils/bindAll';
 
 const SETTINGS = {
-    enableHelpers: true,
+    enableHelpers: false,
     windowLight: {
         castShadow: true,
         color: '#ff0000',
-        intensity: 0.6,
+        intensity: 0.8,
         position: {
             x: 29,
             y: 20,
@@ -16,7 +16,7 @@ const SETTINGS = {
     },
     globalLight: {
         castShadow: false,
-        color: '#0000ff',
+        color: '#ff00ff',
         intensity: 0.9,
         position: {
             x: 100,

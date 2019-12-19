@@ -44,25 +44,32 @@ class SoundManager {
 
     start(audios) {
         this.audios = audios;
-        this.playAudio('introduction');
         this.playAmbiance('ambiance');
     }
 
     playAudio(name) {
         let audio = this.audios[name];
-        this._audioContext.decodeAudioData(audio, buffer => {
-            let bufferSource = this._audioContext.createBufferSource();
-            bufferSource.buffer = buffer;
-            bufferSource.loop = false;
-            bufferSource.connect(this._audioGain);
-            bufferSource.start();
-            this._subtitlesManager.play(name);
-            bufferSource.onended = this._audioEndedHandler;
+        
+        let promise = new Promise(resolve => {
+            this._audioContext.decodeAudioData(audio, buffer => {
+                let bufferSource = this._audioContext.createBufferSource();
+                bufferSource.buffer = buffer;
+                resolve(buffer);
+                bufferSource.loop = false;
+                bufferSource.connect(this._audioGain);
+                bufferSource.start();
+                this._currentAudioDuration = bufferSource.buffer.duration;
+                this._subtitlesManager.play(name);
+                bufferSource.onended = this._audioEndedHandler;
+            });
         });
+
+        return promise;
     }
 
     playAmbiance(name) {
         let audio = this.audios[name];
+
         this._audioContext.decodeAudioData(audio, buffer => {
             let bufferSource = this._audioContext.createBufferSource();
             bufferSource.buffer = buffer;
@@ -80,6 +87,14 @@ class SoundManager {
             bufferSource.loop = false;
             bufferSource.connect(this._audioGain);
             bufferSource.start();
+        });
+    }
+
+    getAudioDuration(name) {
+        let audio = this.audios[name];
+
+        return new Promise(resolve => {
+            this._audioContext.decodeAudioData(audio, resolve);
         });
     }
 

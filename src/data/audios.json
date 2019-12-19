@@ -6,5 +6,37 @@
     {
         "name" : "ambiance",
         "url" : "audios/ambiance.mp3"
+    },
+    {
+        "name" : "1",
+        "url" : "audios/01_Commode.mp3"
+    },
+    {
+        "name" : "2",
+        "url" : "audios/02_Statue.mp3"
+    },
+    {
+        "name" : "3",
+        "url" : "audios/03_Tableau.mp3"
+    },
+    {
+        "name" : "4",
+        "url" : "audios/04_Strapontin.mp3"
+    },
+    {
+        "name" : "5",
+        "url" : "audios/05_HommeNu.mp3"
+    },
+    {
+        "name" : "6",
+        "url" : "audios/06_TableauGauche.mp3"
+    },
+    {
+        "name" : "7",
+        "url" : "audios/07_Sculptrice.mp3"
+    },
+    {
+        "name" : "8",
+        "url" : "audios/08_Rideau.mp3"
     }
 ]

@@ -1,0 +1,119 @@
+.section-home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100vh;
+
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.section-home__content {
+    width: 100%;
+
+    padding-bottom: 100px;
+
+    text-align: center;
+
+    pointer-events: none;
+}
+
+.section-home__subtitle {
+    margin-top: 20px;
+
+    color: white;
+    
+    font-family: $prata;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 14px;
+    @include text-rendering();
+}
+
+.section-home__logo {
+    width: 40%;
+    height: auto;
+}
+
+.section-home__button {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    box-sizing: border-box;
+
+    position: absolute;
+    bottom: 300px;
+    left: 0;
+    right: 0;
+
+    width: 200px;
+
+    margin: auto;
+    padding: 15px 0;
+
+    text-align: center;
+
+    background: none;
+    border-radius: 0;
+    border: solid 1px rgba(255, 255, 255, 0.4);
+    outline: 0;
+    color: white;
+
+    font-family: $steradian;
+    font-weight: 100;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+
+    .section-home__button-content-inital {
+        transform: translateY(0);
+    }
+    .section-home__button-content-final {
+        transform: translateY(100%);
+    }
+    
+    &:hover {
+        .section-home__button-content-inital {
+            transform: translateY(-100%);
+        }
+        .section-home__button-content-final {
+            transform: translateY(0);
+        }
+    }
+
+    cursor: pointer;
+}
+
+.section-home__button-mask {
+    position: relative;
+
+    display: inline-block;
+
+    overflow: hidden;
+
+    width: 100%;
+
+    color: transparent;
+}
+
+
+.section-home__button-content-inital, .section-home__button-content-final {
+    display: inline-block;
+
+    position: absolute;
+    left: 0;
+
+    width: 100%;
+
+    color: white;
+
+    transition: transform .3s ease-in-out;
+}
+
+

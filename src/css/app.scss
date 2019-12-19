@@ -1,4 +1,10 @@
 /**
+ * Fonts
+ */
+ @import "../fonts/steradian/stylesheet.css";
+ @import "../fonts/prata/stylesheet.css";
+
+/**
  * Core
  */
  @import "core/fonts";
@@ -11,6 +17,7 @@
  @import "core/base";
  @import "core/typography";
  @import "core/reset";
+ @import "core/base";
 
  /**
  * Partials
@@ -19,10 +26,12 @@
  @import "partials/controls";
  @import "partials/cursor";
  @import "partials/progress-bar";
-
+ @import "partials/block-content";
  
  /**
  * Sections
  */
  @import "sections/section-loader";
  @import "sections/section-subtitles";
+ @import "sections/section-content";
+ @import "sections/section-home";

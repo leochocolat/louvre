@@ -1,0 +1,56 @@
+@font-face {
+    font-family: 'Steradian';
+    src: url('SteradianExtraLightItalic.woff2') format('woff2'),
+        url('SteradianExtraLightItalic.woff') format('woff');
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Steradian';
+    src: url('SteradianBold.woff2') format('woff2'),
+        url('SteradianBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Steradian';
+    src: url('SteradianMedium.woff2') format('woff2'),
+        url('SteradianMedium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Steradian';
+    src: url('SteradianExtraLight.woff2') format('woff2'),
+        url('SteradianExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Steradian';
+    src: url('SteradianBoldItalic.woff2') format('woff2'),
+        url('SteradianBoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Steradian';
+    src: url('SteradianMediumItalic.woff2') format('woff2'),
+        url('SteradianMediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Steradian';
+    src: url('SteradianLight.woff2') format('woff2'),
+        url('SteradianLight.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+

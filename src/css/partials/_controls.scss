@@ -1,10 +1,10 @@
 .controls__mute-button {
     position: absolute;
-    right: 50px;
+    right: 70px;
     bottom: 30px;
 
     width: 100px;
-    height: 30px;
+    height: 20px;
 
     color: black;
 
@@ -18,7 +18,7 @@
         display: inline-block;
 
         width: 1px;
-        height: 15px;
+        // height: 15px;
 
         margin-right: 1px;
 
@@ -38,25 +38,68 @@
     position: absolute;
     right: 0;
     bottom: 0;
-
-    width: 50px;
-    height: 50px;
 } 
 
 .mute-button__sound-state {
-    display: inline-block;
-    margin-right: 10px;
+    position: absolute;
+    top: 0;
+    right: 40px;
 
+    display: inline-block;
+
+    line-height: 20px;
     text-transform: uppercase;
 
+    color: white;
     opacity: 0;
     transform: translateY(10%);
+
+    font-family: $steradian;
+    letter-spacing: 2px;
+    font-weight: 100;
 
     transition: opacity .5s ease-in-out, transform .5s ease-in-out;
 
     &.isMuted {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+.controls__credits {
+    position: absolute;
+    left: 50px;
+    bottom: 30px;
+
+    color: white;
+
+    font-family: $steradian;
+    letter-spacing: 2px;
+    font-size: 12px;
+    line-height: 1em;
+    font-weight: 100;
+    text-transform: uppercase;
+
+    text-decoration: none;
+
+    &:before {
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+
+        width: 0;
+        height: 1px;
+
+        background-color: white;
+        transition: width .3s ease-in-out;
+
+        content: '';
+    }
+
+    &:hover {
+        &:before {
+            width: 100%;
+        } 
     }
 }
 
