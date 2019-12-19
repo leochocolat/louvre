@@ -2,6 +2,9 @@
     {
         "name": "room",
         "url": "modeles/room/scene.gltf"
+    },
+    {
+        "name": "final",
+        "url": "modeles/final/scene.gltf"
     }
-   
 ]

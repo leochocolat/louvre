@@ -295,13 +295,17 @@ class ThreeScene {
     }
 
     _setCameraLookAt() {
-        let timeline = new TimelineLite();
+        let timeline = new TimelineLite({
+            onComplete: () => {
+                SETTINGS.enableMousemove = true;
+            }
+        });
 
-        // timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
-        // timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
+        timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
 
-        timeline.set(SETTINGS.cameraLookAt, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
-        timeline.set(SETTINGS.position, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        // timeline.set(SETTINGS.cameraLookAt, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
+        // timeline.set(SETTINGS.position, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
     }
 
     _toggleEntityHandler() {
@@ -322,6 +326,7 @@ class ThreeScene {
     _audioEndedHandler() {
         TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut }, 0);
         TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut }, 0);
+        this.components.content.transitionOut();
         this._isSpeaking = false;
     }
 

@@ -18,11 +18,11 @@
     font-family: sans-serif;
 
     opacity: 0;
-
     transition: opacity .5s ease-in-out;
 
+    pointer-events: none;
+
     &.isActive {
-        
         opacity: 1;
     }
 }
@@ -35,7 +35,7 @@
     color: white;
     font-size: 30px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
 
     &:before {
         content: "";
@@ -60,5 +60,4 @@
     line-height: 21px;
 
     width: 40%;
-
 }

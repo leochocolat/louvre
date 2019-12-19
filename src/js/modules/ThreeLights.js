@@ -3,7 +3,7 @@ import * as dat from 'dat.gui';
 import bindAll from '../utils/bindAll';
 
 const SETTINGS = {
-    enableHelpers: true,
+    enableHelpers: false,
     windowLight: {
         castShadow: true,
         color: '#ff0000',
@@ -71,6 +71,8 @@ class ThreeLights {
         //helpers
         this.windowLightHelper = new THREE.PointLightHelper(this.windowLight, 1, 0xff0000);
         this.globalLightHelper = new THREE.SpotLightHelper(this.globalLight, 0x0000ff);
+
+        this._toggleHelpersHandler();
     }
 
     addToScene(scene) {
