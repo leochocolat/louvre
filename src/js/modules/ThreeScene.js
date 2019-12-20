@@ -124,6 +124,7 @@ class ThreeScene {
         this._setupCameraAnimations();
         this._createEntities();
         this._createSceneNoise();
+        this._createObjectOutline()
     }
 
     _setupSceneAndCamera() {
@@ -234,17 +235,21 @@ class ThreeScene {
         this._customPass = new ShaderPass(noiseEffect);
         this._composer.addPass(this._customPass);
 
-        this._outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this._scene, this._camera)
+    }
 
+    _createObjectOutline() {
+        this._enableOutline = true;
+
+        this._outlinePass = new OutlinePass(new THREE.Vector2(this._width, this._height), this._scene, this._camera)
         this._outlinePass.edgeStrength = 10;
         this._outlinePass.edgeThickness = 4;
         this._outlinePass.visibleEdgeColor.set(0xffffff);
+        this._outlinePass.hiddenEdgeColor.set(0xffffff);
 
         this._composer.addPass(this._outlinePass);
 
         this._effectFXAA = new ShaderPass(FXAAShader);
-
-        this._effectFXAA.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+        this._effectFXAA.uniforms['resolution'].value.set(1 / this._width, 1 / this._height);
         this._effectFXAA.renderToScreen = true;
 
         this._composer.addPass(this._effectFXAA);
@@ -352,6 +357,9 @@ class ThreeScene {
     }
 
     rayCastMouseMove() {
+        console.log(this._enableOutline)
+        if (!this._enableOutline) return;
+
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this._mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
@@ -366,10 +374,13 @@ class ThreeScene {
 
     _getSelectedBox(object) {
         let regex = /inte_/;
-        if (regex.test(object.name)) {
+        this._selectedObjects = [];
+        if (regex.test(object.name) && this._enableOutline) {
             let splits = object.name.split('_');
             this._activeIndex = parseInt(splits[splits.length - 1]);
             let glowingObj = this._getSelectedObject(this._activeIndex);
+            this._selectedObjects.push(glowingObj)
+            this._outlinePass.selectedObjects = this._selectedObjects;
         }
     }
 
@@ -380,7 +391,7 @@ class ThreeScene {
 
         this.sceneEntities.modeleTest.object.children[0].traverse((child) => {
             if (child.name === `interaction_${index}`) {
-                object = child;console.log('name', child.name)
+                object = child;
             }
         });
 
@@ -476,6 +487,7 @@ class ThreeScene {
             let splits = object.name.split('_');
             this._activeIndex = parseInt(splits[splits.length - 1]);
             this._isSpeaking = true;
+            this._enableOutline = false;
             this._triggerAnimations(object, this._activeIndex);
         }
     }
@@ -517,10 +529,20 @@ class ThreeScene {
         this.components.cursor.removeCross(); 
         this.components.content.transitionOut();
         this._isSpeaking = false;
+        this._enableOutline = true;
+
     }
 
     _creditCameraAnimationEnd() {
         this.components.cursor.displayCross(); 
+    }
+
+    _leaveInteraction() {
+        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        this.components.content.transitionOut();
+        this._isSpeaking = false;
+        this._enableOutline = true;
     }
 
     mousemoveHandler(position) {
