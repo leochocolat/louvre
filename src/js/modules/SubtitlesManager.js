@@ -9,19 +9,30 @@ class SubtitlesManager {
     }
 
     _setup() {
-
+        this._timeouts = [];
     }
 
     play(name) {
         for (let i = 0; i < data[name].length; i++) {
-            setTimeout(() => {
+            let timeout = setTimeout(() => {
                 this.component.update(data[name][i].content);
             }, data[name][i].timestamp * 1000);
+
+            this._timeouts.push(timeout);
         }
     }
 
     end() {
-        this.component.transitionOut();
+        this._clearTimeouts();
+        setTimeout(() => {
+            this.component.transitionOut();
+        }, 500);
+    }
+
+    _clearTimeouts() {
+        for (let i = 0; i < this._timeouts.length; i++) {
+            window.clearTimeout(this._timeouts[i]);
+        }
     }
 }
 

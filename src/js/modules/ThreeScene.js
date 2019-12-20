@@ -3,6 +3,7 @@ import bindAll from '../utils/bindAll';
 import lerp from '../utils/lerp';
 
 //vendors
+import * as dat from 'dat.gui';
 import * as THREE from 'three';
 import { TweenLite, Power3, TimelineLite } from 'gsap';
 
@@ -11,14 +12,12 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js'
-
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
-
-import * as dat from 'dat.gui';
 
 //components
 import ProgressBarComponent from '../components/ProgressBarComponent';
 import ContentComponent from '../components/ContentComponent';
+import CursorComponent from '../components/CursorComponent';
 
 //modules
 import AssetsLoader from './AssetsLoader';
@@ -28,7 +27,7 @@ import ThreeModele from './ThreeModele';
 import CameraLight from './CameraLight';
 import Ground from './Ground';
 
-
+//shaders
 import vert from '../shaders/vert.glsl'
 import frag from '../shaders/frag.glsl'
 
@@ -68,39 +67,35 @@ class ThreeScene {
             '_toggleHitBoxes',
             '_cameraAnimationCompletedHandler',
             '_audioEndedHandler',
-            '_cameraUpdateHandler'
+            '_cameraUpdateHandler',
+            '_creditCameraAnimationEnd',
+            '_leaveInteractionCompletedHandler'
         );
 
-        const gui = new dat.GUI({
-            name: 'Scene',
-        });
+        // const gui = new dat.GUI({
+        //     name: 'Scene',
+        // });
 
-        let scene = gui.addFolder('scene');
-        scene.add(SETTINGS, 'enableRaycast');
-        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'enableMousemove');
-        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
-
-        let camera = gui.addFolder('camera');
-        camera.add(SETTINGS, 'enableOrbitControl');
-        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.01).onChange(this._cameraUpdateHandler);
-        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.01).onChange(this._cameraUpdateHandler);
-        camera.add(SETTINGS.position, 'z').min(-100).max(100).step(0.01).onChange(this._cameraUpdateHandler);
-
-        let cameraView = gui.addFolder('cameraView');
-        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-
+        // let scene = gui.addFolder('scene');
+        // scene.add(SETTINGS, 'enableRaycast');
+        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'enableMousemove');
+        // scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
+        
         // let camera = gui.addFolder('camera');
         // camera.add(SETTINGS, 'enableOrbitControl');
         // camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
         // camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
         // camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraUpdateHandler);
 
-        this._canvas = canvas;
+        // let cameraView = gui.addFolder('cameraView');
+        // cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
 
+
+        this._canvas = canvas;
 
         this.sceneEntities = {
             lights: new ThreeLights(),
@@ -111,7 +106,8 @@ class ThreeScene {
 
         this.components = {
             progressBar: new ProgressBarComponent(),
-            content: new ContentComponent()
+            content: new ContentComponent(),
+            cursor: new CursorComponent()
         }
 
         this._delta = 0;
@@ -317,7 +313,29 @@ class ThreeScene {
         timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 12, z: -24.5, ease: Power3.easeInOut }, 0);
     }
 
-    rayCast() {
+    goToCredits() {
+        let timeline = new TimelineLite({
+            onComplete: this._creditCameraAnimationEnd,
+            onUpdate: this._cameraUpdateHandler
+        });
+
+        timeline.to(SETTINGS.position, 2, { x: -26.3, y: 15, z: 29, ease: Power3.easeInOut }, 0);
+        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -60.57, y: 16, z: -1.02, ease: Power3.easeInOut }, 0);
+    }
+
+    leaveCredits() {
+        this.components.cursor.removeCross(); 
+    }
+
+    _leaveInteraction() {
+        let timeline = new TimelineLite({
+            onComplete: this._leaveInteractionCompletedHandler
+        });
+        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+    }
+
+    _rayCast() {
         if (this._isSpeaking) return;
         if (!SETTINGS.enableRaycast) return;
 
@@ -346,7 +364,7 @@ class ThreeScene {
         }
     }
 
-    _getSelectedBox(object, index) {
+    _getSelectedBox(object) {
         let regex = /inte_/;
         if (regex.test(object.name)) {
             let splits = object.name.split('_');
@@ -366,8 +384,6 @@ class ThreeScene {
             }
         });
 
-        console.log(object.name);
-
         return object;
     }
 
@@ -386,6 +402,24 @@ class ThreeScene {
             }
         });
         return mesh;
+    }
+
+    _exitStory() {
+        if (this._isLeaving) return;
+
+        this._isLeaving = true;
+
+        this._leaveInteraction();
+        this._soundManager.pauseAudio();
+        this.components.content.transitionOut();
+        window.clearTimeout(this._audioEndTimeout);
+        this.components.cursor.removeCross();
+        this.components.cursor.resetAudioProgress();
+    }
+
+    _exitAttempt() {
+        if (!this._isSpeaking) return;
+        this._exitStory(); 
     }
 
     resize(width, height) {
@@ -414,6 +448,8 @@ class ThreeScene {
 
         this._soundManager.update(this._delta);
         this._composer.render(this._scene, this._camera);
+
+        this.components.cursor.update(this._delta);
     }
 
     tick() {
@@ -446,9 +482,16 @@ class ThreeScene {
 
     _cameraAnimationCompletedHandler() {
         this.components.content.update(this._activeIndex);
-        this._soundManager.playAudio(this._activeIndex).then((response) => {
-            setTimeout(this._audioEndedHandler, response.duration * 1000);
+        this._soundManager.playAudio(this._activeIndex).then((audio) => {
+            this._audioEndTimeout = setTimeout(this._audioEndedHandler, audio.duration * 1000);
+            this.components.cursor.updateAudioProgress(audio.duration); 
+            this.components.cursor.displayCross();
         });
+    }
+
+    _leaveInteractionCompletedHandler() {
+        this._isLeaving = false;
+        this._isSpeaking = false;
     }
 
     _toggleEntityHandler() {
@@ -469,22 +512,25 @@ class ThreeScene {
     }
 
     _audioEndedHandler() {
-        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
-        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        this._leaveInteraction();
+        this.components.cursor.resetAudioProgress(); 
+        this.components.cursor.removeCross(); 
         this.components.content.transitionOut();
         this._isSpeaking = false;
     }
 
-    _leaveInteraction() {
-        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
-        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
-        this.components.content.transitionOut();
-        this._isSpeaking = false;
+    _creditCameraAnimationEnd() {
+        this.components.cursor.displayCross(); 
     }
 
     mousemoveHandler(position) {
         if (!SETTINGS.enableMousemove) return;
         this.sceneEntities.modeleTest.mousemoveHandler(position);
+    }
+
+    clickHandler(event) {
+        this._exitAttempt();
+        this._rayCast();
     }
 }
 

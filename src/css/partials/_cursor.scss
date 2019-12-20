@@ -1,4 +1,4 @@
-$cursor-size: 30px;
+$cursor-size: 50px;
 
 .cursor {
     position: absolute;
@@ -10,16 +10,19 @@ $cursor-size: 30px;
 
     margin-top: calc(-#{$cursor-size} / 2);
     margin-left: calc(-#{$cursor-size} / 2);
-
-    border-radius: 50%;
-
-    border: solid 1px white;
-
-    opacity: 0;
-
+    
     pointer-events: none;
+    
+    // opacity: 0;
+    // display: none;
+}
 
-    mix-blend-mode: difference;
+.cursor__canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
 
-    display: none;
+    margin: auto;
 }

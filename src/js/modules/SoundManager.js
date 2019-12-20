@@ -52,20 +52,25 @@ class SoundManager {
         
         let promise = new Promise(resolve => {
             this._audioContext.decodeAudioData(audio.slice(0), buffer => {
-                this._bufferSource = this._audioContext.createBufferSource();
-                this._bufferSource.buffer = buffer;
+                this._voiceBufferSource = this._audioContext.createBufferSource();
+                this._voiceBufferSource.buffer = buffer;
                 resolve(buffer);
-                this._bufferSource.loop = false;
-                this._bufferSource.connect(this._audioGain);
-                this._bufferSource.start(0);
-                this._currentAudioDuration = this._bufferSource.buffer.duration;
+                this._voiceBufferSource.loop = false;
+                this._voiceBufferSource.connect(this._audioGain);
+                this._voiceBufferSource.start(0);
+                this._currentAudioDuration = this._voiceBufferSource.buffer.duration;
                 this._subtitlesManager.play(name);
-                this._bufferSource.onended = this._audioEndedHandler;
+                this._voiceBufferSource.onended = this._audioEndedHandler;
             });
         });
 
         return promise;
     }
+
+    pauseAudio() {
+        this._voiceBufferSource.stop();
+        this._subtitlesManager.end();
+    } 
 
     playAmbiance(name) {
         let audio = this.audios[name];
@@ -81,7 +86,7 @@ class SoundManager {
 
     playSound(name) {
         let audio = this.audios[name];
-        this._audioContext.decodeAudioData(audio, buffer => {
+        this._audioContext.decodeAudioData(audio.slice(0), buffer => {
             let bufferSource = this._audioContext.createBufferSource();
             bufferSource.buffer = buffer;
             bufferSource.loop = false;

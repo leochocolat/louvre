@@ -1,7 +1,6 @@
 const COMPONENTS = {
     'example-component': () => import('./components/ExampleComponent'),
-    'three-component': () => import('./components/CanvasComponent'),
-    'cursor-component': () => import('./components/CursorComponent'),
+    'three-component': () => import('./components/CanvasComponent')
 }
 
 class ComponentFactory {

@@ -1,6 +1,7 @@
 import bindAll from '../utils/bindAll';
 import ThreeScene from '../modules/ThreeScene';
 import { TweenLite, TweenMax, Power3 } from 'gsap';
+import CursorComponent from './CursorComponent';
 
 class CanvasComponent {
     constructor(options) {
@@ -10,13 +11,15 @@ class CanvasComponent {
             '_resizeHandler',
             '_mouseClickHandler',
             '_mousemoveHandler',
-            '_startBtnClickHandler'
+            '_startBtnClickHandler',
+            '_creditsBtnClickHandler'
         );
 
         this.el = options.el;
 
         this.ui = {
             button: document.querySelector('.js-start-button'),
+            creditsBtn: document.querySelector('.js-credits-button'),
             homeUI: document.querySelectorAll('.js-ui-home'),
             homeSection: document.querySelectorAll('.js-home-section'),
         }
@@ -54,6 +57,7 @@ class CanvasComponent {
         window.addEventListener('click', this._mouseClickHandler);
         window.addEventListener('mousemove', this._mousemoveHandler);
         this.ui.button.addEventListener('click', this._startBtnClickHandler);
+        this.ui.creditsBtn.addEventListener('click', this._creditsBtnClickHandler);
     }
 
     _tickHandler() {
@@ -61,7 +65,8 @@ class CanvasComponent {
     }
 
     _mouseClickHandler() {
-        this._threeScene.rayCast(event);
+        this._threeScene.clickHandler(event);
+        // this._threeScene.rayCast(event);
     }
 
     _resizeHandler() {
@@ -85,6 +90,10 @@ class CanvasComponent {
         setTimeout(() => {
             this._threeScene.startExperience();
         }, 1000)
+    }
+
+    _creditsBtnClickHandler() {
+        this._threeScene.goToCredits();
     }
 }
 
