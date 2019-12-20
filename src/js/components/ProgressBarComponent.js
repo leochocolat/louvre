@@ -1,4 +1,4 @@
-import { TweenLite } from 'gsap';
+import { TweenLite, TimelineLite, Power3 } from 'gsap';
 import bindAll from '../utils/bindAll';
 
 
@@ -7,60 +7,61 @@ class ProgressBarComponent {
         bindAll(
             this,
             '_clickHandler',
-            '_mouseMoveHandler'
         )
+
         this.el = document.querySelector('.js-progress-bar-component');
 
         this.ui = {
-            bullets: this.el.querySelectorAll('.bullet')
-        }
-        this.mouse = {
-            x: 0,
-            y: 0
-        }
-        this._setupEventsListeners()
-    }
-
-    _setupEventsListeners() {
-
-        for (let index = 0; index < this.ui.bullets.length; index++) {
-            // this.ui.bullets[index].addEventListener('mousemove', this._mouseMoveHandler)
-            this.ui.bullets[index].addEventListener('click', this._clickHandler)
+            buttons: this.el.querySelectorAll('.js-progress-bar-button'),
+            activeSquare: this.el.querySelector('.js-active-square')
         }
 
-    }
-
-    _mouseMoveHandler(index) {
-        let object = event.target.querySelector('span')
-
-        this.mouse.x = event.clientX
-        this.mouse.y = event.clientY
-
-        TweenLite.to(object, 0.2, { x: this.mouse.x * 0.03, y: this.mouse.y * 0.03 })
-
-        // this.ui.bullets[index].addEventListener('mouseover', this._aimBulletMouse)
-    }
-
-    _clickHandler() {
-        let object = event.target
-        this.setActiveBullet(object)
-        this.getClickedObject(object)
+        this._setup();
     }
 
     _setup() {
-
+        this._getProperties();
+        this._initStyle();
+        this._setupEventsListeners();
     }
 
-    setActiveBullet(object) {
-        for (let index = 0; index < this.ui.bullets.length; index++) {
-            this.ui.bullets[index].classList.remove('active')
+    _getProperties() {
+        this._invervalY = this.ui.buttons[1].getBoundingClientRect().y - this.ui.buttons[0].getBoundingClientRect().y
+    }
+
+    _initStyle() {
+        TweenLite.set(this.ui.activeSquare, { rotation: 45 });
+    }
+
+    setActiveBullet(el) {
+        for (let index = 0; index < this.ui.buttons.length; index++) {
+            this.ui.buttons[index].classList.remove('active')
         }
 
-        object.classList.add('active')
+        el.classList.add('active');
     }
 
-    getClickedObject(object) {
-        return object.dataset.name;
+    getClickedObject(el) {
+        return el.dataset.name;
+    }
+
+    _animateSquare(el, index) {
+        let timeline = new TimelineLite();
+
+        timeline.to(this.ui.activeSquare, 1, { y: this._invervalY * index, rotation: 45 + 90 * index, ease: Power3.easeInOut }, 0);
+    }
+
+    _setupEventsListeners() {
+        for (let index = 0; index < this.ui.buttons.length; index++) {
+            this.ui.buttons[index].addEventListener('click', () => this._clickHandler(index));
+        }
+    }
+
+    _clickHandler(index) {
+        this._activeElement = this.ui.buttons[index];
+        this.setActiveBullet(this._activeElement);
+        this.getClickedObject(this._activeElement);
+        this._animateSquare(this._activeElement, index);
     }
 }
 
