@@ -45,31 +45,31 @@ class ThreeLights {
 
         this._setup();
 
-        // const gui = new dat.GUI({
-        //     name: 'Lights',
-        // });
+        const gui = new dat.GUI({
+            name: 'Lights'
+        });
 
-        // gui.add(SETTINGS, 'enableHelpers').onChange(this._toggleHelpersHandler);
-        // let windowLight = gui.addFolder('windowLight');
-        // windowLight.add(SETTINGS.windowLight, 'castShadow');
-        // windowLight.add(SETTINGS.windowLight, 'intensity').min(0).max(1).step(0.1);
-        // windowLight.add(SETTINGS.windowLight.position, 'x').min(-100).max(100).step(1);
-        // windowLight.add(SETTINGS.windowLight.position, 'y').min(-100).max(100).step(1);
-        // windowLight.add(SETTINGS.windowLight.position, 'z').min(-100).max(100).step(1);
+        gui.add(SETTINGS, 'enableHelpers').onChange(this._toggleHelpersHandler);
+        let windowLight = gui.addFolder('windowLight');
+        windowLight.add(SETTINGS.windowLight, 'castShadow');
+        windowLight.add(SETTINGS.windowLight, 'intensity').min(0).max(1).step(0.1);
+        windowLight.add(SETTINGS.windowLight.position, 'x').min(-100).max(100).step(1);
+        windowLight.add(SETTINGS.windowLight.position, 'y').min(-100).max(100).step(1);
+        windowLight.add(SETTINGS.windowLight.position, 'z').min(-100).max(100).step(1);
 
-        // let globalLight = gui.addFolder('globalLight');
-        // globalLight.add(SETTINGS.globalLight, 'castShadow');
-        // globalLight.add(SETTINGS.globalLight, 'intensity').min(0).max(1).step(0.1);
-        // globalLight.add(SETTINGS.globalLight.position, 'x').min(-100).max(100).step(1);
-        // globalLight.add(SETTINGS.globalLight.position, 'y').min(-100).max(1000).step(1);
-        // globalLight.add(SETTINGS.globalLight.position, 'z').min(-100).max(100).step(1);
+        let globalLight = gui.addFolder('globalLight');
+        globalLight.add(SETTINGS.globalLight, 'castShadow');
+        globalLight.add(SETTINGS.globalLight, 'intensity').min(0).max(1).step(0.1);
+        globalLight.add(SETTINGS.globalLight.position, 'x').min(-100).max(100).step(1);
+        globalLight.add(SETTINGS.globalLight.position, 'y').min(-100).max(1000).step(1);
+        globalLight.add(SETTINGS.globalLight.position, 'z').min(-100).max(100).step(1);
 
-        // let painterLight = gui.addFolder('painterLight');
-        // painterLight.add(SETTINGS.painterLight, 'castShadow');
-        // painterLight.add(SETTINGS.painterLight, 'intensity').min(0).max(1).step(0.1);
-        // painterLight.add(SETTINGS.painterLight.position, 'x').min(-100).max(100).step(1);
-        // painterLight.add(SETTINGS.painterLight.position, 'y').min(-100).max(1000).step(1);
-        // painterLight.add(SETTINGS.painterLight.position, 'z').min(-100).max(100).step(1);
+        let painterLight = gui.addFolder('painterLight');
+        painterLight.add(SETTINGS.painterLight, 'castShadow');
+        painterLight.add(SETTINGS.painterLight, 'intensity').min(0).max(1).step(0.1);
+        painterLight.add(SETTINGS.painterLight.position, 'x').min(-100).max(100).step(1);
+        painterLight.add(SETTINGS.painterLight.position, 'y').min(-100).max(1000).step(1);
+        painterLight.add(SETTINGS.painterLight.position, 'z').min(-100).max(100).step(1);
     }
 
     _setup() {
@@ -84,12 +84,14 @@ class ThreeLights {
         this.windowLight.position.x = SETTINGS.windowLight.position.x;
         this.windowLight.position.y = SETTINGS.windowLight.position.y;
         this.windowLight.position.z = SETTINGS.windowLight.position.z;
-
+        this.windowLight.castShadow = false;
+        
         this.painterLight = new THREE.SpotLight(0xffffff, SETTINGS.painterLight.intensity);
-
+        
         this.painterLight.position.x = SETTINGS.painterLight.position.x;
         this.painterLight.position.y = SETTINGS.painterLight.position.y;
         this.painterLight.position.z = SETTINGS.painterLight.position.z;
+        this.painterLight.castShadow = false;
 
         //helpers
         // this.windowLightHelper = new THREE.PointLightHelper(this.windowLight, 1, 0xff0000);

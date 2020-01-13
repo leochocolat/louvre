@@ -54,8 +54,8 @@ class CanvasComponent {
     _setupEventListeners() {
         TweenLite.ticker.addEventListener('tick', this._tickHandler);
         window.addEventListener('resize', this._resizeHandler);
-        window.addEventListener('click', this._mouseClickHandler);
-        window.addEventListener('mousemove', this._mousemoveHandler);
+        this.el.addEventListener('click', this._mouseClickHandler);
+        this.el.addEventListener('mousemove', this._mousemoveHandler);
         this.ui.button.addEventListener('click', this._startBtnClickHandler);
         this.ui.creditsBtn.addEventListener('click', this._creditsBtnClickHandler);
     }

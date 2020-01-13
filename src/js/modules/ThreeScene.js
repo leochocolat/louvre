@@ -72,27 +72,27 @@ class ThreeScene {
             '_leaveInteractionCompletedHandler'
         );
 
-        // const gui = new dat.GUI({
-        //     name: 'Scene',
-        // });
+        const gui = new dat.GUI({
+            name: 'Scene'
+        });
 
-        // let scene = gui.addFolder('scene');
-        // scene.add(SETTINGS, 'enableRaycast');
-        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        // scene.add(SETTINGS, 'enableMousemove');
-        // scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
+        let scene = gui.addFolder('scene');
+        scene.add(SETTINGS, 'enableRaycast');
+        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'enableMousemove');
+        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
         
-        // let camera = gui.addFolder('camera');
-        // camera.add(SETTINGS, 'enableOrbitControl');
-        // camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
-        // camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
-        // camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraUpdateHandler);
+        let camera = gui.addFolder('camera');
+        camera.add(SETTINGS, 'enableOrbitControl');
+        camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
+        camera.add(SETTINGS.position, 'y').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
+        camera.add(SETTINGS.position, 'z').min(0).max(100).step(0.1).onChange(this._cameraUpdateHandler);
 
-        // let cameraView = gui.addFolder('cameraView');
-        // cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        // cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        // cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        let cameraView = gui.addFolder('cameraView');
+        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
 
 
         this._canvas = canvas;
@@ -329,7 +329,7 @@ class ThreeScene {
     }
 
     leaveCredits() {
-        this.components.cursor.removeCross(); 
+        this.components.cursor.removeCross();
     }
 
     _leaveInteraction() {
@@ -344,6 +344,8 @@ class ThreeScene {
         if (this._isSpeaking) return;
         if (!SETTINGS.enableRaycast) return;
 
+        console.log('hello')
+
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this._mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
@@ -357,7 +359,7 @@ class ThreeScene {
     }
 
     rayCastMouseMove() {
-        console.log(this._enableOutline)
+        // console.log(this._enableOutline)
         if (!this._enableOutline) return;
 
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -483,6 +485,7 @@ class ThreeScene {
 
     rayCastHandler(object) {
         let regex = /inte_/;
+        console.log(object.name);
         if (regex.test(object.name)) {
             let splits = object.name.split('_');
             this._activeIndex = parseInt(splits[splits.length - 1]);

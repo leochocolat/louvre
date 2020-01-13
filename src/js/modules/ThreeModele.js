@@ -23,15 +23,15 @@ class ThreeModele {
         this.object = models[this.name].scene;
         this.object.position.z = 5;
         this.object.scale.set(.01, .01, .01);
-        this.object.castShadow = true;
+        // this.object.castShadow = true;
 
         this.object.traverse((child) => {
             if (child.isMesh) {
                 let regex = /inte_/;
 
                 if (regex.test(child.name)) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
+                    // child.castShadow = true;
+                    // child.receiveShadow = true;
                     child.visible = true;
 
                     if (child.material) {
@@ -39,8 +39,8 @@ class ThreeModele {
                         child.material.opacity = 0;
                     }
                 } else {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
+                    // child.castShadow = true;
+                    // child.receiveShadow = true;
                     child.material.emissive = new THREE.Color(0xffffff);
                     child.material.emissiveIntensity = 0;
                 }
