@@ -246,7 +246,7 @@ class ThreeScene {
         this._outlinePass.visibleEdgeColor.set(0xffffff);
         this._outlinePass.hiddenEdgeColor.set(0xffffff);
 
-        // this._composer.addPass(this._outlinePass);
+        this._composer.addPass(this._outlinePass);
 
         this._effectFXAA = new ShaderPass(FXAAShader);
         this._effectFXAA.uniforms['resolution'].value.set(1 / this._width, 1 / this._height);
@@ -360,7 +360,7 @@ class ThreeScene {
 
     rayCastMouseMove() {
         // console.log(this._enableOutline)
-        if (!this._enableOutline) return;
+        // if (!this._enableOutline) return;
 
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this._mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -368,9 +368,8 @@ class ThreeScene {
         this._rayCaster.setFromCamera(this._mouse, this._camera);
 
         let intersects = this._rayCaster.intersectObjects(this._scene.children, true);
-
         if (intersects[0]) {
-            this._getSelectedBox(intersects[0].object);
+            this._getSelectedBox(intersects[0].object.parent);
         }
     }
 
@@ -409,6 +408,7 @@ class ThreeScene {
 
     _getSceneObjectWithName(object, name) {
         let mesh;
+        console.log(object)
         object.traverse((child) => {
             if (child.isMesh && child.name === name) {
                 mesh = child;
