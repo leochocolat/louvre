@@ -82,7 +82,7 @@ class ThreeScene {
         scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
         scene.add(SETTINGS, 'enableMousemove');
         scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
-        
+
         let camera = gui.addFolder('camera');
         camera.add(SETTINGS, 'enableOrbitControl');
         camera.add(SETTINGS.position, 'x').min(-100).max(100).step(0.1).onChange(this._cameraUpdateHandler);
@@ -246,7 +246,7 @@ class ThreeScene {
         this._outlinePass.visibleEdgeColor.set(0xffffff);
         this._outlinePass.hiddenEdgeColor.set(0xffffff);
 
-        this._composer.addPass(this._outlinePass);
+        // this._composer.addPass(this._outlinePass);
 
         this._effectFXAA = new ShaderPass(FXAAShader);
         this._effectFXAA.uniforms['resolution'].value.set(1 / this._width, 1 / this._height);
@@ -432,7 +432,7 @@ class ThreeScene {
 
     _exitAttempt() {
         if (!this._isSpeaking) return;
-        this._exitStory(); 
+        this._exitStory();
     }
 
     resize(width, height) {
@@ -485,9 +485,8 @@ class ThreeScene {
 
     rayCastHandler(object) {
         let regex = /inte_/;
-        console.log(object.name);
-        if (regex.test(object.name)) {
-            let splits = object.name.split('_');
+        if (regex.test(object.parent.name)) {
+            let splits = object.parent.name.split('_');
             this._activeIndex = parseInt(splits[splits.length - 1]);
             this._isSpeaking = true;
             this._enableOutline = false;
@@ -499,7 +498,7 @@ class ThreeScene {
         this.components.content.update(this._activeIndex);
         this._soundManager.playAudio(this._activeIndex).then((audio) => {
             this._audioEndTimeout = setTimeout(this._audioEndedHandler, audio.duration * 1000);
-            this.components.cursor.updateAudioProgress(audio.duration); 
+            this.components.cursor.updateAudioProgress(audio.duration);
             this.components.cursor.displayCross();
         });
     }
@@ -528,8 +527,8 @@ class ThreeScene {
 
     _audioEndedHandler() {
         this._leaveInteraction();
-        this.components.cursor.resetAudioProgress(); 
-        this.components.cursor.removeCross(); 
+        this.components.cursor.resetAudioProgress();
+        this.components.cursor.removeCross();
         this.components.content.transitionOut();
         this._isSpeaking = false;
         this._enableOutline = true;
@@ -537,7 +536,7 @@ class ThreeScene {
     }
 
     _creditCameraAnimationEnd() {
-        this.components.cursor.displayCross(); 
+        this.components.cursor.displayCross();
     }
 
     _leaveInteraction() {
