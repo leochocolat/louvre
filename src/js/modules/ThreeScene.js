@@ -344,8 +344,6 @@ class ThreeScene {
         if (this._isSpeaking) return;
         if (!SETTINGS.enableRaycast) return;
 
-        console.log('hello')
-
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this._mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
@@ -359,8 +357,7 @@ class ThreeScene {
     }
 
     rayCastMouseMove() {
-        // console.log(this._enableOutline)
-        // if (!this._enableOutline) return;
+        if (!this._enableOutline) return;
 
         this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this._mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -408,7 +405,6 @@ class ThreeScene {
 
     _getSceneObjectWithName(object, name) {
         let mesh;
-        console.log(object)
         object.traverse((child) => {
             if (child.isMesh && child.name === name) {
                 mesh = child;

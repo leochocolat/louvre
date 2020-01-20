@@ -11,7 +11,7 @@ class SoundManager {
             '_audioEndedHandler',
             '_muteButtonClickHandler',
         )
-        
+
         this.ui = {
             muteButton: document.querySelector('.js-mute-button'),
             soundBar: document.querySelectorAll('.js-mute-button span'),
@@ -49,7 +49,7 @@ class SoundManager {
 
     playAudio(name) {
         let audio = this.audios[name];
-        
+
         let promise = new Promise(resolve => {
             this._audioContext.decodeAudioData(audio.slice(0), buffer => {
                 this._voiceBufferSource = this._audioContext.createBufferSource();
@@ -68,9 +68,10 @@ class SoundManager {
     }
 
     pauseAudio() {
+        console.log(this._voiceBufferSource)
         this._voiceBufferSource.stop();
         this._subtitlesManager.end();
-    } 
+    }
 
     playAmbiance(name) {
         let audio = this.audios[name];
@@ -115,7 +116,7 @@ class SoundManager {
 
     _updateSoundBar(frequencyArray) {
         for (let i = 0; i < this.ui.soundBar.length; i++) {
-            TweenLite.to(this.ui.soundBar[i], .2, { scaleY: 0.2 + frequencyArray[i]/300 })
+            TweenLite.to(this.ui.soundBar[i], .2, { scaleY: 0.2 + frequencyArray[i] / 300 })
         }
     }
 
@@ -123,14 +124,13 @@ class SoundManager {
         // let frequencyArray = new Uint8Array(this._analyzer.frequencyBinCount);
         // this._analyzer.getByteFrequencyData(frequencyArray);
         this.components.soundVisualizer.update(delta, this._audioGain.gain.value);
-    } 
+    }
 
     _setupEventListeners() {
         this.ui.muteButton.addEventListener('click', this._muteButtonClickHandler);
     }
 
     _audioEndedHandler() {
-        console.log(this._bufferSource)
         this._subtitlesManager.end();
     }
 

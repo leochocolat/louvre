@@ -27,6 +27,8 @@ class ThreeModele {
 
         this.object.traverse((child) => {
             if (child.isMesh) {
+                // let material = new THREE.MeshLambertMaterial()
+                // child.material = material
                 let regex = /inte_/;
 
                 if (regex.test(child.name)) {
