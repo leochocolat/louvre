@@ -69,7 +69,8 @@ class ThreeScene {
             '_audioEndedHandler',
             '_cameraUpdateHandler',
             '_creditCameraAnimationEnd',
-            '_leaveInteractionCompletedHandler'
+            '_leaveInteractionCompletedHandler',
+            '_leaveCreditsCompleteHandler'
         );
 
         const gui = new dat.GUI({
@@ -328,10 +329,6 @@ class ThreeScene {
         timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -60.57, y: 16, z: -1.02, ease: Power3.easeInOut }, 0);
     }
 
-    leaveCredits() {
-        this.components.cursor.removeCross();
-    }
-
     _leaveInteraction() {
         let timeline = new TimelineLite({
             onComplete: this._leaveInteractionCompletedHandler
@@ -419,6 +416,7 @@ class ThreeScene {
         this._isLeaving = true;
 
         this._leaveInteraction();
+        this._enableOutline = true;
         this._soundManager.pauseAudio();
         this.components.content.transitionOut();
         window.clearTimeout(this._audioEndTimeout);
@@ -426,8 +424,27 @@ class ThreeScene {
         this.components.cursor.resetAudioProgress();
     }
 
+    _exitCredits() {
+        if (this._isLeaving || !this._isCreditView) return;
+
+        this._isLeaving = true;
+
+        this._leaveCredits();
+    }
+
+    _leaveCredits() {
+        this.components.cursor.removeCross();
+        let timeline = new TimelineLite({
+            onComplete: this._leaveCreditsCompleteHandler
+        });
+        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+    } 
+
     _exitAttempt() {
+        this._exitCredits();
         if (!this._isSpeaking) return;
+        console.log('exit story')
         this._exitStory();
     }
 
@@ -504,6 +521,11 @@ class ThreeScene {
         this._isSpeaking = false;
     }
 
+    _leaveCreditsCompleteHandler() {
+        this._isCreditView = false;
+        this._isLeaving = false;
+    }
+
     _toggleEntityHandler() {
         this.sceneEntities.ground.setVisibility(SETTINGS.toggleGround);
         this.sceneEntities.cameraLight.setVisibility(SETTINGS.toggleCameraLight);
@@ -528,19 +550,11 @@ class ThreeScene {
         this.components.content.transitionOut();
         this._isSpeaking = false;
         this._enableOutline = true;
-
     }
 
     _creditCameraAnimationEnd() {
+        this._isCreditView = true;
         this.components.cursor.displayCross();
-    }
-
-    _leaveInteraction() {
-        TweenLite.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
-        TweenLite.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
-        this.components.content.transitionOut();
-        this._isSpeaking = false;
-        this._enableOutline = true;
     }
 
     mousemoveHandler(position) {
