@@ -241,8 +241,6 @@ class ThreeScene {
         this._enableOutline = true;
 
         this._outlinePass = new OutlinePass(new THREE.Vector2(this._width, this._height), this._scene, this._camera)
-        this._outlinePass.edgeStrength = 10;
-        this._outlinePass.edgeThickness = 4;
         this._outlinePass.visibleEdgeColor.set(0xffffff);
         this._outlinePass.hiddenEdgeColor.set(0xffffff);
 
@@ -378,8 +376,12 @@ class ThreeScene {
             this._activeIndex = parseInt(splits[splits.length - 1]);
             let glowingObj = this._getSelectedObject(this._activeIndex);
             this._selectedObjects.push(glowingObj)
+            TweenLite.to(this._outlinePass, 1, { edgeStrength: 10, edgeThickness: 1 });
             this._outlinePass.selectedObjects = this._selectedObjects;
+        } else {
+            TweenLite.to(this._outlinePass, 1, { edgeStrength: 0, edgeThickness: 0 });
         }
+
     }
 
     _getSelectedObject(index) {
