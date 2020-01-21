@@ -73,27 +73,27 @@ class ThreeScene {
             '_leaveCreditsCompleteHandler'
         );
 
-        const gui = new dat.GUI({
-            name: 'Scene'
-        });
+        // const gui = new dat.GUI({
+        //     name: 'Scene'
+        // });
 
-        let scene = gui.addFolder('scene');
-        scene.add(SETTINGS, 'enableRaycast');
-        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'enableMousemove');
-        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
+        // let scene = gui.addFolder('scene');
+        // scene.add(SETTINGS, 'enableRaycast');
+        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'enableMousemove');
+        // scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
 
-        let camera = gui.addFolder('camera');
-        camera.add(SETTINGS, 'enableOrbitControl');
-        camera.add(SETTINGS.position, 'x').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
-        camera.add(SETTINGS.position, 'y').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
-        camera.add(SETTINGS.position, 'z').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        // let camera = gui.addFolder('camera');
+        // camera.add(SETTINGS, 'enableOrbitControl');
+        // camera.add(SETTINGS.position, 'x').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        // camera.add(SETTINGS.position, 'y').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        // camera.add(SETTINGS.position, 'z').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
 
-        let cameraView = gui.addFolder('cameraView');
-        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // let cameraView = gui.addFolder('cameraView');
+        // cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
 
 
         this._canvas = canvas;
