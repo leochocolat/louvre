@@ -324,6 +324,8 @@ class ThreeScene {
 
         timeline.to(SETTINGS.position, 2, { x: -26.3, y: 15, z: 29, ease: Power3.easeInOut }, 0);
         timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -60.57, y: 16, z: -1.02, ease: Power3.easeInOut }, 0);
+
+        this.sceneEntities.modeleTest.replaceTexture();
     }
 
     _leaveInteraction() {
@@ -437,10 +439,13 @@ class ThreeScene {
     _leaveCredits() {
         this.components.cursor.removeCross();
         let timeline = new TimelineLite({
-            onComplete: this._leaveCreditsCompleteHandler
+            delay: 1,
+            onComplete: this._leaveCreditsCompleteHandle,
         });
         timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
         timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+
+        this.sceneEntities.modeleTest.resetTexture();
     } 
 
     _exitAttempt() {
@@ -520,6 +525,7 @@ class ThreeScene {
 
     rayCastHandler(object) {
         let regex = /inte_/;
+        console.log(object.name)
         if (regex.test(object.parent.name)) {
             let splits = object.parent.name.split('_');
             this._activeIndex = parseInt(splits[splits.length - 1]);

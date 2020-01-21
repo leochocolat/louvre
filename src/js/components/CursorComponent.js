@@ -117,8 +117,8 @@ class CursorComponent {
     _updateCursorPosition() {
         if (!this._mousePosition) return;
 
-        this._cursorPosition.x = lerp(this._cursorPosition.x, this._mousePosition.x, 0.1);
-        this._cursorPosition.y = lerp(this._cursorPosition.y, this._mousePosition.y, 0.1);
+        this._cursorPosition.x = lerp(this._cursorPosition.x, this._mousePosition.x, 0.2);
+        this._cursorPosition.y = lerp(this._cursorPosition.y, this._mousePosition.y, 0.2);
         TweenLite.set(this.el, { x: this._cursorPosition.x, y: this._cursorPosition.y });
     }
 

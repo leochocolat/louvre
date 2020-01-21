@@ -90,6 +90,7 @@ class CanvasComponent {
         TweenMax.to(this.ui.homeSection, 1, { autoAlpha: 0, ease: Power2.easeInOut, delay: 1 });
         TweenMax.to(this.ui.progressBar, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
         TweenMax.to(this.ui.muteButton, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.1 });
+        TweenMax.to(this.ui.creditsBtn, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
 
         setTimeout(() => {
             this._threeScene.startExperience();
