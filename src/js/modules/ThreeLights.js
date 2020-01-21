@@ -17,10 +17,10 @@ const SETTINGS = {
     globalLight: {
         castShadow: false,
         color: '#ff00ff',
-        intensity: 1.7,
+        intensity: 3,
         position: {
-            x: -20,
-            y: 26,
+            x: -90,
+            y: 148,
             z: 71
         },
     },

@@ -1,7 +1,7 @@
 import bindAll from '../utils/bindAll';
 import ThreeScene from '../modules/ThreeScene';
 import { TweenLite, TweenMax, Power3 } from 'gsap';
-import CursorComponent from './CursorComponent';
+
 
 class CanvasComponent {
     constructor(options) {
@@ -22,6 +22,8 @@ class CanvasComponent {
             creditsBtn: document.querySelector('.js-credits-button'),
             homeUI: document.querySelectorAll('.js-ui-home'),
             homeSection: document.querySelectorAll('.js-home-section'),
+            progressBar: document.querySelector('.js-progress-bar'),
+            muteButton: document.querySelector('.js-mute-button'),
         }
 
         this._setup();
@@ -66,7 +68,6 @@ class CanvasComponent {
 
     _mouseClickHandler() {
         this._threeScene.clickHandler(event);
-        // this._threeScene.rayCast(event);
     }
 
     _resizeHandler() {
@@ -87,6 +88,9 @@ class CanvasComponent {
         TweenMax.to(this.ui.button, 0.5, { autoAlpha: 0, ease: Power1.easeOut });
         TweenMax.staggerTo(this.ui.homeUI, 1, { autoAlpha: 0, ease: Power2.easeInOut }, -0.2, 0);
         TweenMax.to(this.ui.homeSection, 1, { autoAlpha: 0, ease: Power2.easeInOut, delay: 1 });
+        TweenMax.to(this.ui.progressBar, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
+        TweenMax.to(this.ui.muteButton, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.1 });
+
         setTimeout(() => {
             this._threeScene.startExperience();
         }, 1000)

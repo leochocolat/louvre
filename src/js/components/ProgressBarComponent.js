@@ -16,12 +16,24 @@ class ProgressBarComponent {
             activeSquare: this.el.querySelector('.js-active-square')
         }
 
+        this._names = [
+            "L'artiste, cet artisan de génie",
+            "La signature",
+            "L'autoportrait",
+            "Ut pictura poesis",
+            "Vies d'artiste",
+            "L'artiste et l'académie",
+            "La femme artiste",
+            'mille citadelles',
+        ] 
+
         this._setup();
     }
 
     _setup() {
         this._getProperties();
         this._initStyle();
+        this._initNames();
         this._setupEventsListeners();
     }
 
@@ -33,19 +45,32 @@ class ProgressBarComponent {
         TweenLite.set(this.ui.activeSquare, { rotation: 45 });
     }
 
-    setActiveBullet(el) {
+    _initNames() {
+        for (let i = 0; i < this.ui.buttons.length; i++) {
+            const element = this.ui.buttons[i];
+            element.querySelector('.js-name').innerHTML = this._names[i];
+        }
+    }
+
+    setActiveBullet(activeIndex) {
         for (let index = 0; index < this.ui.buttons.length; index++) {
             this.ui.buttons[index].classList.remove('active')
         }
 
-        el.classList.add('active');
+        this.ui.buttons[activeIndex].classList.add('active');
+    }
+
+    removeActive() {
+        for (let index = 0; index < this.ui.buttons.length; index++) {
+            this.ui.buttons[index].classList.remove('active')
+        }
     }
 
     getClickedObject(el) {
         return el.dataset.name;
     }
 
-    _animateSquare(el, index) {
+    animateSquare(index) {
         let timeline = new TimelineLite();
 
         timeline.to(this.ui.activeSquare, 1, { y: this._invervalY * index, rotation: 45 + 90 * index, ease: Power3.easeInOut }, 0);
@@ -59,9 +84,17 @@ class ProgressBarComponent {
 
     _clickHandler(index) {
         this._activeElement = this.ui.buttons[index];
-        this.setActiveBullet(this._activeElement);
+        // this.setActiveBullet(index);
         this.getClickedObject(this._activeElement);
-        this._animateSquare(this._activeElement, index);
+        // this.animateSquare(index);
+    }
+
+    transitionOut() {
+        TweenLite.to(this.el, .5, { autoAlpha: 0 });
+    }
+    
+    transitionIn() {
+        TweenLite.to(this.el, .5, { autoAlpha: 1 });
     }
 }
 
