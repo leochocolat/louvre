@@ -347,10 +347,10 @@ class ThreeScene {
             this._activeIndex = parseInt(splits[splits.length - 1]);
             let glowingObj = this._getSelectedObject(this._activeIndex);
             this._selectedObjects.push(glowingObj)
-            TweenLite.to(this._outlinePass, 1, { edgeStrength: 10, edgeThickness: 1 });
             this._outlinePass.selectedObjects = this._selectedObjects;
+            TweenLite.to(this._outlinePass, 1.5, { edgeStrength: 10, edgeThickness: 1 });
         } else {
-            TweenLite.to(this._outlinePass, 1, { edgeStrength: 0, edgeThickness: 0 });
+            this._disableOutline()
         }
     }
 
@@ -373,6 +373,7 @@ class ThreeScene {
             this._timelines[index].progress(0);
             this._timelines[index].play();
         };
+        this._disableOutline()
     }
 
     _getSceneObjectWithName(object, name) {
@@ -425,7 +426,9 @@ class ThreeScene {
         if (!this._isSpeaking) return;
         this._exitStory();
     }
-
+    _disableOutline() {
+        TweenLite.to(this._outlinePass, 1.5, { edgeStrength: 0, edgeThickness: 0 });
+    }
     resize(width, height) {
         this._width = width;
         this._height = height;
