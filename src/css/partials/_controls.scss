@@ -68,10 +68,11 @@
     }
 }
 
-.controls__credits {
+.controls__about {
     position: absolute;
     left: 80px;
     bottom: 50px;
+    display: flex;
 
     color: white;
 
@@ -86,26 +87,36 @@
 
     cursor: pointer;
 
-    opacity: 0;
+    .separator{
+        padding: 0 8px;
 
-    &:before {
-        position: absolute;
-        left: 0;
-        bottom: -5px;
-
-        width: 0;
-        height: 1px;
-
-        background-color: white;
-        transition: width .3s ease-in-out;
-
-        content: '';
+        opacity: 0;
     }
 
-    &:hover {
+    .credits-button, .about-button {
+        opacity: 0;
+
+        position: relative;
         &:before {
-            width: 100%;
-        } 
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+
+            width: 0;
+            height: 1px;
+
+            background-color: white;
+            transition: width .3s ease-in-out;
+
+            content: '';
+        }
+
+        &:hover {
+
+            &:before {
+                width: 100%;
+            } 
+        }
     }
 }
 

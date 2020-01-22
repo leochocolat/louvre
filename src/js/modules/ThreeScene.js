@@ -205,7 +205,7 @@ class ThreeScene {
             noiseEffect = {
                 uniforms: {
                     "tDiffuse": { value: null },
-                    "amount": { value: this.noiseCounter }
+                    "amount": { value: this._noiseCounter }
                 },
                 vertexShader: vert,
                 fragmentShader: frag
@@ -217,7 +217,7 @@ class ThreeScene {
         this._composer.setSize(this._width * pixelRatio, this._height * pixelRatio);
         this._composer.setPixelRatio(pixelRatio);
 
-        this.noiseCounter = 0.0
+        this._noiseCounter = 0.0
 
         this._customPass = new ShaderPass(noiseEffect);
         this._composer.addPass(this._customPass);
@@ -426,9 +426,11 @@ class ThreeScene {
         if (!this._isSpeaking) return;
         this._exitStory();
     }
+
     _disableOutline() {
         TweenLite.to(this._outlinePass, 1.5, { edgeStrength: 0, edgeThickness: 0 });
     }
+
     resize(width, height) {
         this._width = width;
         this._height = height;
@@ -450,8 +452,8 @@ class ThreeScene {
             this.sceneEntities[i].update(this._delta);
         }
 
-        this.noiseCounter += 0.1;
-        this._customPass.uniforms["amount"].value = this.noiseCounter;
+        this._noiseCounter += 0.1;
+        this._customPass.uniforms["amount"].value = this._noiseCounter;
 
         this._soundManager.update(this._delta);
         this._composer.render(this._scene, this._camera);

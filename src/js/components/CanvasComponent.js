@@ -20,6 +20,9 @@ class CanvasComponent {
         this.ui = {
             button: document.querySelector('.js-start-button'),
             creditsBtn: document.querySelector('.js-credits-button'),
+            creditsSeparator: document.querySelector('.js-separator'),
+            aboutBtn: document.querySelector('.js-about-button'),
+            logo: document.querySelector('.js-logo'),
             homeUI: document.querySelectorAll('.js-ui-home'),
             homeSection: document.querySelectorAll('.js-home-section'),
             progressBar: document.querySelector('.js-progress-bar'),
@@ -60,6 +63,7 @@ class CanvasComponent {
         this.el.addEventListener('mousemove', this._mousemoveHandler);
         this.ui.button.addEventListener('click', this._startBtnClickHandler);
         this.ui.creditsBtn.addEventListener('click', this._creditsBtnClickHandler);
+        this.ui.aboutBtn.addEventListener('click', this._aboutBtnClickHandler);
     }
 
     _tickHandler() {
@@ -91,6 +95,10 @@ class CanvasComponent {
         TweenMax.to(this.ui.progressBar, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
         TweenMax.to(this.ui.muteButton, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.1 });
         TweenMax.to(this.ui.creditsBtn, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
+        TweenMax.to(this.ui.creditsSeparator, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.3 });
+        TweenMax.to(this.ui.aboutBtn, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.7 });
+        TweenMax.to(this.ui.logo, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
+
 
         setTimeout(() => {
             this._threeScene.startExperience();
@@ -99,6 +107,9 @@ class CanvasComponent {
 
     _creditsBtnClickHandler() {
         this._threeScene.goToCredits();
+    }
+    _creditsBtnClickHandler() {
+        this._threeScene.goToAbout();
     }
 }
 
