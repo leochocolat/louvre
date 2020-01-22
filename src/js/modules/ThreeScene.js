@@ -71,30 +71,31 @@ class ThreeScene {
             '_cameraUpdateHandler',
             '_creditCameraAnimationEnd',
             '_leaveInteractionCompletedHandler',
-            '_leaveCreditsCompleteHandler'
+            '_leaveCreditsCompleteHandler',
+            '_aboutAnimationEnd'
         );
 
-        // const gui = new dat.GUI({
-        //     name: 'Scene'
-        // });
+        const gui = new dat.GUI({
+            name: 'Scene'
+        });
 
-        // let scene = gui.addFolder('scene');
-        // scene.add(SETTINGS, 'enableRaycast');
-        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        // scene.add(SETTINGS, 'enableMousemove');
-        // scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
+        let scene = gui.addFolder('scene');
+        scene.add(SETTINGS, 'enableRaycast');
+        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        scene.add(SETTINGS, 'enableMousemove');
+        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
 
-        // let camera = gui.addFolder('camera');
-        // camera.add(SETTINGS, 'enableOrbitControl');
-        // camera.add(SETTINGS.position, 'x').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
-        // camera.add(SETTINGS.position, 'y').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
-        // camera.add(SETTINGS.position, 'z').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        let camera = gui.addFolder('camera');
+        camera.add(SETTINGS, 'enableOrbitControl');
+        camera.add(SETTINGS.position, 'x').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        camera.add(SETTINGS.position, 'y').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        camera.add(SETTINGS.position, 'z').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
 
-        // let cameraView = gui.addFolder('cameraView');
-        // cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        // cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        // cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        let cameraView = gui.addFolder('cameraView');
+        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
 
 
         this._canvas = canvas;
@@ -212,12 +213,12 @@ class ThreeScene {
             }
 
         this._composer.addPass(renderPass);
-        renderPass.renderToScreen = true
+        renderPass.renderToScreen = true;
 
         this._composer.setSize(this._width * pixelRatio, this._height * pixelRatio);
         this._composer.setPixelRatio(pixelRatio);
 
-        this.noiseCounter = 0.0
+        this.noiseCounter = 0.0;
 
         this._customPass = new ShaderPass(noiseEffect);
         this._composer.addPass(this._customPass);
@@ -297,6 +298,22 @@ class ThreeScene {
         timeline.to(SETTINGS.position, 2, { x: -26.3, y: 15, z: 29, ease: Power3.easeInOut }, 0);
         timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -60.57, y: 16, z: -1.02, ease: Power3.easeInOut }, 0);
 
+        this.sceneEntities.modeleTest.replaceTexture();
+    }
+
+    goToAbout() {
+        let timeline = new TimelineLite({
+            onComplete: this._aboutAnimationEnd,
+            onUpdate: this._cameraUpdateHandler
+        });
+
+        timeline.to(SETTINGS.position, 2, { x: -0.5, y: 34, z: 60, ease: Power3.easeInOut }, 0);
+        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: 5.6, z: -0.63, ease: Power3.easeInOut }, 0);
+
+        timeline.to(SETTINGS.position, 2, { x: -0.5, y: 37, z: 26.9, ease: Power3.easeInOut }, 2);
+        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: -500, z: -0.63, ease: Power3.easeInOut }, 2.5);
+
+        this.sceneEntities.modeleTest.removeTexture();
         this.sceneEntities.modeleTest.replaceTexture();
     }
 
@@ -409,6 +426,14 @@ class ThreeScene {
         this._leaveCredits();
     }
 
+    _exitAbout() {
+        if (this._isLeaving || !this._isAboutView) return;
+
+        this._isLeaving = true;
+
+        this._leaveAbout();
+    }
+
     _leaveCredits() {
         this.components.cursor.removeCross();
         let timeline = new TimelineLite({
@@ -421,14 +446,29 @@ class ThreeScene {
         this.sceneEntities.modeleTest.resetTexture();
     }
 
+    _leaveAbout() {
+        this.components.cursor.removeCross();
+        let timeline = new TimelineLite({
+            delay: 1,
+            onComplete: this._leaveCreditsCompleteHandler,
+        });
+        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+
+        // this.sceneEntities.modeleTest.resetTexture();
+    }
+
     _exitAttempt() {
         this._exitCredits();
+        this._exitAbout();
         if (!this._isSpeaking) return;
         this._exitStory();
     }
+
     _disableOutline() {
         TweenLite.to(this._outlinePass, 1.5, { edgeStrength: 0, edgeThickness: 0 });
     }
+
     resize(width, height) {
         this._width = width;
         this._height = height;
@@ -560,6 +600,11 @@ class ThreeScene {
 
     _creditCameraAnimationEnd() {
         this._isCreditView = true;
+        this.components.cursor.displayCross();
+    }
+    
+    _aboutAnimationEnd() {
+        this._isAboutView = true;
         this.components.cursor.displayCross();
     }
 

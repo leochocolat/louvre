@@ -99,6 +99,7 @@ class CanvasComponent {
 
     _creditsBtnClickHandler() {
         this._threeScene.goToCredits();
+        // this._threeScene.goToAbout();
     }
 }
 
