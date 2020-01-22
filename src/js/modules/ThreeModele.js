@@ -81,14 +81,6 @@ class ThreeModele {
         });
 
         child.material = shaderMaterial;
-
-        let tl = new TimelineLite({
-            delay: 1.8
-        });
-
-        tl.to(this._creditsUniforms.u_displacement1, 1.5, { value: 0.5 }, 0);
-        tl.to(this._creditsUniforms.u_transition, 1.5, { value: 1 }, 0);
-        tl.to(this._creditsUniforms.u_displacement2, 1.5, { value: 0 }, 0);
     }
 
     removeTexture() {
@@ -124,7 +116,7 @@ class ThreeModele {
         // });
     }
 
-    replaceTexture() {
+    loadShaderTexture() {
         this.object.traverse((child) => {
             if (child.isMesh && child.name === 'toile_menu_toile_menu_0') {
                 const loader = new THREE.TextureLoader();
@@ -142,6 +134,16 @@ class ThreeModele {
                 });
             }
         });
+    }
+
+    replaceTexture() {
+        let tl = new TimelineLite({
+            delay: 1.8
+        });
+
+        tl.to(this._creditsUniforms.u_displacement1, 1.5, { value: 0.5 }, 0);
+        tl.to(this._creditsUniforms.u_transition, 1.5, { value: 1 }, 0);
+        tl.to(this._creditsUniforms.u_displacement2, 1.5, { value: 0 }, 0);
     }
 
     resetTexture() {

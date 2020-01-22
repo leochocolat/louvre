@@ -12,7 +12,8 @@ class CanvasComponent {
             '_mouseClickHandler',
             '_mousemoveHandler',
             '_startBtnClickHandler',
-            '_creditsBtnClickHandler'
+            '_creditsBtnClickHandler',
+            '_aboutBtnClickHandler'
         );
 
         this.el = options.el;
@@ -107,9 +108,9 @@ class CanvasComponent {
 
     _creditsBtnClickHandler() {
         this._threeScene.goToCredits();
-        // this._threeScene.goToAbout();
     }
-    _creditsBtnClickHandler() {
+
+    _aboutBtnClickHandler() {
         this._threeScene.goToAbout();
     }
 }

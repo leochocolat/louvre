@@ -279,6 +279,7 @@ class ThreeScene {
         let timeline = new TimelineLite({
             onComplete: () => {
                 SETTINGS.enableMousemove = true;
+                this.sceneEntities.modeleTest.loadShaderTexture();
             },
             onUpdate: this._cameraUpdateHandler
         });
@@ -308,11 +309,8 @@ class ThreeScene {
         timeline.to(SETTINGS.position, 2, { x: -0.5, y: 34, z: 60, ease: Power3.easeInOut }, 0);
         timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: 5.6, z: -0.63, ease: Power3.easeInOut }, 0);
 
-        timeline.to(SETTINGS.position, 2, { x: -0.5, y: 37, z: 26.9, ease: Power3.easeInOut }, 1.8);
-        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: -500, z: -0.63, ease: Power3.easeInOut }, 2);
-
-        this.sceneEntities.modeleTest.removeTexture();
-        this.sceneEntities.modeleTest.replaceTexture();
+        timeline.to(SETTINGS.position, 2, { x: -0.5, y: 37, z: 26.9, ease: Power3.easeInOut }, 1.5);
+        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: -500, z: -0.63, ease: Power3.easeInOut }, 1.8);
     }
 
     _leaveInteraction() {
@@ -453,8 +451,6 @@ class ThreeScene {
         });
         timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
         timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
-
-        // this.sceneEntities.modeleTest.resetTexture();
     }
 
     _exitAttempt() {
