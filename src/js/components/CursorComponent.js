@@ -6,12 +6,15 @@ class CursorComponent {
     constructor(options) {
         bindAll(
             this,
-            '_mousemoveHandler'
+            '_mousemoveHandler',
+            '_mouseenterHandler',
+            '_mouseleaveHandler'
         )
 
         this.el = document.querySelector('.js-cursor');
 
         this.ui = {
+            scene: document.querySelector('.js-canvas-three'),
             canvas: this.el.querySelector('.js-canvas-cursor')
         }
 
@@ -21,6 +24,7 @@ class CursorComponent {
         }
 
         this._audioProgress = 0;
+        this._globalOpacity = 0;
         this._crossOpacity = 0;
 
         this._setup();
@@ -109,9 +113,15 @@ class CursorComponent {
     _draw() {
         this._ctx.clearRect(0, 0, this._width, this._height);
 
+        this._ctx.save();
+
+        this._ctx.globalAlpha = this._globalOpacity;
+        
         this._drawCircle();
         this._drawProgressCircle();
         this._drawCross();
+
+        this._ctx.restore();
     }
 
     _updateCursorPosition() {
@@ -128,7 +138,17 @@ class CursorComponent {
     }
 
     _setupEventListeners() {
+        this.ui.scene.addEventListener('mouseenter', this._mouseenterHandler);
+        this.ui.scene.addEventListener('mouseleave', this._mouseleaveHandler);
         window.addEventListener('mousemove', this._mousemoveHandler);
+    }
+
+    _mouseenterHandler() {
+        TweenLite.to(this, .5, { _globalOpacity: 1 });
+    }
+    
+    _mouseleaveHandler() {
+        TweenLite.to(this, .5, { _globalOpacity: 0 });
     }
 
     _mousemoveHandler(e) {
