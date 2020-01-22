@@ -218,11 +218,7 @@ class ThreeScene {
         this._composer.setSize(this._width * pixelRatio, this._height * pixelRatio);
         this._composer.setPixelRatio(pixelRatio);
 
-<<<<<<< HEAD
         this._noiseCounter = 0.0
-=======
-        this.noiseCounter = 0.0;
->>>>>>> 311f03c089da8ef21b95af0d914eb20e8ded661b
 
         this._customPass = new ShaderPass(noiseEffect);
         this._composer.addPass(this._customPass);
@@ -606,7 +602,7 @@ class ThreeScene {
         this._isCreditView = true;
         this.components.cursor.displayCross();
     }
-    
+
     _aboutAnimationEnd() {
         this._isAboutView = true;
         this.components.cursor.displayCross();
