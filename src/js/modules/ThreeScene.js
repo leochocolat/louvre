@@ -11,7 +11,6 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
-import { Sky } from 'three/examples/jsm/objects/Sky.js'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 
 //components
@@ -26,10 +25,12 @@ import ThreeLights from './ThreeLights';
 import ThreeModele from './ThreeModele';
 import CameraLight from './CameraLight';
 import Ground from './Ground';
+import SkyBox from './SkyBox';
+
 
 //shaders
 import vert from '../shaders/vert.glsl'
-import frag from '../shaders/frag.glsl'
+import frag from '../shaders/outline/frag.glsl'
 
 const SETTINGS = {
     enableRaycast: true,
@@ -102,7 +103,8 @@ class ThreeScene {
             lights: new ThreeLights(),
             modeleTest: new ThreeModele('500'),
             cameraLight: new CameraLight(),
-            ground: new Ground()
+            ground: new Ground(),
+            skyBox: new SkyBox()
         };
 
         this.components = {
@@ -121,7 +123,6 @@ class ThreeScene {
         this.resize(window.innerWidth, window.innerHeight);
         this._setupAudioManager();
         this._loadAssets();
-        this._createSkyBox();
         this._setupCameraAnimations();
         this._createEntities();
         this._createSceneNoise();
@@ -144,10 +145,6 @@ class ThreeScene {
 
         this._mouse = new THREE.Vector2();
         this._rayCaster = new THREE.Raycaster();
-
-        this._renderer.shadowMap.enabled = true;
-        this._renderer.shadowMap.width = 256;
-        this._renderer.shadowMap.height = 256;
     }
 
     _setupAudioManager() {
@@ -242,31 +239,6 @@ class ThreeScene {
         this._composer.addPass(this._effectFXAA);
     }
 
-    _setupSkyBox() {
-        this._sky.scale.setScalar(450000);
-        this._sunSphere.position.x = 40000 * Math.cos(-SETTINGS.sunController.azimuth);
-        this._sunSphere.position.y = 40000 * Math.sin(-SETTINGS.sunController.azimuth) * Math.sin(-SETTINGS.sunController.inclination);
-        this._sunSphere.position.z = 40000 * Math.sin(-SETTINGS.sunController.azimuth) * Math.cos(-SETTINGS.sunController.inclination);
-        this._sunSphere.visible = SETTINGS.sunController.sun;
-        this._skyUniforms["sunPosition"].value.copy(this._sunSphere.position);
-        this._skyUniforms["luminance"].value = SETTINGS.sunController.luminance;
-        this._skyUniforms["turbidity"].value = SETTINGS.sunController.turbidity;
-        this._skyUniforms["rayleigh"].value = SETTINGS.sunController.rayleigh;;
-
-
-        this._scene.add(this._sunSphere, this._sky);
-    }
-
-    _createSkyBox() {
-        this._sky = new Sky();
-        this._sunSphere = new THREE.Mesh(
-            new THREE.SphereBufferGeometry(20000, 16, 8),
-            new THREE.MeshBasicMaterial({ color: 0xffffff })
-        );
-        this._skyUniforms = this._sky.material.uniforms;
-        this._setupSkyBox();
-    }
-
     _createEntities() {
         for (let i in this.sceneEntities) {
             if (this.sceneEntities[i].is3dModel) continue;
@@ -299,7 +271,7 @@ class ThreeScene {
         let timeline = new TimelineLite({
             onUpdate: this._cameraUpdateHandler
         });
-        
+
         timeline.fromTo(SETTINGS.position, 2, { x: 0, y: 0, z: 0 }, { x: SETTINGS.position.x, y: SETTINGS.position.y, z: SETTINGS.position.z });
         timeline.fromTo(SETTINGS.cameraLookAt, 2, { x: 0, y: 0, z: 0 }, { x: SETTINGS.cameraLookAt.x, y: SETTINGS.cameraLookAt.y, z: SETTINGS.cameraLookAt.z });
     }
@@ -375,10 +347,10 @@ class ThreeScene {
             this._activeIndex = parseInt(splits[splits.length - 1]);
             let glowingObj = this._getSelectedObject(this._activeIndex);
             this._selectedObjects.push(glowingObj)
-            TweenLite.to(this._outlinePass, 1, { edgeStrength: 10, edgeThickness: 1 });
             this._outlinePass.selectedObjects = this._selectedObjects;
+            TweenLite.to(this._outlinePass, 1.5, { edgeStrength: 10, edgeThickness: 1 });
         } else {
-            TweenLite.to(this._outlinePass, 1, { edgeStrength: 0, edgeThickness: 0 });
+            this._disableOutline()
         }
     }
 
@@ -401,6 +373,7 @@ class ThreeScene {
             this._timelines[index].progress(0);
             this._timelines[index].play();
         };
+        this._disableOutline()
     }
 
     _getSceneObjectWithName(object, name) {
@@ -446,14 +419,16 @@ class ThreeScene {
         timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
 
         this.sceneEntities.modeleTest.resetTexture();
-    } 
+    }
 
     _exitAttempt() {
         this._exitCredits();
         if (!this._isSpeaking) return;
         this._exitStory();
     }
-
+    _disableOutline() {
+        TweenLite.to(this._outlinePass, 1.5, { edgeStrength: 0, edgeThickness: 0 });
+    }
     resize(width, height) {
         this._width = width;
         this._height = height;
@@ -519,7 +494,7 @@ class ThreeScene {
             SETTINGS.cameraLookAt.y,
             SETTINGS.cameraLookAt.z
         );
-        
+
         this.sceneEntities.cameraLight.updatePositions(SETTINGS.position, SETTINGS.cameraLookAt);
     }
 
