@@ -68,7 +68,6 @@ class SoundManager {
     }
 
     pauseAudio() {
-        console.log(this._voiceBufferSource)
         this._voiceBufferSource.stop();
         this._subtitlesManager.end();
     }

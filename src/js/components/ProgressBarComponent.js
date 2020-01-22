@@ -58,6 +58,10 @@ class ProgressBarComponent {
         }
 
         this.ui.buttons[activeIndex].classList.add('active');
+
+        if (!this.ui.buttons[activeIndex].classList.contains('visited')) {
+            this.ui.buttons[activeIndex].classList.add('visited');
+        }
     }
 
     removeActive() {
