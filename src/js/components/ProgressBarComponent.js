@@ -19,10 +19,10 @@ class ProgressBarComponent {
         this._names = [
             "L'artiste, cet artisan de génie",
             "La signature",
-            "L'autoportrait",
+            "L'artiste et l'académie",
             "Ut pictura poesis",
             "Vies d'artiste",
-            "L'artiste et l'académie",
+            "L'autoportrait",
             "La femme artiste",
             'mille citadelles',
         ] 

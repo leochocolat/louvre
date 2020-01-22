@@ -30,7 +30,7 @@
             },
             "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
         },
-        "three" : {
+        "six" : {
             "title" : "L'autoportrait",
             "introduction" : "L'autoportrait, entre oeuvre de jeunesse et besoin de postérité",
             "description" : {
@@ -72,7 +72,7 @@
             },
             "quoteDescription" : "Homère décrit le forgeron Héphaïstos qui cisèle avec art sur le bouclier d'Achille mille et une scènes de la vie, entourées de l'Océan sous la voûte céleste."
         },
-        "six" : {
+        "three" : {
             "title" : "L'artiste et l'académie",
             "introduction" : "L'émancipation de l'artiste et l'élévation de l'art pictural et sculptural",
             "description" : {

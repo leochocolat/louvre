@@ -27,7 +27,6 @@ import CameraLight from './CameraLight';
 import Ground from './Ground';
 import SkyBox from './SkyBox';
 
-
 //shaders
 import vert from '../shaders/vert.glsl'
 import frag from '../shaders/outline/frag.glsl'
@@ -96,7 +95,6 @@ class ThreeScene {
         cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
         cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
         cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-
 
         this._canvas = canvas;
 
@@ -310,8 +308,8 @@ class ThreeScene {
         timeline.to(SETTINGS.position, 2, { x: -0.5, y: 34, z: 60, ease: Power3.easeInOut }, 0);
         timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: 5.6, z: -0.63, ease: Power3.easeInOut }, 0);
 
-        timeline.to(SETTINGS.position, 2, { x: -0.5, y: 37, z: 26.9, ease: Power3.easeInOut }, 2);
-        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: -500, z: -0.63, ease: Power3.easeInOut }, 2.5);
+        timeline.to(SETTINGS.position, 2, { x: -0.5, y: 37, z: 26.9, ease: Power3.easeInOut }, 1.8);
+        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: -500, z: -0.63, ease: Power3.easeInOut }, 2);
 
         this.sceneEntities.modeleTest.removeTexture();
         this.sceneEntities.modeleTest.replaceTexture();
@@ -323,6 +321,7 @@ class ThreeScene {
         });
         timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
         timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        
         this.sceneEntities.cameraLight.turnOff();
     }
 
@@ -545,6 +544,7 @@ class ThreeScene {
             this._activeIndex = parseInt(splits[splits.length - 1]);
             this._isSpeaking = true;
             this._enableOutline = false;
+
             this.components.progressBar.setActiveBullet(this._activeIndex - 1);
             this.components.progressBar.animateSquare(this._activeIndex - 1);
             this.triggerAnimations(this._activeIndex);
