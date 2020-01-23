@@ -96,8 +96,8 @@ class CanvasComponent {
         TweenMax.to(this.ui.progressBar, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
         TweenMax.to(this.ui.muteButton, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.1 });
         TweenMax.to(this.ui.creditsBtn, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
-        TweenMax.to(this.ui.creditsSeparator, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.3 });
-        TweenMax.to(this.ui.aboutBtn, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.7 });
+        TweenMax.to(this.ui.creditsSeparator, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.1 });
+        TweenMax.to(this.ui.aboutBtn, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3.2 });
         TweenMax.to(this.ui.logo, 0.5, { autoAlpha: 1, ease: Power2.easeInOut, delay: 3 });
 
 

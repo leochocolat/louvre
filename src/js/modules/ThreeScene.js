@@ -17,6 +17,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import ProgressBarComponent from '../components/ProgressBarComponent';
 import ContentComponent from '../components/ContentComponent';
 import CursorComponent from '../components/CursorComponent';
+import AboutComponent from '../components/AboutComponent';
 
 //modules
 import AssetsLoader from './AssetsLoader';
@@ -74,27 +75,27 @@ class ThreeScene {
             '_aboutAnimationEnd'
         );
 
-        const gui = new dat.GUI({
-            name: 'Scene'
-        });
+        // const gui = new dat.GUI({
+        //     name: 'Scene'
+        // });
 
-        let scene = gui.addFolder('scene');
-        scene.add(SETTINGS, 'enableRaycast');
-        scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
-        scene.add(SETTINGS, 'enableMousemove');
-        scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
+        // let scene = gui.addFolder('scene');
+        // scene.add(SETTINGS, 'enableRaycast');
+        // scene.add(SETTINGS, 'toggleGround').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'toggleCameraLight').onChange(this._toggleEntityHandler);
+        // scene.add(SETTINGS, 'enableMousemove');
+        // scene.add(SETTINGS, 'toggleHitboxes').onChange(this._toggleHitboxes);
 
-        let camera = gui.addFolder('camera');
-        camera.add(SETTINGS, 'enableOrbitControl');
-        camera.add(SETTINGS.position, 'x').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
-        camera.add(SETTINGS.position, 'y').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
-        camera.add(SETTINGS.position, 'z').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        // let camera = gui.addFolder('camera');
+        // camera.add(SETTINGS, 'enableOrbitControl');
+        // camera.add(SETTINGS.position, 'x').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        // camera.add(SETTINGS.position, 'y').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
+        // camera.add(SETTINGS.position, 'z').min(-300).max(300).step(0.1).onChange(this._cameraUpdateHandler);
 
-        let cameraView = gui.addFolder('cameraView');
-        cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
-        cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // let cameraView = gui.addFolder('cameraView');
+        // cameraView.add(SETTINGS.cameraLookAt, 'x').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'y').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
+        // cameraView.add(SETTINGS.cameraLookAt, 'z').min(-500).max(100).step(0.01).onChange(this._cameraUpdateHandler)
 
         this._canvas = canvas;
 
@@ -109,6 +110,7 @@ class ThreeScene {
         this.components = {
             progressBar: new ProgressBarComponent(),
             content: new ContentComponent(),
+            about: new AboutComponent(),
             cursor: new CursorComponent()
         }
 
@@ -310,7 +312,9 @@ class ThreeScene {
         timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: 5.6, z: -0.63, ease: Power3.easeInOut }, 0);
 
         timeline.to(SETTINGS.position, 2, { x: -0.5, y: 37, z: 26.9, ease: Power3.easeInOut }, 1.5);
-        timeline.to(SETTINGS.cameraLookAt, 2.5, { x: -1.02, y: -500, z: -0.63, ease: Power3.easeInOut }, 1.8);
+        timeline.to(SETTINGS.cameraLookAt, 2, { x: -1.02, y: -500, z: -0.63, ease: Power3.easeInOut }, 1.8);
+
+        this.components.about.transitionIn();
     }
 
     _leaveInteraction() {
@@ -449,8 +453,10 @@ class ThreeScene {
             delay: 1,
             onComplete: this._leaveCreditsCompleteHandler,
         });
-        timeline.to(SETTINGS.cameraLookAt, 3, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+        timeline.to(SETTINGS.cameraLookAt, 2, { x: 0, y: 11.9, z: -24.5, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
         timeline.to(SETTINGS.position, 2, { x: 0.2, y: 17.8, z: 36, ease: Power3.easeInOut, onUpdate: this._cameraUpdateHandler }, 0);
+
+        this.components.about.transitionOut();
     }
 
     _exitAttempt() {
